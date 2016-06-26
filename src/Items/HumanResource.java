@@ -1,44 +1,55 @@
 package Items;
 
-public class HumanResource extends Resource {
-	private String Fname, Lname;
-	private Degree degree;
+import java.sql.Date;
 
-	public HumanResource(String Fname, String Lname, String degree,
-			String specialty) {
-		this.Fname = Fname;
-		this.Lname = Lname;
-		this.degree = new Degree(degree, specialty);
+import Data.DatabaseInterface;
+
+public class HumanResource {
+	private Date from, to;
+	private User user;
+	
+	public HumanResource(User user, Date from, Date to) {
+		this.user = user;
+		this.from = from;
+		this.to = to;
 	}
 
-	@Override
-	public boolean add() {
-		// TODO Auto-generated method stub
-		return false;
+	public Date getFrom() {
+		return from;
 	}
 
-	@Override
-	public boolean delete() {
-		// TODO Auto-generated method stub
-		return false;
+	public void setFrom(Date from) {
+		this.from = from;
 	}
 
-	class Degree {
-		private String degree, specialty;
+	public Date getTo() {
+		return to;
+	}
 
-		public Degree(String degree, String specialty) {
-			this.degree = degree;
-			this.specialty = specialty;
-		}
+	public void setTo(Date to) {
+		this.to = to;
+	}
 
-		public String getDegree() {
-			return degree;
-		}
+	public User getUser() {
+		return user;
+	}
 
-		public String getSpecialty() {
-			return specialty;
-		}
+	public void setUser(User user) {
+		this.user = user;
+	}
 
+	public boolean addHumanResource() {
+		String query = "insert into HUMANRESOURCE values(\'" + user.getUsername() + "\', \'" + from + "\', \'" + to + "\');";  
+		DatabaseInterface db = new DatabaseInterface();
+		
+		return db.update(query);
+	}
+
+	public boolean deleteHumanResource() {
+		String query = "delete from HUMANRESOURCE where USERNAME = \'" + user.getUsername() + "\';";   
+		DatabaseInterface db = new DatabaseInterface();
+		
+		return db.update(query);
 	}
 
 }

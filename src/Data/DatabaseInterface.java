@@ -14,7 +14,72 @@ public class DatabaseInterface {
 	static final String USER = "Golabi";
 	static final String PASS = "123456";
 
-	public static ResultSet getQuery(String query) {
+	public String generateAddQuery(String table, String[] values) {
+		String query = "insert into " + table + " values(\'";
+		for (int i = 0; i < values.length; i++) {
+			if (i == values.length - 1)
+				query += values[i] + "\');";
+			else
+				query += values[i] + "\', \'";
+		}
+		return query;
+	}
+
+	public String generateDeleteQuery(String table, String[] values, String[] fields) {
+		String query = "delete from " + table + " where ";
+		for (int i = 0; i < values.length; i++) {
+			if (i == values.length - 1)
+				query += fields[i] + " = \'" + values[i] + "\';";
+			else
+				query += fields[i] + " = \'" + values[i] + "\' and ";
+		}
+		return query;
+	}
+
+	public String generateSelectQuery(String table, String[] col, String[] values, String[] fields) {
+		String query = "select ";
+		for (int i = 0; i < col.length; i++) {
+			if (i == col.length - 1)
+				query += col[i] + " ";
+			else
+				query += col[i] + ", ";
+		}
+		query += "from " + table;
+		if(values.length>0) {
+			query += " where ";
+			for (int i = 0; i < values.length; i++) {
+				if (i == values.length - 1)
+					query += fields[i] + " = \'" + values[i] + "\';";
+				else
+					query += fields[i] + " = \'" + values[i] + "\' and ";
+			}
+		}
+		else 
+			query += ";";
+		return query;
+	}
+
+	public String generateUpdateQuery(String table, String[] newValues, String[] newValuesFileds, String[] oldValues,
+			String[] oldValuesFields) {
+		String query = "update " + table + " set ";
+		for (int i = 0; i < newValues.length; i++)
+			if (i == newValues.length - 1)
+				query += newValuesFileds[i] + " = " + newValues[i] + " ";
+			else
+				query += newValuesFileds[i] + " = " + newValues[i] + ", ";
+		if (oldValues.length > 0) {
+			query += "where ";
+			for (int i = 0; i < oldValues.length; i++)
+				if (i == oldValues.length - 1)
+					query += oldValuesFields[i] + " = " + oldValues[i] + ";";
+				else
+					query += oldValuesFields[i] + " = " + oldValues[i] + " and ";
+		} else
+			query += ";";
+		return query;
+	}
+
+	public ResultSet getQuery(String query) {
 		ResultSet rs;
 		Connection conn = null;
 		Statement stmt = null;
@@ -35,8 +100,8 @@ public class DatabaseInterface {
 		}
 		return null;
 	}
-	
-	public static boolean update(String query) {
+
+	public boolean update(String query) {
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -57,19 +122,19 @@ public class DatabaseInterface {
 		return false;
 	}
 
-	public static void showResult(String statement, ResultSet rs, Map<String, Integer> tn, String [] col) {
+	public static void showResult(String statement, ResultSet rs, Map<String, Integer> tn, String[] col) {
 		try {
-			for(int i = 0; i < col.length; i++)
+			for (int i = 0; i < col.length; i++)
 				System.out.print(col[i] + "\t");
 			System.out.println();
 			while (rs.next()) {
-				for(int i = 0; i < col.length; i++) {
+				for (int i = 0; i < col.length; i++) {
 					int type = tn.get(col[i]);
-					if(type == 1) {
+					if (type == 1) {
 						System.out.print(rs.getInt(col[i]) + "\t");
-					} else if(type == 2) {
+					} else if (type == 2) {
 						System.out.println(rs.getString(col[i]) + "\t");
-					} else if(type == 3) {
+					} else if (type == 3) {
 						System.out.println(rs.getDate(col[i]) + "\t");
 					}
 				}
@@ -79,4 +144,5 @@ public class DatabaseInterface {
 			System.out.println("No results for " + statement);
 		}
 	}
+
 }

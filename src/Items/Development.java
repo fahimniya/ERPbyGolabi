@@ -1,55 +1,51 @@
 package Items;
 
 import java.sql.Date;
+import java.util.Random;
 import java.util.Scanner;
 
 import Data.DatabaseInterface;
 
 public class Development extends Process {
-	private boolean hasTeam;
 
-	public Development() {
-
+	public Development(String projectName, Date from, Date to) {
+		super(projectName, from, to);
+		super.id = generateId();
 	}
 
-	public Development(int id, String name, Date start, Date end) {
-		hasTeam = false;
-		super.setID(id);
-		super.projectName = name;
-		Duration duration = new Duration(start, end);
-		super.duration = duration;
-	}
-
-	public Development(int id, String name, Date start, Date end, int[] res,
-			int[] team) {
-		hasTeam = true;
-		super.setID(id);
-		super.projectName = name;
-		Duration duration = new Duration(start, end);
-		super.duration = duration;
-		super.resources = res;
-		super.team = team;
+	public Development(String projectName, Date from, Date to, int id) {
+		super(projectName, from, to);
+		super.id = id;
 	}
 
 	@Override
 	public boolean add() {
-		String query = "insert into DEVELOP values (" + String.valueOf(id)
-				+ ", '" + projectName + "', '"
-				+ duration.getBeginnig().toString() + "', '"
-				+ duration.getEnd().toString() + "');";
-//		System.out.println(query);
-		return DatabaseInterface.update(query);
+		DatabaseInterface db = new DatabaseInterface();
+		String query = db.generateAddQuery("DEVELOP",
+				new String[] { String.valueOf(id), projectName, from.toString(), to.toString() });
+		return db.update(query);
 	}
 
 	@Override
-	public boolean delete() {
-		System.out.println("***************************");
-		System.out.println("\n\nDelete Process **************");
-		System.out.println("Please enter the ID of the process you intend to delete.");
-		Scanner scan = new Scanner(System.in);
-		int id = scan.nextInt();
-		String query = "delete from DEVELOP where ID = " + id;
-		return DatabaseInterface.update(query);
+	public boolean remove() {
+		DatabaseInterface db = new DatabaseInterface();
+		String query = db.generateDeleteQuery("DEVELOP", new String[] { Integer.toString(id) }, new String[] { "ID" });
+		return db.update(query);
 	}
 
+	@Override
+	public int generateId() {
+		Random rand = new Random();
+		int id = 100000000 + rand.nextInt(99999999);
+		return id;
+	}
+
+	@Override
+	public boolean update() {
+		DatabaseInterface db = new DatabaseInterface();
+		String query = db.generateUpdateQuery("DEVELOP", new String[] { projectName, from.toString(), to.toString() },
+				new String[] { "PROJECTNAME", "FROM", "TO" }, new String[] { Integer.toString(id) },
+				new String[] { "ID" });
+		return db.update(query);
+	}
 }

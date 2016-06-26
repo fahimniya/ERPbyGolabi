@@ -1,34 +1,26 @@
 package Items;
 
-public abstract class Process extends Item {
-	protected Duration duration;
+import java.sql.Date;
+
+public abstract class Process {
 	protected String projectName;
-	protected int [] resources;
-	protected int [] team;
+	protected Date from, to;
+	protected int id;
 	
-	public Duration getDuration() {
-		return duration;
+	public Process(String projectName, Date from, Date to) {
+		this.projectName = projectName;
+		this.from = from;
+		this.to = to;
 	}
-	public void setDuration(Duration duration) {
-		this.duration = duration;
-	}
+	
 	public String getProjectName() {
 		return projectName;
 	}
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
-	public void setResources(int[] resources) {
-		this.resources = resources;
-	}
-	public void setTeam(int[] team) {
-		this.team = team;
-	}
-	public void setID(int id) {
-		super.id = id;
-	}
-	protected int getID() {
-		return super.id;
-	}
-	
+	public abstract int generateId();
+	public abstract boolean add();
+	public abstract boolean remove();
+	public abstract boolean update();
 }
