@@ -1,7 +1,5 @@
 package Items;
 
-import Data.DatabaseInterface;
-
 public class AuthorizedResourceWrapper extends ResourceWrapper{
 	
 	public boolean addFacilityResource(FacilityResource facility) {
