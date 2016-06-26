@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import Items.UserWrapper;
+
 public class LoginView implements View {
 	private JFrame loginFrame;
 	private JLabel systemName;
@@ -52,8 +54,15 @@ public class LoginView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				MainView mainView = new MainView(lv);
-				mainView.show();
+				UserWrapper userWrapper = new UserWrapper();
+				System.out.println("user: " + username.getText() + ", password: " + password.getPassword());
+				boolean isValid = userWrapper.login(username.getText(), new String(password.getPassword()));
+				if (isValid) {
+					MainView mainView = new MainView(lv);
+					mainView.show();
+				} else {
+					message.setText("ورود ناموفق، دوباره تلاش کنید");
+				}
 			}
 		});
 		loginFrame.add(login);
