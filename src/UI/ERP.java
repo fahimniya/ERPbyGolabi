@@ -1,12 +1,11 @@
 package UI;
 
-import java.sql.Date;
-import java.util.Scanner;
-
-import Items.*;
+import graphicalViews.LoginView;
 
 public class ERP {
 	public static void main(String[] args) {
+		LoginView login = new LoginView();
+		login.show(false);
 		MainView mv = new MainView();
 		mv.show();
 	}
