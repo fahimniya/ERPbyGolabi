@@ -4,11 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class ResourceWrapper {
 	public Resource[] showResources() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("FACILITYRESOURCE", new String[] { "*" }, null, null);
 		ResultSet rs = db.getQuery(query);
 		ArrayList<Resource> resources = new ArrayList<Resource>();

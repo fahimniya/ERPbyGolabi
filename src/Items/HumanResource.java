@@ -2,7 +2,7 @@ package Items;
 
 import java.sql.Date;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class HumanResource {
 	private Date from, to;
@@ -40,14 +40,14 @@ public class HumanResource {
 
 	public boolean addHumanResource() {
 		String query = "insert into HUMANRESOURCE values(\'" + user.getUsername() + "\', \'" + from + "\', \'" + to + "\');";  
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		
 		return db.update(query);
 	}
 
 	public boolean deleteHumanResource() {
 		String query = "delete from HUMANRESOURCE where USERNAME = \'" + user.getUsername() + "\';";   
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		
 		return db.update(query);
 	}

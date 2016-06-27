@@ -2,7 +2,7 @@ package Items;
 
 import java.sql.Date;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class Module {
 	private String moduleName, projectName;
@@ -27,7 +27,7 @@ public class Module {
 	}
 
 	public boolean addResourceAllocated() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = "";
 		if (res != null) {
 			if (res instanceof FacilityResource)
@@ -46,7 +46,7 @@ public class Module {
 	}
 
 	public boolean deleteResourceAllocation() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = "";
 		if (res != null) {
 			if (res instanceof FacilityResource)

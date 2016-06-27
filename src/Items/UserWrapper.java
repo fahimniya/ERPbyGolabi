@@ -3,7 +3,7 @@ package Items;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class UserWrapper {
 
@@ -16,7 +16,7 @@ public class UserWrapper {
 	public User getAccountInformation(String username) {
 		String name = null, password = null;
 
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = "select * from USER where USERNAME = \"" + username + "\";";
 		ResultSet result = db.getQuery(query);
 		try {

@@ -2,7 +2,7 @@ package Items;
 
 import java.sql.ResultSet;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class User {
 
@@ -23,7 +23,7 @@ public class User {
 	}
 
 	public boolean authenticate() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 
 		String query = "select username, password from USER where USERNAME = \"" + username + "\" and PASSWORD = \""
 				+ password + "\";";
@@ -34,7 +34,7 @@ public class User {
 	}
 
 	public boolean addToPendingUpdate(String oldUsername) {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 
 		String query = "insert into PENDINGUPDATE values(\"" + oldUsername + "\", \"" + username + "\", \"" + password
 				+ "\", \"" + name + "\");";
@@ -43,13 +43,13 @@ public class User {
 
 	public boolean add(String username, String password, String name) {
 		String query = "insert into USER values(\"" + username + "\", \"" + password + "\", \"" + name + "\");";
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		return db.update(query);
 	}
 
 	public boolean remove(String username) {
 		String query = "select * from USER where USERNAME = \"" + username + "\" ;";
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		if (db.getQuery(query) == null)
 			return false;
 		query = "delete from USER where USERNAME = \"" + username + "\" ;";

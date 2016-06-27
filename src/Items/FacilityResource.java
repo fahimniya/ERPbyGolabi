@@ -2,7 +2,7 @@ package Items;
 
 import java.util.Random;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class FacilityResource extends Resource {
 	private int id;
@@ -19,14 +19,14 @@ public class FacilityResource extends Resource {
 	}
 	@Override
 	public boolean addToDB() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateAddQuery("facilityresource".toUpperCase(),  new String[]{Integer.toString(id), name});
 		return db.update(query);
 	}
 
 	@Override
 	public boolean removeFromDB() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateDeleteQuery("facilityresource".toUpperCase(),  new String[]{Integer.toString(id)}, new String[]{"ID"});
 		return db.update(query);
 	}

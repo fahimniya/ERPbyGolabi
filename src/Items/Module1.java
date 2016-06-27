@@ -1,6 +1,6 @@
 package Items;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class Module1 {
 	private String moduleName, projectName;
@@ -11,20 +11,20 @@ public class Module1 {
 	}
 
 	public boolean add() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateAddQuery("MODULE", new String[] { moduleName, projectName });
 		return db.update(query);
 	}
 
 	public boolean remove() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateDeleteQuery("MODULE", new String[] { moduleName, projectName },
 				new String[] { "MODULENAME", "PROJECTNAME" });
 		return db.update(query);
 	}
 
 	public boolean update(String oldmName, String oldpName) {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateUpdateQuery("MODULE", new String[] { moduleName, projectName },
 				new String[] { "MODULENAME", "PROJECTNAME" }, new String[] { oldmName, oldpName },
 				new String[] { "MODULENAME", "PROJECTNAME" });

@@ -3,7 +3,7 @@ package Items;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class FundingResource extends Resource {
 
@@ -19,7 +19,7 @@ public class FundingResource extends Resource {
 
 	@Override
 	public boolean addToDB() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("FUNDINGRESOURCE", new String[] { "AMOUNT" },
 				new String[] { quantity.getUnit().toString() }, new String[] { "UNIT" });
 		ResultSet rs = db.getQuery(query);
@@ -44,7 +44,7 @@ public class FundingResource extends Resource {
 
 	@Override
 	public boolean removeFromDB() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("FUNDINGRESOURCE", new String[] { "AMOUNT" },
 				new String[] { quantity.getUnit().toString() }, new String[] { "UNIT" });
 		ResultSet rs = db.getQuery(query);

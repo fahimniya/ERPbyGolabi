@@ -3,7 +3,7 @@ package Items;
 import java.sql.Date;
 import java.util.Random;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class Maintenance extends Process {
 	
@@ -19,7 +19,7 @@ public class Maintenance extends Process {
 
 	@Override
 	public boolean add() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateAddQuery("MAINTENANCE",
 				new String[] { String.valueOf(id), projectName, from.toString(), to.toString() });
 		return db.update(query);
@@ -27,7 +27,7 @@ public class Maintenance extends Process {
 
 	@Override
 	public boolean remove() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateDeleteQuery("MAINTENANCE", new String[] { Integer.toString(id) }, new String[] { "ID" });
 		return db.update(query);
 	}
@@ -41,7 +41,7 @@ public class Maintenance extends Process {
 
 	@Override
 	public boolean update() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateUpdateQuery("MAINTENANCE", new String[] { projectName, from.toString(), to.toString() },
 				new String[] { "PROJECTNAME", "FROM", "TO" }, new String[] { Integer.toString(id) },
 				new String[] { "ID" });

@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class RequirementWrapper {
 	public boolean allocateResuorce(Resource resource, String moduleName, String projectName, Date from, Date to) {
@@ -14,7 +14,7 @@ public class RequirementWrapper {
 	}
 
 	public Module[] resourceTurnover() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("FACILITYRESOURCEALLOCATION", new String[] { "*" }, null, null);
 		query = query.substring(0, query.length() - 1)
 				+ " inner join FACILITYRESOURCE on FACILITYRESOURCEALLOCATION.ID = FACILITYRESOURCE.ID order by ID;";

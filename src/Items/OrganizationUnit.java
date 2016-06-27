@@ -2,7 +2,7 @@ package Items;
 
 import java.util.Random;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class OrganizationUnit {
 	private int id;
@@ -18,7 +18,7 @@ public class OrganizationUnit {
 	}
 
 	private boolean registerHumanResource(int humanNumber, String specialty) {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		int hReqId = generateReqId();
 		String query = db.generateAddQuery("REQUIREDHUMANRESOURCE", new String[] { Integer.toString(hReqId),
 				Integer.toString(id), Integer.toString(humanNumber), specialty });
@@ -32,7 +32,7 @@ public class OrganizationUnit {
 	}
 
 	private boolean registerFacilityResource(int facilityNumber, String name) {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		int fReqId = generateReqId();
 		String query = db.generateAddQuery("REQUIREDFACILITYRESOURCE", new String[] { Integer.toString(fReqId),
 				Integer.toString(id), Integer.toString(facilityNumber), name });
@@ -40,7 +40,7 @@ public class OrganizationUnit {
 	}
 
 	private boolean registerFundingResource(Quantity amount) {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		int fundingReqId = generateReqId();
 		String query = db.generateAddQuery("REQUIREDFUNDINGRESOURCE", new String[] { Integer.toString(fundingReqId),
 				Integer.toString(id), Integer.toString(amount.getAmount()), amount.getUnit().toString()});

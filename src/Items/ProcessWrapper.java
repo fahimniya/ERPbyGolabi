@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Data.DatabaseInterface;
+import Data.DBManagement;
 
 public class ProcessWrapper {
 	
@@ -30,7 +30,7 @@ public class ProcessWrapper {
 	}
 	
 	public Process[] showProcesses() {
-		DatabaseInterface db = new DatabaseInterface();
+		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("DEVELOP", new String[] {"*"}, null, null);
 		ResultSet rs = db.getQuery(query);
 		ArrayList<Process> processes = new ArrayList<Process>();
