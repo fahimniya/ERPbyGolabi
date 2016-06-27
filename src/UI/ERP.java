@@ -1,7 +1,7 @@
 package UI;
 
-import Items.ManagerWrapper;
 import graphicalViews.LoginView;
+import user_management.ManagerWrapper;
 
 public class ERP {
 	public static void main(String[] args) {

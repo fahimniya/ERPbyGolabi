@@ -1,4 +1,6 @@
-package Items;
+package resources;
+
+import software_system.estimation.Requirement;
 
 public abstract class Resource {
 	public abstract boolean addToDB();

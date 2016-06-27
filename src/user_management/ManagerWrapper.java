@@ -1,4 +1,4 @@
-package Items;
+package user_management;
 
 public class ManagerWrapper extends UserWrapper {
 	public boolean removeUser (String username) {

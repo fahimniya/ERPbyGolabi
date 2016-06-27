@@ -1,8 +1,11 @@
-package Items;
+package software_system;
 
 import java.sql.Date;
 
 import Data.DBManagement;
+import resources.FacilityResource;
+import resources.FundingResource;
+import resources.Resource;
 
 public class Module {
 	private String moduleName, projectName;

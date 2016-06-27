@@ -1,4 +1,4 @@
-package Items;
+package software_system.estimation;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Data.DBManagement;
+import resources.FacilityResource;
+import resources.Resource;
+import software_system.Module;
 
 public class RequirementWrapper {
 	public boolean allocateResuorce(Resource resource, String moduleName, String projectName, Date from, Date to) {

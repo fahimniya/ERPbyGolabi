@@ -1,4 +1,4 @@
-package Items;
+package resources;
 
 public class Unit {
 	private String unit;

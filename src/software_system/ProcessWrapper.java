@@ -1,4 +1,4 @@
-package Items;
+package software_system;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import Data.DBManagement;
+import resources.Resource;
 
 public class ProcessWrapper {
 	

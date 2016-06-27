@@ -1,8 +1,9 @@
-package Items;
+package software_system;
 
 import java.util.Random;
 
 import Data.DBManagement;
+import resources.Quantity;
 
 public class OrganizationUnit {
 	private int id;

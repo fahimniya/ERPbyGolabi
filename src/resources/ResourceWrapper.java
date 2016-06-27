@@ -1,4 +1,4 @@
-package Items;
+package resources;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

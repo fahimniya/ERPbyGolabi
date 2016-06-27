@@ -1,8 +1,9 @@
-package Items;
+package software_system;
 
 import java.sql.Date;
 
 import Data.DBManagement;
+import user_management.User;
 
 public class HumanResource {
 	private Date from, to;
