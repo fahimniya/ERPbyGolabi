@@ -42,11 +42,19 @@ public class ProcessWrapper {
 			// TODO Auto-generated catch block
 			return null;
 		}
-		return null;
+		query = db.generateSelectQuery("DEVELOP", new String[] {"*"}, null, null);
+		rs = db.getQuery(query);
+		try {
+			while(rs.next()) {
+				processes.add(new Maintenance(rs.getString("PROJECTNAME"), rs.getDate("FROM"), rs.getDate("TO"), rs.getInt("ID")));
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return (Process[]) processes.toArray();
 	}
 	
 	public Module[] showModules() {
-		
 		return null;
 	}
 }
