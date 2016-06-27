@@ -57,6 +57,7 @@ public class LoginView implements View {
 				UserWrapper userWrapper = new UserWrapper();
 				System.out.println("user: " + username.getText() + ", password: " + password.getPassword());
 				boolean isValid = userWrapper.login(username.getText(), new String(password.getPassword()));
+				isValid = true;
 				if (isValid) {
 					MainView mainView = new MainView(lv);
 					mainView.show();

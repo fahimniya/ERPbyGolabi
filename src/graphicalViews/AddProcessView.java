@@ -1,12 +1,16 @@
 package graphicalViews;
 
+import java.awt.Button;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 
 public class AddProcessView implements View {
@@ -16,6 +20,8 @@ public class AddProcessView implements View {
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
+	private JRadioButton developmentRB;
+	private JRadioButton maintenanceRB;
 	
 	public AddProcessView(View rv, LoginView lv) {
 		returnView = rv;
@@ -55,6 +61,18 @@ public class AddProcessView implements View {
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		addProcessFrame.add(nameLabel);
+		
+		developmentRB = new JRadioButton("فرآیند ایجاد");
+		developmentRB.setBounds(100, 100, 100, 30);
+		developmentRB.setSelected(true);
+		addProcessFrame.add(developmentRB);
+		maintenanceRB = new JRadioButton("فرآیند نگهداری");
+		maintenanceRB.setBounds(300, 100, 100, 30);
+		addProcessFrame.add(maintenanceRB);
+		ButtonGroup group = new ButtonGroup();
+		group.add(developmentRB);
+		group.add(maintenanceRB);
+		
 		
 	}
 	
