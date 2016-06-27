@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Map;
 
+import javax.activation.FileDataSource;
+
 public class DatabaseInterface {
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	static final String DB_URL = "jdbc:mysql://localhost/EMP";
@@ -13,6 +15,35 @@ public class DatabaseInterface {
 	// Database credentials
 	static final String USER = "Golabi";
 	static final String PASS = "123456";
+	
+//	public void createtable() {
+//		String query = createTableQuery("DEVELOP", new String[] { "ID", "PROJECTNAME", "FROM", "TO" }, new String[] { "INT", "VARCHAR(255)", "DATE", "DATE" }, new String[] { "", "", "", "" }, new String {"ID"}, foreignKey, refrence)
+//				,
+//				new String[] { String.valueOf(id), projectName, from.toString(), to.toString() }
+//		update(query);
+//	}
+	
+	public String createTableQuery(String tableName, String fields[], String type[], String options[], String primaryKey[], String foreignKey[], String refrence[]) {
+		String query = "create table " + tableName + "( ";
+		for(int i=0; i<fields.length; i++) 
+			query += fields[i] + " " + type[i] + " " + options[i] + ", ";
+		query += "PRIMARY KEY ( ";
+		for(int i=0; i<primaryKey.length; i++)
+			if(i==primaryKey.length-1)
+				query += primaryKey[i] + " )";
+			else
+				query += primaryKey[i] + ", ";
+		if(foreignKey !=null) {
+			for(int i=0; i<foreignKey.length; i++) {
+				query += "FOREIGN KEY ( " + foreignKey +" ) REFERENCES" + refrence[i] + " ";
+				if(i != foreignKey.length-1)
+					query += ", ";
+			}
+		}
+		query += ");";
+		return query;
+			
+	}
 
 	public String generateAddQuery(String table, String[] values) {
 		String query = "insert into " + table + " values(\'";
@@ -45,7 +76,7 @@ public class DatabaseInterface {
 				query += col[i] + ", ";
 		}
 		query += "from " + table;
-		if(values.length>0) {
+		if(values !=null) {
 			query += " where ";
 			for (int i = 0; i < values.length; i++) {
 				if (i == values.length - 1)
@@ -144,5 +175,4 @@ public class DatabaseInterface {
 			System.out.println("No results for " + statement);
 		}
 	}
-
 }
