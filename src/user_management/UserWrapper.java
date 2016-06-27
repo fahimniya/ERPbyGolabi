@@ -6,6 +6,16 @@ import java.sql.SQLException;
 import Data.DBManagement;
 
 public class UserWrapper {
+	private static UserWrapper uniqueInstance;
+	
+	private UserWrapper(){};
+	
+	public static UserWrapper getInstance() {
+		if (uniqueInstance == null)
+			return (uniqueInstance = new UserWrapper());
+		else
+			return uniqueInstance;
+	}
 
 	public boolean login(String username, String password) {
 		User user = new User(username, password);
