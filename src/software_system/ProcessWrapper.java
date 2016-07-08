@@ -30,6 +30,15 @@ public class ProcessWrapper {
 		return module.addResourceAllocated();
 	}
 	
+	public boolean addOrganizationProjects(int oid, String[] projects) {
+		boolean flag = true;
+		for(int i = 0; i < projects.length; i++) {
+			SoftwareOrganization so = new SoftwareOrganization(oid, projects[i]);
+			flag = flag && so.add();
+		}
+		return flag;
+	}
+	
 	public Process[] showProcesses() {
 		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("DEVELOP", new String[] {"*"}, null, null);
