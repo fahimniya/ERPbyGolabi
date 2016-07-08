@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -51,7 +51,7 @@ public class MainView implements View {
 		});
 		mainFrame.add(userManagement);
 		
-		process = new JButton("فرآیند");
+		process = new JButton("�?رآیند");
 		process.setFont(new Font(process.getFont().getName(), Font.PLAIN, 30));
 		process.setBounds(350, 55, 200, 140);
 		process.addActionListener(new ActionListener() {

@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class AssignResourceView implements View {
+public class EstimateRequirementsView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame assignResourceFrame;
+	private JFrame estimateRequirementsFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public AssignResourceView(View rv, LoginView lv) {
+	public EstimateRequirementsView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		assignResourceFrame = new JFrame();
-		assignResourceFrame.setBounds(150, 100, 600, 500);
+		estimateRequirementsFrame = new JFrame();
+		estimateRequirementsFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class AssignResourceView implements View {
 				loginView.show(true);
 			}
 		});
-		assignResourceFrame.add(logout);
+		estimateRequirementsFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class AssignResourceView implements View {
 				returnView.show();
 			}
 		});
-		assignResourceFrame.add(return_);
+		estimateRequirementsFrame.add(return_);
 		
-		nameLabel = new JLabel("تخصیص منبع", SwingConstants.CENTER);
+		nameLabel = new JLabel("تخمین نیازمندی‌ها", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		assignResourceFrame.add(nameLabel);
+		estimateRequirementsFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		assignResourceFrame.setLayout(null);
-		assignResourceFrame.setVisible(true);
+		estimateRequirementsFrame.setLayout(null);
+		estimateRequirementsFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		assignResourceFrame.setVisible(false);
+		estimateRequirementsFrame.setVisible(false);
 	}
 
 }

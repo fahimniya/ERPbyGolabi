@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -101,7 +101,7 @@ public class UserManagementView implements View {
 		});
 		userManagementFrame.add(confirmChanges);
 		
-		addUser = new JButton("افزودن کاربر");
+		addUser = new JButton("ا�?زودن کاربر");
 		addUser.setFont(new Font(addUser.getFont().getName(), Font.PLAIN, 30));
 		addUser.setBounds(50, 300, 200, 140);
 		addUser.addActionListener(new ActionListener() {

@@ -1,6 +1,6 @@
-package UI;
+package ui;
 
-import graphicalViews.LoginView;
+import graphical_views.LoginView;
 import user_management.ManagerWrapper;
 
 public class ERP {

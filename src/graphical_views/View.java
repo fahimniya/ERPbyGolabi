@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 public interface View {
 	public void show();

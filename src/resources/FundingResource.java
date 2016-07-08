@@ -3,7 +3,7 @@ package resources;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Data.DBManagement;
+import data.DBManagement;
 
 public class FundingResource extends Resource {
 

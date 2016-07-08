@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class ChooseUserView implements View {
+public class RemoveResourceView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame chooseUserFrame;
+	private JFrame removeResourceFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public ChooseUserView(View rv, LoginView lv) {
+	public RemoveResourceView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		chooseUserFrame = new JFrame();
-		chooseUserFrame.setBounds(150, 100, 600, 500);
+		removeResourceFrame = new JFrame();
+		removeResourceFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class ChooseUserView implements View {
 				loginView.show(true);
 			}
 		});
-		chooseUserFrame.add(logout);
+		removeResourceFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class ChooseUserView implements View {
 				returnView.show();
 			}
 		});
-		chooseUserFrame.add(return_);
+		removeResourceFrame.add(return_);
 		
-		nameLabel = new JLabel("ویرایش اطلاعات: انتخاب کاربر", SwingConstants.CENTER);
+		nameLabel = new JLabel("حذ�? منبع", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		chooseUserFrame.add(nameLabel);
+		removeResourceFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		chooseUserFrame.setLayout(null);
-		chooseUserFrame.setVisible(true);
+		removeResourceFrame.setLayout(null);
+		removeResourceFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		chooseUserFrame.setVisible(false);
+		removeResourceFrame.setVisible(false);
 	}
 
 }

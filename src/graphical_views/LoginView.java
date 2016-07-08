@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -67,7 +67,7 @@ public class LoginView implements View {
 					MainView mainView = new MainView(lv);
 					mainView.show();
 				} else {
-					message.setText("ورود ناموفق، دوباره تلاش کنید");
+					message.setText("ورود نامو�?ق، دوباره تلاش کنید");
 				}
 			}
 		});
@@ -82,7 +82,7 @@ public class LoginView implements View {
 		username.setText("");
 		password.setText("");
 		if (logout)
-			message.setText("شما با موفقیت خارج شدید");
+			message.setText("شما با مو�?قیت خارج شدید");
 		loginFrame.setLayout(null);
 		loginFrame.setVisible(true);
 	}

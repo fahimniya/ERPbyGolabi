@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class EstimateResourceView implements View {
+public class ConfirmChangesView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame estimateResourceFrame;
+	private JFrame confirmChangesFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public EstimateResourceView(View rv, LoginView lv) {
+	public ConfirmChangesView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		estimateResourceFrame = new JFrame();
-		estimateResourceFrame.setBounds(150, 100, 600, 500);
+		confirmChangesFrame = new JFrame();
+		confirmChangesFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class EstimateResourceView implements View {
 				loginView.show(true);
 			}
 		});
-		estimateResourceFrame.add(logout);
+		confirmChangesFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class EstimateResourceView implements View {
 				returnView.show();
 			}
 		});
-		estimateResourceFrame.add(return_);
+		confirmChangesFrame.add(return_);
 		
-		nameLabel = new JLabel("تخمین منابع", SwingConstants.CENTER);
+		nameLabel = new JLabel("تأیید ویرایش اطلاعات کاربران", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		estimateResourceFrame.add(nameLabel);
+		confirmChangesFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		estimateResourceFrame.setLayout(null);
-		estimateResourceFrame.setVisible(true);
+		confirmChangesFrame.setLayout(null);
+		confirmChangesFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		estimateResourceFrame.setVisible(false);
+		confirmChangesFrame.setVisible(false);
 	}
 
 }

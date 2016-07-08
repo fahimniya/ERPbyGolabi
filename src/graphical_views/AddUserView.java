@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class UpdateProcessView implements View {
+public class AddUserView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame updateProcessFrame;
+	private JFrame addUserFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public UpdateProcessView(View rv, LoginView lv) {
+	public AddUserView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		updateProcessFrame = new JFrame();
-		updateProcessFrame.setBounds(150, 100, 600, 500);
+		addUserFrame = new JFrame();
+		addUserFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class UpdateProcessView implements View {
 				loginView.show(true);
 			}
 		});
-		updateProcessFrame.add(logout);
+		addUserFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class UpdateProcessView implements View {
 				returnView.show();
 			}
 		});
-		updateProcessFrame.add(return_);
+		addUserFrame.add(return_);
 		
-		nameLabel = new JLabel("به‌روزرسانی فرآیند", SwingConstants.CENTER);
+		nameLabel = new JLabel("ا�?زودن کاربر", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		updateProcessFrame.add(nameLabel);
+		addUserFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		updateProcessFrame.setLayout(null);
-		updateProcessFrame.setVisible(true);
+		addUserFrame.setLayout(null);
+		addUserFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		updateProcessFrame.setVisible(false);
+		addUserFrame.setVisible(false);
 	}
 
 }

@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -55,14 +55,14 @@ public class ProcessView implements View {
 		});
 		processFrame.add(return_);
 		
-		nameLabel = new JLabel("مدیریت فرآیندها", SwingConstants.CENTER);
+		nameLabel = new JLabel("مدیریت �?رآیندها", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		processFrame.add(nameLabel);
 		
 		final View pv = this;
 		
-		add = new JButton("افزودن");
+		add = new JButton("ا�?زودن");
 		add.setFont(new Font(add.getFont().getName(), Font.PLAIN, 30));
 		add.setBounds(350, 100, 200, 140);
 		add.addActionListener(new ActionListener() {
@@ -75,7 +75,7 @@ public class ProcessView implements View {
 		});
 		processFrame.add(add);
 		
-		remove = new JButton("حذف");
+		remove = new JButton("حذ�?");
 		remove.setFont(new Font(remove.getFont().getName(), Font.PLAIN, 30));
 		remove.setBounds(50, 100, 200, 140);
 		remove.addActionListener(new ActionListener() {
