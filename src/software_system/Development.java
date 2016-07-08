@@ -20,7 +20,7 @@ public class Development extends Process {
 	@Override
 	public boolean add() {
 		DBManagement db = new DBManagement();
-		String query = db.generateAddQuery("DEVELOP",
+		String query = db.generateAddQuery("PROCESS",
 				new String[] { String.valueOf(id), projectName, from.toString(), to.toString() });
 		return db.update(query);
 	}
@@ -28,7 +28,7 @@ public class Development extends Process {
 	@Override
 	public boolean remove() {
 		DBManagement db = new DBManagement();
-		String query = db.generateDeleteQuery("DEVELOP", new String[] { Integer.toString(id) }, new String[] { "ID" });
+		String query = db.generateDeleteQuery("PROCESS", new String[] { Integer.toString(id) }, new String[] { "ID" });
 		return db.update(query);
 	}
 
@@ -42,8 +42,9 @@ public class Development extends Process {
 	@Override
 	public boolean update() {
 		DBManagement db = new DBManagement();
-		String query = db.generateUpdateQuery("DEVELOP", new String[] { projectName, from.toString(), to.toString() },
-				new String[] { "PROJECTNAME", "FROM", "TO" }, new String[] { Integer.toString(id) },
+		String query = db.generateUpdateQuery("PROCESS",
+				new String[] { projectName, from.toString(), to.toString(), "DEVELOP" },
+				new String[] { "PROJECTNAME", "FROM_DATE", "TO_DATE", "TYPE" }, new String[] { Integer.toString(id) },
 				new String[] { "ID" });
 		return db.update(query);
 	}
