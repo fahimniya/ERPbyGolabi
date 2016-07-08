@@ -27,7 +27,7 @@ public class RequirementWrapper {
 			while (rs.next()) {
 				module.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"),
 						new FacilityResource(rs.getString("FACILITYRESOURCE.NAME"), rs.getInt("ID")),
-						rs.getDate("FROM"), rs.getDate("TO")));
+						rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -9,7 +9,7 @@ public class User {
 	private String username;
 	private String password;
 	private String name;
-	
+
 	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
@@ -37,12 +37,13 @@ public class User {
 		DBManagement db = new DBManagement();
 
 		String query = "insert into PENDINGUPDATE values(\"" + oldUsername + "\", \"" + username + "\", \"" + password
-				+ "\", \"" + name + "\");";
+				+ "\", \"" + name + "\", \"NORMAL\");";
 		return db.update(query);
 	}
 
 	public boolean add(String username, String password, String name) {
-		String query = "insert into USER values(\"" + username + "\", \"" + password + "\", \"" + name + "\");";
+		String query = "insert into USER values(\"" + username + "\", \"" + password + "\", \"" + name
+				+ "\", \"NORMAL\");";
 		DBManagement db = new DBManagement();
 		return db.update(query);
 	}

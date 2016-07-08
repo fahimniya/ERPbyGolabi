@@ -39,7 +39,8 @@ public class Module {
 			else
 				query = db.generateAddQuery("FUNDINGRESOURCEALLOCATION",
 						new String[] { moduleName, projectName,
-								((FundingResource) res).getQuantity().getUnit().toString(), from.toString(),
+								((FundingResource) res).getQuantity().getUnit().toString(),
+								String.valueOf(((FundingResource) res).getQuantity().getAmount()), from.toString(),
 								to.toString() });
 		} else if (hres != null) {
 			query = db.generateAddQuery("HUMANRESOURCEALLOCATION", new String[] { moduleName, projectName,
@@ -53,17 +54,21 @@ public class Module {
 		String query = "";
 		if (res != null) {
 			if (res instanceof FacilityResource)
-				query = db.generateDeleteQuery("FACILITYRESOURCEALLOCATION", new String[] { moduleName, projectName,
-						Integer.toString(((FacilityResource) res).getId()), from.toString(), to.toString() }, 
-						new String[] {"MODULENAME", "PROJECTNAME", "FACILITYRESOURCEID", "FROM", "TO"});
+				query = db.generateDeleteQuery("FACILITYRESOURCEALLOCATION",
+						new String[] { moduleName, projectName, Integer.toString(((FacilityResource) res).getId()),
+								from.toString(), to.toString() },
+						new String[] { "MODULENAME", "PROJECTNAME", "FACILITYRESOURCEID", "FROM_DATE", "TO_DATE" });
 			else
-				query = db.generateDeleteQuery("FUNDINGRESOURCEALLOCATION", new String[] { moduleName, projectName,
-						((FundingResource) res).getQuantity().getUnit().toString(), from.toString(), to.toString() }, 
-						new String[] {"MODULENAME", "PROJECTNAME", "FUNDINGYRESOURCEID", "FROM", "TO"});
+				query = db.generateDeleteQuery("FUNDINGRESOURCEALLOCATION",
+						new String[] { moduleName, projectName,
+								((FundingResource) res).getQuantity().getUnit().toString(), from.toString(),
+								to.toString() },
+						new String[] { "MODULENAME", "PROJECTNAME", "FUNDINGYRESOURCEID", "FROM_DATE", "TO_DATE" });
 		} else if (hres != null) {
-			query = db.generateDeleteQuery("HUMANRESOURCEALLOCATION", new String[] { moduleName, projectName,
-					hres.getUser().getUsername(), from.toString(), to.toString() }, 
-					new String[] {"MODULENAME", "PROJECTNAME", "USERNAME", "FROM", "TO"});
+			query = db.generateDeleteQuery(
+					"HUMANRESOURCEALLOCATION", new String[] { moduleName, projectName, hres.getUser().getUsername(),
+							from.toString(), to.toString() },
+					new String[] { "MODULENAME", "PROJECTNAME", "USERNAME", "FROM_DATE", "TO_DATE" });
 		}
 		return db.update(query);
 	}
