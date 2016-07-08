@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class RemoveProcessView implements View {
+public class AssignProcessView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame removeProcessFrame;
+	private JFrame assignProcessFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public RemoveProcessView(View rv, LoginView lv) {
+	public AssignProcessView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		removeProcessFrame = new JFrame();
-		removeProcessFrame.setBounds(150, 100, 600, 500);
+		assignProcessFrame = new JFrame();
+		assignProcessFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class RemoveProcessView implements View {
 				loginView.show(true);
 			}
 		});
-		removeProcessFrame.add(logout);
+		assignProcessFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class RemoveProcessView implements View {
 				returnView.show();
 			}
 		});
-		removeProcessFrame.add(return_);
+		assignProcessFrame.add(return_);
 		
-		nameLabel = new JLabel("حذف فرآیند", SwingConstants.CENTER);
+		nameLabel = new JLabel("تخصیص �?رآیند", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		removeProcessFrame.add(nameLabel);
+		assignProcessFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		removeProcessFrame.setLayout(null);
-		removeProcessFrame.setVisible(true);
+		assignProcessFrame.setLayout(null);
+		assignProcessFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		removeProcessFrame.setVisible(false);
+		assignProcessFrame.setVisible(false);
 	}
 
 }

@@ -1,6 +1,6 @@
 package software_system;
 
-import Data.DBManagement;
+import data.DBManagement;
 
 public class Module1 {
 	private String moduleName, projectName;

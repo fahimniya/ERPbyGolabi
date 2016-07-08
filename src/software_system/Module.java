@@ -2,7 +2,7 @@ package software_system;
 
 import java.sql.Date;
 
-import Data.DBManagement;
+import data.DBManagement;
 import resources.FacilityResource;
 import resources.FundingResource;
 import resources.Resource;

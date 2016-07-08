@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import Data.DBManagement;
+import data.DBManagement;
 
 public class ResourceWrapper {
 	public Resource[] showResources() {

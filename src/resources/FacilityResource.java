@@ -2,7 +2,7 @@ package resources;
 
 import java.util.Random;
 
-import Data.DBManagement;
+import data.DBManagement;
 
 public class FacilityResource extends Resource {
 	private int id;

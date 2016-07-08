@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class ConfirmChangesView implements View {
+public class RemoveProcessView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame confirmChangesFrame;
+	private JFrame removeProcessFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public ConfirmChangesView(View rv, LoginView lv) {
+	public RemoveProcessView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		confirmChangesFrame = new JFrame();
-		confirmChangesFrame.setBounds(150, 100, 600, 500);
+		removeProcessFrame = new JFrame();
+		removeProcessFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class ConfirmChangesView implements View {
 				loginView.show(true);
 			}
 		});
-		confirmChangesFrame.add(logout);
+		removeProcessFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class ConfirmChangesView implements View {
 				returnView.show();
 			}
 		});
-		confirmChangesFrame.add(return_);
+		removeProcessFrame.add(return_);
 		
-		nameLabel = new JLabel("تأیید ویرایش اطلاعات کاربران", SwingConstants.CENTER);
+		nameLabel = new JLabel("حذ�? �?رآیند", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		confirmChangesFrame.add(nameLabel);
+		removeProcessFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		confirmChangesFrame.setLayout(null);
-		confirmChangesFrame.setVisible(true);
+		removeProcessFrame.setLayout(null);
+		removeProcessFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		confirmChangesFrame.setVisible(false);
+		removeProcessFrame.setVisible(false);
 	}
 
 }

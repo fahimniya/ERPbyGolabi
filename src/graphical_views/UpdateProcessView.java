@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class AssignProcessView implements View {
+public class UpdateProcessView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame assignProcessFrame;
+	private JFrame updateProcessFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public AssignProcessView(View rv, LoginView lv) {
+	public UpdateProcessView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		assignProcessFrame = new JFrame();
-		assignProcessFrame.setBounds(150, 100, 600, 500);
+		updateProcessFrame = new JFrame();
+		updateProcessFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class AssignProcessView implements View {
 				loginView.show(true);
 			}
 		});
-		assignProcessFrame.add(logout);
+		updateProcessFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class AssignProcessView implements View {
 				returnView.show();
 			}
 		});
-		assignProcessFrame.add(return_);
+		updateProcessFrame.add(return_);
 		
-		nameLabel = new JLabel("تخصیص فرآیند", SwingConstants.CENTER);
+		nameLabel = new JLabel("به‌روزرسانی �?رآیند", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		assignProcessFrame.add(nameLabel);
+		updateProcessFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		assignProcessFrame.setLayout(null);
-		assignProcessFrame.setVisible(true);
+		updateProcessFrame.setLayout(null);
+		updateProcessFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		assignProcessFrame.setVisible(false);
+		updateProcessFrame.setVisible(false);
 	}
 
 }

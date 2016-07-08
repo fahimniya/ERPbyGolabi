@@ -2,7 +2,7 @@ package software_system;
 
 import java.util.Random;
 
-import Data.DBManagement;
+import data.DBManagement;
 import resources.Quantity;
 
 public class OrganizationUnit {

@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class AddResourceView implements View {
+public class AssignResourceView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame addResourceFrame;
+	private JFrame assignResourceFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public AddResourceView(View rv, LoginView lv) {
+	public AssignResourceView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		addResourceFrame = new JFrame();
-		addResourceFrame.setBounds(150, 100, 600, 500);
+		assignResourceFrame = new JFrame();
+		assignResourceFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class AddResourceView implements View {
 				loginView.show(true);
 			}
 		});
-		addResourceFrame.add(logout);
+		assignResourceFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class AddResourceView implements View {
 				returnView.show();
 			}
 		});
-		addResourceFrame.add(return_);
+		assignResourceFrame.add(return_);
 		
-		nameLabel = new JLabel("افزودن منبع", SwingConstants.CENTER);
+		nameLabel = new JLabel("تخصیص منبع", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		addResourceFrame.add(nameLabel);
+		assignResourceFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		addResourceFrame.setLayout(null);
-		addResourceFrame.setVisible(true);
+		assignResourceFrame.setLayout(null);
+		assignResourceFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		addResourceFrame.setVisible(false);
+		assignResourceFrame.setVisible(false);
 	}
 
 }

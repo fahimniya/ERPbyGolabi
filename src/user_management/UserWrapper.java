@@ -3,12 +3,12 @@ package user_management;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Data.DBManagement;
+import data.DBManagement;
 
 public class UserWrapper {
 	private static UserWrapper uniqueInstance;
 	
-	private UserWrapper(){};
+	public UserWrapper(){};
 	
 	public static UserWrapper getInstance() {
 		if (uniqueInstance == null)

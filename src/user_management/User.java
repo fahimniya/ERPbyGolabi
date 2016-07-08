@@ -2,7 +2,7 @@ package user_management;
 
 import java.sql.ResultSet;
 
-import Data.DBManagement;
+import data.DBManagement;
 
 public class User {
 

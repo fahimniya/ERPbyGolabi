@@ -1,29 +1,35 @@
-package graphicalViews;
+package graphical_views;
 
+import java.awt.Button;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 
-public class RemoveResourceView implements View {
+public class AddProcessView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame removeResourceFrame;
+	private JFrame addProcessFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
+	private JRadioButton developmentRB;
+	private JRadioButton maintenanceRB;
 	
-	public RemoveResourceView(View rv, LoginView lv) {
+	public AddProcessView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		removeResourceFrame = new JFrame();
-		removeResourceFrame.setBounds(150, 100, 600, 500);
+		addProcessFrame = new JFrame();
+		addProcessFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +42,7 @@ public class RemoveResourceView implements View {
 				loginView.show(true);
 			}
 		});
-		removeResourceFrame.add(logout);
+		addProcessFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +55,36 @@ public class RemoveResourceView implements View {
 				returnView.show();
 			}
 		});
-		removeResourceFrame.add(return_);
+		addProcessFrame.add(return_);
 		
-		nameLabel = new JLabel("حذف منبع", SwingConstants.CENTER);
+		nameLabel = new JLabel("ا�?زودن �?رآیند", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		removeResourceFrame.add(nameLabel);
+		addProcessFrame.add(nameLabel);
+		
+		developmentRB = new JRadioButton("�?رآیند ایجاد");
+		developmentRB.setBounds(100, 100, 100, 30);
+		developmentRB.setSelected(true);
+		addProcessFrame.add(developmentRB);
+		maintenanceRB = new JRadioButton("�?رآیند نگهداری");
+		maintenanceRB.setBounds(300, 100, 100, 30);
+		addProcessFrame.add(maintenanceRB);
+		ButtonGroup group = new ButtonGroup();
+		group.add(developmentRB);
+		group.add(maintenanceRB);
+		
 		
 	}
 	
 	@Override
 	public void show() {
-		removeResourceFrame.setLayout(null);
-		removeResourceFrame.setVisible(true);
+		addProcessFrame.setLayout(null);
+		addProcessFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		removeResourceFrame.setVisible(false);
+		addProcessFrame.setVisible(false);
 	}
 
 }

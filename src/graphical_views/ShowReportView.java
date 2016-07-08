@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;

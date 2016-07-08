@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -51,7 +51,7 @@ public class ChangeProcessView implements View {
 		});
 		updateProcessListFrame.add(return_);
 		
-		nameLabel = new JLabel("لیست فرآیندها", SwingConstants.CENTER);
+		nameLabel = new JLabel("لیست �?رآیندها", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		updateProcessListFrame.add(nameLabel);

@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class InfoView implements View {
+public class EstimateResourceView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame infoFrame;
+	private JFrame estimateResourceFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public InfoView(View rv, LoginView lv) {
+	public EstimateResourceView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		infoFrame = new JFrame();
-		infoFrame.setBounds(150, 100, 600, 500);
+		estimateResourceFrame = new JFrame();
+		estimateResourceFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class InfoView implements View {
 				loginView.show(true);
 			}
 		});
-		infoFrame.add(logout);
+		estimateResourceFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class InfoView implements View {
 				returnView.show();
 			}
 		});
-		infoFrame.add(return_);
+		estimateResourceFrame.add(return_);
 		
-		nameLabel = new JLabel("نمایش اطلاعات کاربری", SwingConstants.CENTER);
+		nameLabel = new JLabel("تخمین منابع", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		infoFrame.add(nameLabel);
+		estimateResourceFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		infoFrame.setLayout(null);
-		infoFrame.setVisible(true);
+		estimateResourceFrame.setLayout(null);
+		estimateResourceFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		infoFrame.setVisible(false);
+		estimateResourceFrame.setVisible(false);
 	}
 
 }

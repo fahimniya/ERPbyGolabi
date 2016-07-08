@@ -1,4 +1,4 @@
-package graphicalViews;
+package graphical_views;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,21 +9,21 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class EstimateRequirementsView implements View {
+public class InfoView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame estimateRequirementsFrame;
+	private JFrame infoFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public EstimateRequirementsView(View rv, LoginView lv) {
+	public InfoView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		estimateRequirementsFrame = new JFrame();
-		estimateRequirementsFrame.setBounds(150, 100, 600, 500);
+		infoFrame = new JFrame();
+		infoFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +36,7 @@ public class EstimateRequirementsView implements View {
 				loginView.show(true);
 			}
 		});
-		estimateRequirementsFrame.add(logout);
+		infoFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +49,24 @@ public class EstimateRequirementsView implements View {
 				returnView.show();
 			}
 		});
-		estimateRequirementsFrame.add(return_);
+		infoFrame.add(return_);
 		
-		nameLabel = new JLabel("تخمین نیازمندی‌ها", SwingConstants.CENTER);
+		nameLabel = new JLabel("نمایش اطلاعات کاربری", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		estimateRequirementsFrame.add(nameLabel);
+		infoFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		estimateRequirementsFrame.setLayout(null);
-		estimateRequirementsFrame.setVisible(true);
+		infoFrame.setLayout(null);
+		infoFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		estimateRequirementsFrame.setVisible(false);
+		infoFrame.setVisible(false);
 	}
 
 }
