@@ -4,6 +4,25 @@ import java.sql.Date;
 
 public abstract class Process {
 	protected String projectName;
+	public Date getFrom() {
+		return from;
+	}
+
+	public void setFrom(Date from) {
+		this.from = from;
+	}
+
+	public Date getTo() {
+		return to;
+	}
+
+	public void setTo(Date to) {
+		this.to = to;
+	}
+
+	public int getId() {
+		return id;
+	}
 	protected Date from, to;
 	protected int id;
 	

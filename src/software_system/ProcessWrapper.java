@@ -6,7 +6,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import data.DBManagement;
+import resources.FacilityResource;
+import resources.FundingResource;
+import resources.Quantity;
 import resources.Resource;
+import resources.Unit;
+import user_management.User;
 
 public class ProcessWrapper {
 
@@ -43,6 +48,15 @@ public class ProcessWrapper {
 		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "*" }, null, null);
 		ResultSet rs = db.getQuery(query);
+		ArrayList<SoftwareOrganization> sos = new ArrayList<SoftwareOrganization>();
+		try {
+			while (rs.next()) {
+				sos.add(new SoftwareOrganization(rs.getInt("OID"), rs.getString("SSNAME")));
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return (SoftwareOrganization[]) sos.toArray();
 	}
 
 	public Process[] showProcesses() {
@@ -73,6 +87,83 @@ public class ProcessWrapper {
 	}
 
 	public Module[] showModules() {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("FACILITYRESOURCEALLOCATION", new String[] { "*" }, null, null);
+		ResultSet rs = db.getQuery(query);
+		ArrayList<Module> modules = new ArrayList<Module>();
+		try {
+			while (rs.next()) {
+				int id = rs.getInt("ID");
+				String q = db.generateSelectQuery("FACILITYRESOURCE", new String[] { "*" },
+						new String[] { Integer.toString(id) }, new String[] { "ID" });
+				ResultSet temp = db.getQuery(q);
+				FacilityResource fr = null;
+				fr = new FacilityResource(temp.getString("NAME"), temp.getInt("ID"));
+				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), fr,
+						rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		query = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] { "*" }, null, null);
+		rs = db.getQuery(query);
+		try {
+			while (rs.next()) {
+				int id = rs.getInt("ID");
+				String q = db.generateSelectQuery("HUMSNRESOURCE", new String[] { "*" },
+						new String[] { Integer.toString(id) }, new String[] { "ID" });
+				ResultSet temp = db.getQuery(q);
+				HumanResource hr = null;
+				q = db.generateSelectQuery("USER", new String[] { "*" }, null, null);
+				ResultSet t = db.getQuery(q);
+				User user = new User(t.getString("USERNAME"), t.getString("PASSWORD"), t.getString("NAME"));
+				hr = new HumanResource(user, temp.getDate("FROM_DATE"), temp.getDate("TO_DATE"));
+				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), hr,
+						rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		query = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] { "*" }, null, null);
+		rs = db.getQuery(query);
+		try {
+			while (rs.next()) {
+				FundingResource fr = new FundingResource(
+						new Quantity(rs.getInt("AMOUNT"), new Unit(rs.getString("UNIT"))));
+				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), fr,
+						rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
+			}
+		} catch (Exception e) {
+			return null;
+		}
 		return null;
+	}
+
+	public boolean removeProcess(Process[] processes) {
+		boolean flag = true;
+		for (int i = 0; i < processes.length; i++) {
+			flag = flag && processes[i].remove();
+		}
+		return flag;
+	}
+
+	public boolean removeModule(Module[] modules) {
+		boolean flag = true;
+		for (int i = 0; i < modules.length; i++) {
+			flag = flag && modules[i].deleteResourceAllocation();
+		}
+		return flag;
+	}
+
+	public boolean removeSoftwareSystem(SoftwareOrganization[] so) {
+		boolean flag = true;
+		for (int i = 0; i < so.length; i++) {
+			flag = flag && so[i].remove();
+		}
+		return flag;
+	}
+	
+	public boolean updateProcess(Process process) {
+		return process.update();
 	}
 }
