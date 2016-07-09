@@ -1,13 +1,23 @@
 package graphical_views;
 
+import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+
+import software_system.Development;
+import software_system.Process;
+import software_system.ProcessWrapper;
 
 public class ChangeProcessView implements View {
 	private View returnView;
@@ -16,6 +26,13 @@ public class ChangeProcessView implements View {
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
+	private JPanel processesPanel;
+	private JScrollPane ppScroll;
+	private JRadioButton[] processesRBS;
+	private JButton updateProcess;
+	
+	private ProcessWrapper pw;
+	private Process[] processes;
 	
 	public ChangeProcessView(View rv, LoginView lv) {
 		returnView = rv;
@@ -23,7 +40,7 @@ public class ChangeProcessView implements View {
 		returnView.hide();
 		
 		updateProcessListFrame = new JFrame();
-		updateProcessListFrame.setBounds(150, 100, 600, 500);
+		updateProcessListFrame.setBounds(150, 100, 600, 550);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -51,17 +68,49 @@ public class ChangeProcessView implements View {
 		});
 		updateProcessListFrame.add(return_);
 		
-		nameLabel = new JLabel("لیست �?رآیندها", SwingConstants.CENTER);
+		nameLabel = new JLabel("لیست فرآیندها", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		updateProcessListFrame.add(nameLabel);
 		
+		processesPanel = new JPanel();
+		processesPanel.setLayout(new BorderLayout());
+		ppScroll = new JScrollPane(processesPanel);
+		ppScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		ppScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		processesPanel.setBounds(50, 130, 500, 300);
+		processesPanel.setVisible(true);
+		updateProcessListFrame.add(processesPanel);
+		
+		final View cpv = this;
+		
+		updateProcess = new JButton("ویرایش فرآیند");
+		updateProcess.setBounds(250, 450, 100, 30);
+		updateProcess.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				UpdateProcessView updateProcessView = new UpdateProcessView(cpv, loginView);
+				updateProcessView.show();
+			}
+		});
+		updateProcessListFrame.add(updateProcess);
 	}
 	
 	@Override
 	public void show() {
 		updateProcessListFrame.setLayout(null);
 		updateProcessListFrame.setVisible(true);
+		
+		pw = new ProcessWrapper();
+		processes = pw.showProcesses();
+		processesRBS = new JRadioButton[processes.length];
+		ButtonGroup group = new ButtonGroup();
+		for (int i = 0; i < processes.length; i++) {
+			processesRBS[i] = new JRadioButton(processes[i].getProjectName() + "(" + (processes[i].getClass().equals(Development.class) ? "ایجاد" : "نگهداری") + ")");
+			group.add(processesRBS[i]);
+		}
+		
 	}
 
 	@Override

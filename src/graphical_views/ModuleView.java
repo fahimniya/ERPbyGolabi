@@ -9,25 +9,24 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class ProcessView implements View {
+public class ModuleView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame processFrame;
+	private JFrame moduleFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	private JButton add;
 	private JButton remove;
 	private JButton update;
-	private JButton module;
 	
-	public ProcessView(View rv, LoginView lv) {
+	public ModuleView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		processFrame = new JFrame();
-		processFrame.setBounds(150, 100, 600, 500);
+		moduleFrame = new JFrame();
+		moduleFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -40,7 +39,7 @@ public class ProcessView implements View {
 				loginView.show(true);
 			}
 		});
-		processFrame.add(logout);
+		moduleFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -53,14 +52,14 @@ public class ProcessView implements View {
 				returnView.show();
 			}
 		});
-		processFrame.add(return_);
+		moduleFrame.add(return_);
 		
 		nameLabel = new JLabel("مدیریت فرآیندها", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		processFrame.add(nameLabel);
+		moduleFrame.add(nameLabel);
 		
-		final View pv = this;
+		final View mov = this;
 		
 		add = new JButton("افزودن");
 		add.setFont(new Font(add.getFont().getName(), Font.PLAIN, 30));
@@ -69,11 +68,11 @@ public class ProcessView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				AddProcessView addProcessView = new AddProcessView(pv, loginView);
-				addProcessView.show();
+				AddModuleView addModuleView = new AddModuleView(mov, loginView);
+				addModuleView.show();
 			}
 		});
-		processFrame.add(add);
+		moduleFrame.add(add);
 		
 		remove = new JButton("حذف");
 		remove.setFont(new Font(remove.getFont().getName(), Font.PLAIN, 30));
@@ -82,11 +81,11 @@ public class ProcessView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				RemoveProcessView removeProcessView = new RemoveProcessView(pv, loginView);
-				removeProcessView.show();
+				//RemoveModuleView removeModuleView = new RemoveModuleView(mov, loginView);
+				//removeModuleView.show();
 			}
 		});
-		processFrame.add(remove);
+		moduleFrame.add(remove);
 		
 		update = new JButton("به‌روزرسانی");
 		update.setFont(new Font(update.getFont().getName(), Font.PLAIN, 30));
@@ -95,34 +94,21 @@ public class ProcessView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ChangeProcessView updateList = new ChangeProcessView(pv, loginView);
-				updateList.show();
+				//ChangeModuleView updateList = new ChangeModuleView(mov, loginView);
+				//updateList.show();
 			}
 		});
-		processFrame.add(update);
-		
-		module = new JButton("ماژول");
-		module.setFont(new Font(module.getFont().getName(), Font.PLAIN, 30));
-		module.setBounds(50, 300, 200, 140);
-		module.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				ModuleView moduleView = new ModuleView(pv, loginView);
-				moduleView.show();
-			}
-		});
-		processFrame.add(module);
+		moduleFrame.add(update);
 	}
 
 	@Override
 	public void show() {
-		processFrame.setLayout(null);
-		processFrame.setVisible(true);
+		moduleFrame.setLayout(null);
+		moduleFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		processFrame.setVisible(false);
+		moduleFrame.setVisible(false);
 	}
 }

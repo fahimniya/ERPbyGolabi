@@ -51,7 +51,7 @@ public class MainView implements View {
 		});
 		mainFrame.add(userManagement);
 		
-		process = new JButton("�?رآیند");
+		process = new JButton("فرآیند");
 		process.setFont(new Font(process.getFont().getName(), Font.PLAIN, 30));
 		process.setBounds(350, 55, 200, 140);
 		process.addActionListener(new ActionListener() {

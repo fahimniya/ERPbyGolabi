@@ -7,8 +7,10 @@ import data.DBManagement;
 
 public class UserWrapper {
 	private static UserWrapper uniqueInstance;
+	private String username;
+	private boolean isManager;
 	
-	public UserWrapper(){};
+	protected UserWrapper(){};
 	
 	public static UserWrapper getInstance() {
 		if (uniqueInstance == null)

@@ -28,9 +28,12 @@ public class User {
 		String query = "select username, password from USER where USERNAME = \"" + username + "\" and PASSWORD = \""
 				+ password + "\";";
 		ResultSet result = db.getQuery(query);
-		if (result == null)
-			return false;
-		return true;
+		try {
+			result.next();
+			System.out.println(result.getString("USERNAME"));
+			return true;
+		} catch (Exception e) {}
+		return false;
 	}
 
 	public boolean addToPendingUpdate(String oldUsername) {

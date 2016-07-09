@@ -3,27 +3,28 @@ package graphical_views;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class AddResourceView implements View {
+public class AddFundingModuleView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame addResourceFrame;
+	private JFrame addFundingModuleFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public AddResourceView(View rv, LoginView lv) {
+	public AddFundingModuleView(View rv, LoginView lv, Date from, Date to, String moduleName, String projectName, boolean isDevelopment) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		addResourceFrame = new JFrame();
-		addResourceFrame.setBounds(150, 100, 600, 500);
+		addFundingModuleFrame = new JFrame();
+		addFundingModuleFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +37,7 @@ public class AddResourceView implements View {
 				loginView.show(true);
 			}
 		});
-		addResourceFrame.add(logout);
+		addFundingModuleFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +50,24 @@ public class AddResourceView implements View {
 				returnView.show();
 			}
 		});
-		addResourceFrame.add(return_);
+		addFundingModuleFrame.add(return_);
 		
-		nameLabel = new JLabel("افزودن منبع", SwingConstants.CENTER);
+		nameLabel = new JLabel("افزودن منبع مالی به ماژول", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		addResourceFrame.add(nameLabel);
+		addFundingModuleFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		addResourceFrame.setLayout(null);
-		addResourceFrame.setVisible(true);
+		addFundingModuleFrame.setLayout(null);
+		addFundingModuleFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		addResourceFrame.setVisible(false);
+		addFundingModuleFrame.setVisible(false);
 	}
 
 }

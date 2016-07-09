@@ -3,27 +3,28 @@ package graphical_views;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class AssignProcessView implements View {
+public class AddHumanModuleView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame assignProcessFrame;
+	private JFrame addHumanModuleFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	
-	public AssignProcessView(View rv, LoginView lv) {
+	public AddHumanModuleView(View rv, LoginView lv, Date from, Date to, String moduleName, String projectName, boolean isDevelopment) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		assignProcessFrame = new JFrame();
-		assignProcessFrame.setBounds(150, 100, 600, 500);
+		addHumanModuleFrame = new JFrame();
+		addHumanModuleFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -36,7 +37,7 @@ public class AssignProcessView implements View {
 				loginView.show(true);
 			}
 		});
-		assignProcessFrame.add(logout);
+		addHumanModuleFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -49,24 +50,24 @@ public class AssignProcessView implements View {
 				returnView.show();
 			}
 		});
-		assignProcessFrame.add(return_);
+		addHumanModuleFrame.add(return_);
 		
-		nameLabel = new JLabel("تخصیص �?رآیند", SwingConstants.CENTER);
+		nameLabel = new JLabel("افزودن منبع انسانی به ماژول", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		assignProcessFrame.add(nameLabel);
+		addHumanModuleFrame.add(nameLabel);
 		
 	}
 	
 	@Override
 	public void show() {
-		assignProcessFrame.setLayout(null);
-		assignProcessFrame.setVisible(true);
+		addHumanModuleFrame.setLayout(null);
+		addHumanModuleFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		assignProcessFrame.setVisible(false);
+		addHumanModuleFrame.setVisible(false);
 	}
 
 }

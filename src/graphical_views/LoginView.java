@@ -59,15 +59,15 @@ public class LoginView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				UserWrapper userWrapper = new UserWrapper();
-				System.out.println("user: " + username.getText() + ", password: " + password.getPassword());
+				UserWrapper userWrapper = UserWrapper.getInstance();
+				System.out.println("user: " + username.getText() + ", password: " + new String(password.getPassword()));
 				boolean isValid = userWrapper.login(username.getText(), new String(password.getPassword()));
-				isValid = true;
+				System.out.println(isValid);
 				if (isValid) {
 					MainView mainView = new MainView(lv);
 					mainView.show();
 				} else {
-					message.setText("ورود نامو�?ق، دوباره تلاش کنید");
+					message.setText("ورود ناموفق، دوباره تلاش کنید");
 				}
 			}
 		});
@@ -82,7 +82,7 @@ public class LoginView implements View {
 		username.setText("");
 		password.setText("");
 		if (logout)
-			message.setText("شما با مو�?قیت خارج شدید");
+			message.setText("شما با موفقیت خارج شدید");
 		loginFrame.setLayout(null);
 		loginFrame.setVisible(true);
 	}

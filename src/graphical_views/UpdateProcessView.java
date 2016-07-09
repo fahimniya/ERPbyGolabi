@@ -3,11 +3,15 @@ package graphical_views;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+
+import software_system.ProcessWrapper;
 
 public class UpdateProcessView implements View {
 	private View returnView;
@@ -16,6 +20,18 @@ public class UpdateProcessView implements View {
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
+	private JTextField processName;
+	private JLabel processNameLabel;
+	private JTextField from_year;
+	private JTextField from_month;
+	private JTextField from_day;
+	private JLabel fromLabel;
+	private JTextField to_year;
+	private JTextField to_month;
+	private JTextField to_day;
+	private JLabel toLabel;
+	private JButton updateProcess;
+	private JLabel message;
 	
 	public UpdateProcessView(View rv, LoginView lv) {
 		returnView = rv;
@@ -51,11 +67,68 @@ public class UpdateProcessView implements View {
 		});
 		updateProcessFrame.add(return_);
 		
-		nameLabel = new JLabel("به‌روزرسانی �?رآیند", SwingConstants.CENTER);
+		nameLabel = new JLabel("به‌روزرسانی فرآیند", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		updateProcessFrame.add(nameLabel);
 		
+		processName = new JTextField();
+		processName.setBounds(100, 150, 250, 30);
+		updateProcessFrame.add(processName);
+		
+		processNameLabel = new JLabel("نام فرآیند:");
+		processNameLabel.setBounds(380, 150, 60, 30);
+		updateProcessFrame.add(processNameLabel);
+		
+		from_year = new JTextField();
+		from_year.setBounds(100, 200, 60, 30);
+		updateProcessFrame.add(from_year);
+		from_month = new JTextField();
+		from_month.setBounds(195, 200, 60, 30);
+		updateProcessFrame.add(from_month);
+		from_day = new JTextField();
+		from_day.setBounds(290, 200, 60, 30);
+		updateProcessFrame.add(from_day);
+		fromLabel = new JLabel("تاریخ شروع:");
+		fromLabel.setBounds(380, 200, 60, 30);
+		updateProcessFrame.add(fromLabel);
+		
+		to_year = new JTextField();
+		to_year.setBounds(100, 250, 60, 30);
+		updateProcessFrame.add(to_year);
+		to_month = new JTextField();
+		to_month.setBounds(195, 250, 60, 30);
+		updateProcessFrame.add(to_month);
+		to_day = new JTextField();
+		to_day.setBounds(290, 250, 60, 30);
+		updateProcessFrame.add(to_day);
+		toLabel = new JLabel("تاریخ اتمام:");
+		toLabel.setBounds(380, 250, 60, 30);
+		updateProcessFrame.add(toLabel);
+		
+		updateProcess = new JButton("ویرایش فرآیند");
+		updateProcess.setBounds(180, 300, 90, 30);
+		updateProcess.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Date from = new Date(Integer.parseInt(from_year.getText()), Integer.parseInt(from_month.getText()), Integer.parseInt(from_day.getText()));
+				Date to = new Date(Integer.parseInt(to_year.getText()), Integer.parseInt(to_month.getText()), Integer.parseInt(to_day.getText()));
+
+				ProcessWrapper pw = new ProcessWrapper();
+				boolean success;
+				success = false;
+				if (success)
+					message.setText("موفقیت‌آمیز");
+				else
+					message.setText("ناموفق");
+			}
+		});
+		updateProcessFrame.add(updateProcess);
+		
+		message = new JLabel("", SwingConstants.CENTER);
+		message.setBounds(100, 350, 250, 30);
+		updateProcessFrame.add(message);
 	}
 	
 	@Override

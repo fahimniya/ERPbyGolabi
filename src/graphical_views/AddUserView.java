@@ -51,7 +51,7 @@ public class AddUserView implements View {
 		});
 		addUserFrame.add(return_);
 		
-		nameLabel = new JLabel("ا�?زودن کاربر", SwingConstants.CENTER);
+		nameLabel = new JLabel("افزودن کاربر", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		addUserFrame.add(nameLabel);
