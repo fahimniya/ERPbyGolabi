@@ -54,4 +54,20 @@ public class UserWrapper {
 		user.addToPendingUpdate(oldUsername);
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public boolean isManager() {
+		return isManager;
+	}
+
+	public void setManager(boolean isManager) {
+		this.isManager = isManager;
+	}
+
 }

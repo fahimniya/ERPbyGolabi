@@ -1,6 +1,7 @@
 package user_management;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import data.DBManagement;
 
@@ -25,14 +26,17 @@ public class User {
 	public boolean authenticate() {
 		DBManagement db = new DBManagement();
 
-		String query = "select username, password from USER where USERNAME = \"" + username + "\" and PASSWORD = \""
+		String query = "select * from USER where USERNAME = \"" + username + "\" and PASSWORD = \""
 				+ password + "\";";
 		ResultSet result = db.getQuery(query);
 		try {
 			result.next();
 			System.out.println(result.getString("USERNAME"));
+			UserWrapper userWrapper = UserWrapper.getInstance();
+			userWrapper.setUsername(username);
+			userWrapper.setManager(result.getString("ROLE").equals("MANAGER"));
 			return true;
-		} catch (Exception e) {}
+		} catch (SQLException e) {}
 		return false;
 	}
 
