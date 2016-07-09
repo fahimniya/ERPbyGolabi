@@ -8,6 +8,8 @@ import resources.FundingResource;
 import resources.Resource;
 
 public class Module {
+	final static String MAINTENANCE = "maintenance";
+	final static String DEVELOPMENT = "development";
 	private String moduleName, projectName, type;
 	private Resource res;
 	private HumanResource hres;
