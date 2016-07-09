@@ -1,6 +1,7 @@
 package graphical_views;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -73,15 +74,6 @@ public class ChangeProcessView implements View {
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		updateProcessListFrame.add(nameLabel);
 		
-		processesPanel = new JPanel();
-		processesPanel.setLayout(new BorderLayout());
-		ppScroll = new JScrollPane(processesPanel);
-		ppScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		ppScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		processesPanel.setBounds(50, 130, 500, 300);
-		processesPanel.setVisible(true);
-		updateProcessListFrame.add(processesPanel);
-		
 		final View cpv = this;
 		
 		updateProcess = new JButton("ویرایش فرآیند");
@@ -95,6 +87,22 @@ public class ChangeProcessView implements View {
 			}
 		});
 		updateProcessListFrame.add(updateProcess);
+		
+		processesPanel = new JPanel();
+		processesPanel.setLayout(null);
+        ppScroll = new JScrollPane(processesPanel);
+        ppScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        ppScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        ppScroll.setBounds(50, 130, 500, 300);
+        JPanel contentPane = new JPanel(null);
+        contentPane.setPreferredSize(new Dimension(600, 550));
+        contentPane.add(ppScroll);
+        contentPane.add(nameLabel);
+        contentPane.add(updateProcess);
+        updateProcessListFrame.setContentPane(contentPane);
+        updateProcessListFrame.pack();
+        updateProcessListFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        updateProcessListFrame.setVisible(true);
 	}
 	
 	@Override

@@ -7,32 +7,37 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import user_management.ManagerWrapper;
 import user_management.User;
 import user_management.UserWrapper;
 
-public class InfoView implements View {
+public class EditUserView implements View {
 	private View returnView;
 	private LoginView loginView;
 	private JFrame infoFrame;
 	private JLabel _nameLabel;
 	private JButton logout;
 	private JButton return_;
-	private JLabel username;
+	private JTextField username;
 	private JLabel usernameLabel;
-	private JLabel name;
+	private JTextField name;
 	private JLabel nameLabel;
-	private JLabel isManager;
-	private JLabel managerLabel;
+	private JPasswordField password;
+	private JLabel passwordLabel;
+	private JButton edit;
+	private JLabel message;
 	
-	public InfoView(View rv, LoginView lv) {
+	public EditUserView(View rv, LoginView lv, User usr) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
 		infoFrame = new JFrame();
-		infoFrame.setBounds(150, 100, 600, 300);
+		infoFrame.setBounds(150, 100, 600, 350);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -65,29 +70,57 @@ public class InfoView implements View {
 		_nameLabel.setFont(new Font(_nameLabel.getFont().getName(), Font.PLAIN, 40));
 		infoFrame.add(_nameLabel);
 		
-		User user = UserWrapper.getInstance().getAccountInformation(UserWrapper.getInstance().getUsername());
+		final User user;
+		if (usr == null)
+			user = UserWrapper.getInstance().getAccountInformation(UserWrapper.getInstance().getUsername());
+		else
+			user = usr;
 		
-		
-		username = new JLabel(user.getUsername(), SwingConstants.RIGHT);
+		username = new JTextField(user.getUsername());
 		username.setBounds(100, 100, 300, 30);
 		infoFrame.add(username);
 		usernameLabel = new JLabel("نام کاربری:");
 		usernameLabel.setBounds(450, 100, 100, 30);
 		infoFrame.add(usernameLabel);
 		
-		name = new JLabel(user.getName(), SwingConstants.RIGHT);
+		name = new JTextField(user.getName());
 		name.setBounds(100, 150, 300, 30);
 		infoFrame.add(name);
 		nameLabel = new JLabel("نام:");
 		nameLabel.setBounds(450, 150, 100, 30);
 		infoFrame.add(nameLabel);
 		
-		isManager = new JLabel(UserWrapper.getInstance().isManager()? "بله": "خیر", SwingConstants.RIGHT);
-		isManager.setBounds(100, 200, 300, 30);
-		infoFrame.add(isManager);
-		managerLabel = new JLabel("مدیریت؟");
-		managerLabel.setBounds(450, 200, 100, 30);
-		infoFrame.add(managerLabel);
+		password = new JPasswordField();
+		password.setBounds(100, 200, 300, 30);
+		infoFrame.add(password);
+		passwordLabel = new JLabel("کلمه‌ی عبور جدید");
+		passwordLabel.setBounds(450, 200, 100, 30);
+		infoFrame.add(passwordLabel);
+		
+		edit = new JButton("ویرایش");
+		edit.setBounds(210, 250, 80, 45);
+		edit.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				UserWrapper userWrapper = UserWrapper.getInstance();
+				ManagerWrapper managerWrapper = ManagerWrapper.getInstance();
+				boolean success;
+				if (UserWrapper.getInstance().isManager()) {
+					success = managerWrapper.updateUser(user.getUsername(), username.getText(), name.getText(), (new String(password.getPassword()).length() > 0)? new String(password.getPassword()) : user.getPassword(), "NORMAL");
+				}
+					success = userWrapper.editAccountInformation(user.getUsername(), username.getText(), name.getText(), (new String(password.getPassword()).length() > 0)? new String(password.getPassword()) : user.getPassword());
+				if (success)
+					message.setText("موفقیت‌آمیز");
+				else
+					message.setText("ناموفق");
+			}
+		});
+		infoFrame.add(edit);
+		
+		message = new JLabel("");
+		message.setBounds(130, 250, 50, 45);
+		infoFrame.add(message);
 	}
 	
 	@Override

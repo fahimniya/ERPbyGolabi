@@ -26,8 +26,7 @@ public class User {
 	public boolean authenticate() {
 		DBManagement db = new DBManagement();
 
-		String query = "select * from USER where USERNAME = \"" + username + "\" and PASSWORD = \""
-				+ password + "\";";
+		String query = "select * from USER where USERNAME = \"" + username + "\" and PASSWORD = \"" + password + "\";";
 		ResultSet result = db.getQuery(query);
 		try {
 			result.next();
@@ -36,7 +35,8 @@ public class User {
 			userWrapper.setUsername(username);
 			userWrapper.setManager(result.getString("ROLE").equals("MANAGER"));
 			return true;
-		} catch (SQLException e) {}
+		} catch (SQLException e) {
+		}
 		return false;
 	}
 
@@ -45,6 +45,7 @@ public class User {
 
 		String query = "insert into PENDINGUPDATE values(\"" + oldUsername + "\", \"" + username + "\", \"" + password
 				+ "\", \"" + name + "\", \"NORMAL\");";
+
 		return db.update(query);
 	}
 
@@ -64,9 +65,13 @@ public class User {
 		return db.update(query);
 	}
 
-	// public boolean banUser() {
-	//
-	// }
+	public boolean update(String oldUsername, String role) {
+		DBManagement db = new DBManagement();
+		String query = db.generateUpdateQuery("USER", new String[] { username, password, name, role },
+				new String[] { "USERNAME", "PASSWORD", "NAME", "ROLE" }, new String[] { oldUsername },
+				new String[] { "USERNAME" });
+		return db.update(query);
+	}
 
 	public String getName() {
 		return name;

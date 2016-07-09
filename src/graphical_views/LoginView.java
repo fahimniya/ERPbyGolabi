@@ -66,6 +66,7 @@ public class LoginView implements View {
 				if (isValid) {
 					MainView mainView = new MainView(lv);
 					mainView.show();
+					System.out.println(userWrapper.isManager());
 				} else {
 					message.setText("ورود ناموفق، دوباره تلاش کنید");
 				}

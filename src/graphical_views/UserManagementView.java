@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import user_management.UserWrapper;
+
 public class UserManagementView implements View {
 	private View returnView;
 	private LoginView loginView;
@@ -27,7 +29,7 @@ public class UserManagementView implements View {
 		returnView.hide();
 		
 		userManagementFrame = new JFrame();
-		userManagementFrame.setBounds(150, 100, 600, 500);
+		userManagementFrame.setBounds(150, 100, 600, UserWrapper.getInstance().isManager()? 500 : 330);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -82,8 +84,13 @@ public class UserManagementView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ChooseUserView chooseUserView = new ChooseUserView(umv, loginView);
-				chooseUserView.show();
+				if (UserWrapper.getInstance().isManager()) {
+					ChooseUserView chooseUserView = new ChooseUserView(umv, loginView);
+					chooseUserView.show();
+				} else {
+					EditUserView editUserView = new EditUserView(umv, loginView, null);
+					editUserView.show();
+				}
 			}
 		});
 		userManagementFrame.add(edit);
@@ -99,9 +106,10 @@ public class UserManagementView implements View {
 				confirmChanges.show();
 			}
 		});
-		userManagementFrame.add(confirmChanges);
+		if (UserWrapper.getInstance().isManager())
+			userManagementFrame.add(confirmChanges);
 		
-		addUser = new JButton("ا�?زودن کاربر");
+		addUser = new JButton("افزودن کاربر");
 		addUser.setFont(new Font(addUser.getFont().getName(), Font.PLAIN, 30));
 		addUser.setBounds(50, 300, 200, 140);
 		addUser.addActionListener(new ActionListener() {
@@ -112,7 +120,8 @@ public class UserManagementView implements View {
 				addUserView.show();
 			}
 		});
-		userManagementFrame.add(addUser);
+		if (UserWrapper.getInstance().isManager())
+			userManagementFrame.add(addUser);
 	}
 	
 	@Override

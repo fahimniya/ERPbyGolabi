@@ -98,6 +98,7 @@ public class ProcessWrapper {
 				String q = db.generateSelectQuery("FACILITYRESOURCE", new String[] { "*" },
 						new String[] { Integer.toString(id) }, new String[] { "ID" });
 				ResultSet temp = db.getQuery(q);
+				if(!temp.next()) break;
 				FacilityResource fr = null;
 				fr = new FacilityResource(temp.getString("NAME"), temp.getInt("ID"));
 				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), fr,
@@ -114,9 +115,11 @@ public class ProcessWrapper {
 				String q = db.generateSelectQuery("HUMSNRESOURCE", new String[] { "*" },
 						new String[] { Integer.toString(id) }, new String[] { "ID" });
 				ResultSet temp = db.getQuery(q);
+				if(!temp.next()) break;
 				HumanResource hr = null;
 				q = db.generateSelectQuery("USER", new String[] { "*" }, null, null);
 				ResultSet t = db.getQuery(q);
+				t.next();
 				User user = new User(t.getString("USERNAME"), t.getString("PASSWORD"), t.getString("NAME"));
 				hr = new HumanResource(user, temp.getDate("FROM_DATE"), temp.getDate("TO_DATE"));
 				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), hr,
