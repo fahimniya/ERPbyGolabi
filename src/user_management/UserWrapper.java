@@ -2,6 +2,7 @@ package user_management;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import data.DBManagement;
 
@@ -48,10 +49,25 @@ public class UserWrapper {
 		return user;
 	}
 	
-	public void editAccountInformation(String oldUsername, String username, String name, String password) {
+	public User[] showUsers() {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("USER", new String[] {"*"}, null, null);
+		ResultSet rs = db.getQuery(query);
+		ArrayList<User> users = new ArrayList<User>();
+		try {
+			while(rs.next()) {
+				users.add(new User(rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("NAME")));
+			}
+		}catch(Exception e) {
+			return null;
+		}
+		return (users.toArray(new User[users.size()]));
+	}
+	
+	public boolean editAccountInformation(String oldUsername, String username, String name, String password) {
 		User user = new User(username, password, name);
 		
-		user.addToPendingUpdate(oldUsername);
+		return user.addToPendingUpdate(oldUsername);
 	}
 
 	public String getUsername() {
