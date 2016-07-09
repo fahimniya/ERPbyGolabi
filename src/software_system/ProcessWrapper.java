@@ -25,13 +25,14 @@ public class ProcessWrapper {
 		return maintenance.add();
 	}
 
-	public boolean addModule(String moduleName, String projectName, Resource res, Date from, Date to) {
-		Module module = new Module(moduleName, projectName, res, from, to);
+	public boolean addModule(String moduleName, String projectName, Resource res, String type, Date from, Date to) {
+		Module module = new Module(moduleName, projectName, res, type, from, to);
 		return module.addResourceAllocated();
 	}
 
-	public boolean addModule(String moduleName, String projectName, HumanResource hRes, Date from, Date to) {
-		Module module = new Module(moduleName, projectName, hRes, from, to);
+	public boolean addModule(String moduleName, String projectName, HumanResource hRes, String type, Date from,
+			Date to) {
+		Module module = new Module(moduleName, projectName, hRes, type, from, to);
 		return module.addResourceAllocated();
 	}
 
@@ -100,7 +101,7 @@ public class ProcessWrapper {
 				FacilityResource fr = null;
 				fr = new FacilityResource(temp.getString("NAME"), temp.getInt("ID"));
 				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), fr,
-						rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
+						rs.getString("TYPE"), rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
 			}
 		} catch (Exception e) {
 			return null;
@@ -119,7 +120,7 @@ public class ProcessWrapper {
 				User user = new User(t.getString("USERNAME"), t.getString("PASSWORD"), t.getString("NAME"));
 				hr = new HumanResource(user, temp.getDate("FROM_DATE"), temp.getDate("TO_DATE"));
 				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), hr,
-						rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
+						rs.getString("TYPE"), rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
 			}
 		} catch (Exception e) {
 			return null;
@@ -131,7 +132,7 @@ public class ProcessWrapper {
 				FundingResource fr = new FundingResource(
 						new Quantity(rs.getInt("AMOUNT"), new Unit(rs.getString("UNIT"))));
 				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), fr,
-						rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
+						rs.getString("TYPE"), rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
 			}
 		} catch (Exception e) {
 			return null;
@@ -162,7 +163,7 @@ public class ProcessWrapper {
 		}
 		return flag;
 	}
-	
+
 	public boolean updateProcess(Process process) {
 		return process.update();
 	}
