@@ -100,6 +100,8 @@ public class ChooseUserView implements View {
         contentPane.add(upScroll);
         contentPane.add(nameLabel);
         contentPane.add(editUser);
+        contentPane.add(logout);
+        contentPane.add(return_);
         chooseUserFrame.setContentPane(contentPane);
         chooseUserFrame.pack();
         chooseUserFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

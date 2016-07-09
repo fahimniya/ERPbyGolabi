@@ -8,12 +8,12 @@ import data.DBManagement;
 public class Maintenance extends Process {
 
 	public Maintenance(String projectName, Date from, Date to) {
-		super(projectName, from, to);
+		super(projectName, from, to, "MAINTENANCE");
 		super.id = generateId();
 	}
 
 	public Maintenance(String projectName, Date from, Date to, int id) {
-		super(projectName, from, to);
+		super(projectName, from, to, "MAINTENANCE");
 		super.id = id;
 	}
 

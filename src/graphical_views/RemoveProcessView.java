@@ -85,7 +85,7 @@ public class RemoveProcessView implements View {
 		removeProcessFrame.setLayout(null);
 		removeProcessFrame.setVisible(true);
 		
-		pw = new ProcessWrapper();
+		pw = ProcessWrapper.getInstance();
 		processes = pw.showProcesses();
 		processesCBS = new JCheckBox[processes.length];
 		for (int i = 0; i < processes.length; i++) {

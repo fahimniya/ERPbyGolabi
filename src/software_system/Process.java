@@ -25,11 +25,13 @@ public abstract class Process {
 	}
 	protected Date from, to;
 	protected int id;
+	protected String type;
 	
-	public Process(String projectName, Date from, Date to) {
+	public Process(String projectName, Date from, Date to, String type) {
 		this.projectName = projectName;
 		this.from = from;
 		this.to = to;
+		this.type = type;
 	}
 	
 	public String getProjectName() {

@@ -18,7 +18,6 @@ public class ModuleView implements View {
 	private JButton return_;
 	private JButton add;
 	private JButton remove;
-	private JButton update;
 	
 	public ModuleView(View rv, LoginView lv) {
 		returnView = rv;
@@ -26,7 +25,7 @@ public class ModuleView implements View {
 		returnView.hide();
 		
 		moduleFrame = new JFrame();
-		moduleFrame.setBounds(150, 100, 600, 500);
+		moduleFrame.setBounds(150, 100, 600, 350);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -54,7 +53,7 @@ public class ModuleView implements View {
 		});
 		moduleFrame.add(return_);
 		
-		nameLabel = new JLabel("مدیریت فرآیندها", SwingConstants.CENTER);
+		nameLabel = new JLabel("مدیریت ماژول‌ها", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		moduleFrame.add(nameLabel);
@@ -86,19 +85,6 @@ public class ModuleView implements View {
 			}
 		});
 		moduleFrame.add(remove);
-		
-		update = new JButton("به‌روزرسانی");
-		update.setFont(new Font(update.getFont().getName(), Font.PLAIN, 30));
-		update.setBounds(350, 300, 200, 140);
-		update.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				//ChangeModuleView updateList = new ChangeModuleView(mov, loginView);
-				//updateList.show();
-			}
-		});
-		moduleFrame.add(update);
 	}
 
 	@Override

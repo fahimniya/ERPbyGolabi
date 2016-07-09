@@ -14,6 +14,17 @@ import resources.Unit;
 import user_management.User;
 
 public class ProcessWrapper {
+	private static ProcessWrapper uniqueInstance;
+	private Process process;
+	
+	private ProcessWrapper() {}
+	
+	public static ProcessWrapper getInstance() {
+		if (uniqueInstance == null)
+			return (uniqueInstance = new ProcessWrapper());
+		else
+			return uniqueInstance;
+	}
 
 	public boolean addDevelopmentProcess(Date from, Date to, String name) {
 		Development dev = new Development(name, from, to);
@@ -62,29 +73,25 @@ public class ProcessWrapper {
 
 	public Process[] showProcesses() {
 		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("DEVELOP", new String[] { "*" }, null, null);
+		String query = db.generateSelectQuery("PROCESS", new String[] { "*" }, null, null);
+		System.out.println(query);
 		ResultSet rs = db.getQuery(query);
 		ArrayList<Process> processes = new ArrayList<Process>();
 		try {
 			while (rs.next()) {
-				processes.add(new Development(rs.getString("PROJECTNAME"), rs.getDate("FROM"), rs.getDate("TO"),
-						rs.getInt("ID")));
+				System.out.println(rs.getString("type"));
+				if (rs.getString("TYPE").equals("DEVELOPMENT"))
+					processes.add(new Development(rs.getString("SOFTWARESYSTEMNAME"), rs.getDate("FROM_DATE"),
+							rs.getDate("TO_DATE"), rs.getInt("ID")));
+				else
+					processes.add(new Maintenance(rs.getString("SOFTWARESYSTEMNAME"), rs.getDate("FROM_DATE"),
+							rs.getDate("TO_DATE"), rs.getInt("ID")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			return null;
 		}
-		query = db.generateSelectQuery("DEVELOP", new String[] { "*" }, null, null);
-		rs = db.getQuery(query);
-		try {
-			while (rs.next()) {
-				processes.add(new Maintenance(rs.getString("PROJECTNAME"), rs.getDate("FROM"), rs.getDate("TO"),
-						rs.getInt("ID")));
-			}
-		} catch (SQLException e) {
-			return null;
-		}
-		return (Process[]) processes.toArray();
+		return processes.toArray(new Process[processes.size()]);
 	}
 
 	public Module[] showModules() {
@@ -98,7 +105,8 @@ public class ProcessWrapper {
 				String q = db.generateSelectQuery("FACILITYRESOURCE", new String[] { "*" },
 						new String[] { Integer.toString(id) }, new String[] { "ID" });
 				ResultSet temp = db.getQuery(q);
-				if(!temp.next()) break;
+				if (!temp.next())
+					break;
 				FacilityResource fr = null;
 				fr = new FacilityResource(temp.getString("NAME"), temp.getInt("ID"));
 				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), fr,
@@ -115,7 +123,8 @@ public class ProcessWrapper {
 				String q = db.generateSelectQuery("HUMSNRESOURCE", new String[] { "*" },
 						new String[] { Integer.toString(id) }, new String[] { "ID" });
 				ResultSet temp = db.getQuery(q);
-				if(!temp.next()) break;
+				if (!temp.next())
+					break;
 				HumanResource hr = null;
 				q = db.generateSelectQuery("USER", new String[] { "*" }, null, null);
 				ResultSet t = db.getQuery(q);
@@ -169,5 +178,13 @@ public class ProcessWrapper {
 
 	public boolean updateProcess(Process process) {
 		return process.update();
+	}
+
+	public Process getProcess() {
+		return process;
+	}
+
+	public void setProcess(Process process) {
+		this.process = process;
 	}
 }

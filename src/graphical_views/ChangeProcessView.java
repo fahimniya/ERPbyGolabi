@@ -16,6 +16,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import org.omg.stub.java.rmi._Remote_Stub;
+
 import software_system.Development;
 import software_system.Process;
 import software_system.ProcessWrapper;
@@ -82,6 +84,13 @@ public class ChangeProcessView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Process process = processes[0];
+				for (int i = 0; i < processes.length; i++)
+					if (processesRBS[i].isSelected()) {
+						process = processes[i];
+						break;
+					}
+				ProcessWrapper.getInstance().setProcess(process);
 				UpdateProcessView updateProcessView = new UpdateProcessView(cpv, loginView);
 				updateProcessView.show();
 			}
@@ -99,6 +108,8 @@ public class ChangeProcessView implements View {
         contentPane.add(ppScroll);
         contentPane.add(nameLabel);
         contentPane.add(updateProcess);
+        contentPane.add(logout);
+        contentPane.add(return_);
         updateProcessListFrame.setContentPane(contentPane);
         updateProcessListFrame.pack();
         updateProcessListFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -110,13 +121,16 @@ public class ChangeProcessView implements View {
 		updateProcessListFrame.setLayout(null);
 		updateProcessListFrame.setVisible(true);
 		
-		pw = new ProcessWrapper();
+		pw = ProcessWrapper.getInstance();
 		processes = pw.showProcesses();
+		System.out.println(processes.length);
 		processesRBS = new JRadioButton[processes.length];
 		ButtonGroup group = new ButtonGroup();
 		for (int i = 0; i < processes.length; i++) {
 			processesRBS[i] = new JRadioButton(processes[i].getProjectName() + "(" + (processes[i].getClass().equals(Development.class) ? "ایجاد" : "نگهداری") + ")");
+			processesRBS[i].setBounds(30, i * 40, 200, 30);
 			group.add(processesRBS[i]);
+			processesPanel.add(processesRBS[i]);
 		}
 		
 	}

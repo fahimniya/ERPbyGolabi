@@ -12,6 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import software_system.ProcessWrapper;
+import software_system.Process;
 
 public class UpdateProcessView implements View {
 	private View returnView;
@@ -72,7 +73,9 @@ public class UpdateProcessView implements View {
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		updateProcessFrame.add(nameLabel);
 		
-		processName = new JTextField();
+		final Process process = ProcessWrapper.getInstance().getProcess();
+		
+		processName = new JTextField(process.getProjectName());
 		processName.setBounds(100, 150, 250, 30);
 		updateProcessFrame.add(processName);
 		
@@ -80,26 +83,26 @@ public class UpdateProcessView implements View {
 		processNameLabel.setBounds(380, 150, 60, 30);
 		updateProcessFrame.add(processNameLabel);
 		
-		from_year = new JTextField();
+		from_year = new JTextField(process.getFrom().getYear());
 		from_year.setBounds(100, 200, 60, 30);
 		updateProcessFrame.add(from_year);
-		from_month = new JTextField();
+		from_month = new JTextField(process.getFrom().getMonth());
 		from_month.setBounds(195, 200, 60, 30);
 		updateProcessFrame.add(from_month);
-		from_day = new JTextField();
+		from_day = new JTextField(process.getFrom().getDay());
 		from_day.setBounds(290, 200, 60, 30);
 		updateProcessFrame.add(from_day);
 		fromLabel = new JLabel("تاریخ شروع:");
 		fromLabel.setBounds(380, 200, 60, 30);
 		updateProcessFrame.add(fromLabel);
 		
-		to_year = new JTextField();
+		to_year = new JTextField(process.getTo().getYear());
 		to_year.setBounds(100, 250, 60, 30);
 		updateProcessFrame.add(to_year);
-		to_month = new JTextField();
+		to_month = new JTextField(process.getTo().getMonth());
 		to_month.setBounds(195, 250, 60, 30);
 		updateProcessFrame.add(to_month);
-		to_day = new JTextField();
+		to_day = new JTextField(process.getTo().getDay());
 		to_day.setBounds(290, 250, 60, 30);
 		updateProcessFrame.add(to_day);
 		toLabel = new JLabel("تاریخ اتمام:");
@@ -115,8 +118,8 @@ public class UpdateProcessView implements View {
 				Date from = new Date(Integer.parseInt(from_year.getText()), Integer.parseInt(from_month.getText()), Integer.parseInt(from_day.getText()));
 				Date to = new Date(Integer.parseInt(to_year.getText()), Integer.parseInt(to_month.getText()), Integer.parseInt(to_day.getText()));
 
-				ProcessWrapper pw = new ProcessWrapper();
-				boolean success;
+				ProcessWrapper pw = ProcessWrapper.getInstance();
+				boolean success = pw.updateProcess(process);
 				success = false;
 				if (success)
 					message.setText("موفقیت‌آمیز");

@@ -8,12 +8,12 @@ import data.DBManagement;
 public class Development extends Process {
 
 	public Development(String projectName, Date from, Date to) {
-		super(projectName, from, to);
+		super(projectName, from, to, "DEVELOPMENT");
 		super.id = generateId();
 	}
 
 	public Development(String projectName, Date from, Date to, int id) {
-		super(projectName, from, to);
+		super(projectName, from, to, "DEVELOPMENT");
 		super.id = id;
 	}
 
@@ -21,7 +21,8 @@ public class Development extends Process {
 	public boolean add() {
 		DBManagement db = new DBManagement();
 		String query = db.generateAddQuery("PROCESS",
-				new String[] { String.valueOf(id), projectName, from.toString(), to.toString() });
+				new String[] { String.valueOf(id), projectName, from.toString(), to.toString(), type });
+		System.out.println(query);
 		return db.update(query);
 	}
 

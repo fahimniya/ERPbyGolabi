@@ -130,7 +130,7 @@ public class AddProcessView implements View {
 				Date from = new Date(Integer.parseInt(from_year.getText()), Integer.parseInt(from_month.getText()), Integer.parseInt(from_day.getText()));
 				Date to = new Date(Integer.parseInt(to_year.getText()), Integer.parseInt(to_month.getText()), Integer.parseInt(to_day.getText()));
 
-				ProcessWrapper pw = new ProcessWrapper();
+				ProcessWrapper pw = ProcessWrapper.getInstance();
 				boolean success;
 				if (developmentRB.isSelected())
 					success = pw.addDevelopmentProcess(from, to, processName.getText());
