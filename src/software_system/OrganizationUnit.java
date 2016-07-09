@@ -1,15 +1,43 @@
 package software_system;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Random;
 
 import data.DBManagement;
 import resources.Quantity;
 import user_management.User;
+import user_management.UserWrapper;
 
 public class OrganizationUnit {
 	private int id;
 	private String name;
 	private User manager;
+	
+	public OrganizationUnit[] getAll() {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("ORGANIZATIONUNIT", new String[] {"*"}, new String[] {UserWrapper.getInstance().getUsername()}, new String[] {"USERNAME"});
+		ResultSet rs = db.getQuery(query);
+		ArrayList<OrganizationUnit> result = new ArrayList<OrganizationUnit>();
+		try {
+			while(rs.next()) {
+				int currentID = rs.getInt("ID");
+				String currentName = rs.getString("NAME");
+				String managerUsername = rs.getString("USERNAME");
+				result.add(new OrganizationUnit(currentID, currentName, new User(managerUsername, null)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result.toArray(new OrganizationUnit[result.size()]);
+	}
+	
+	public OrganizationUnit(int id, String name, User manager) {
+		this.id = id;
+		this.name = name;
+		this.manager = manager;
+	}
 	
 	public boolean addOrganizationUnit(int id, String name, User manager) {
 		this.id = id;
@@ -21,6 +49,9 @@ public class OrganizationUnit {
 	}
 	
 	public boolean registerResource(String projectName, int humans, String specialty, Quantity amount, int facilityNumber, String name, int priority) {
+		if(!UserWrapper.getInstance().getUsername().equals(manager.getUsername()))
+			return false;
+		UserWrapper.getInstance().getUsername();
 		boolean human = false, facility = false, fund = false;
 		if (humans != 0)
 			human = registerHumanResource(projectName, humans, specialty, priority);
