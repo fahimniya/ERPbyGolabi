@@ -2,13 +2,11 @@ package software_system.estimation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import data.DBManagement;
 import resources.Quantity;
-import resources.Resource;
 import resources.Unit;
 import software_system.SoftwareSystem;
 

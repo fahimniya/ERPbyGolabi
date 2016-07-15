@@ -206,7 +206,7 @@ public class ProcessWrapper {
 
 	public boolean softwareSystemExists(String name) {
 		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, null, null);
+		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, new String[] {name}, new String[] {"NAME"});
 		ResultSet rs = db.getQuery(query);
 		try {
 			rs.next();
