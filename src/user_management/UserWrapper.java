@@ -56,7 +56,7 @@ public class UserWrapper {
 		ArrayList<User> users = new ArrayList<User>();
 		try {
 			while(rs.next()) {
-				users.add(new User(rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("NAME")));
+				users.add(new User(rs.getString("USERNAME"), rs.getString("PASSWORD"), rs.getString("NAME"), rs.getString("ROLE")));
 			}
 		}catch(Exception e) {
 			return null;
