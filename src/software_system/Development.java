@@ -44,8 +44,8 @@ public class Development extends Process {
 	public boolean update() {
 		DBManagement db = new DBManagement();
 		String query = db.generateUpdateQuery("PROCESS",
-				new String[] { projectName, from.toString(), to.toString(), "DEVELOP" },
-				new String[] { "PROJECTNAME", "FROM_DATE", "TO_DATE", "TYPE" }, new String[] { Integer.toString(id) },
+				new String[] { projectName, from.toString(), to.toString(), "DEVELOPMENT" },
+				new String[] { "SOFTWARESYSTEMNAME", "FROM_DATE", "TO_DATE", "TYPE" }, new String[] { Integer.toString(id) },
 				new String[] { "ID" });
 		return db.update(query);
 	}

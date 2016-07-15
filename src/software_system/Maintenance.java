@@ -22,6 +22,7 @@ public class Maintenance extends Process {
 		DBManagement db = new DBManagement();
 		String query = db.generateAddQuery("PROCESS",
 				new String[] { String.valueOf(id), projectName, from.toString(), to.toString(), "MAINTENANCE" });
+		System.out.println(query);
 		return db.update(query);
 	}
 
@@ -44,8 +45,9 @@ public class Maintenance extends Process {
 		DBManagement db = new DBManagement();
 		String query = db.generateUpdateQuery("PROCESS",
 				new String[] { projectName, from.toString(), to.toString(), "MAINTENANCE" },
-				new String[] { "PROJECTNAME", "FROM_DATE", "TO_DATE", "TYPE" }, new String[] { Integer.toString(id) },
+				new String[] { "SOFTWARESYSTEmNAME", "FROM_DATE", "TO_DATE", "TYPE" }, new String[] { Integer.toString(id) },
 				new String[] { "ID" });
+		System.out.println(query);
 		return db.update(query);
 	}
 }

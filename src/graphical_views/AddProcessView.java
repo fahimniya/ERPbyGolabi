@@ -24,7 +24,7 @@ public class AddProcessView implements View {
 	private JButton return_;
 	private JRadioButton developmentRB;
 	private JRadioButton maintenanceRB;
-	private JTextField processName;
+	private JTextField softwareSystemName;
 	private JLabel processNameLabel;
 	private JTextField from_year;
 	private JTextField from_month;
@@ -87,9 +87,9 @@ public class AddProcessView implements View {
 		group.add(developmentRB);
 		group.add(maintenanceRB);
 		
-		processName = new JTextField();
-		processName.setBounds(100, 150, 250, 30);
-		addProcessFrame.add(processName);
+		softwareSystemName = new JTextField();
+		softwareSystemName.setBounds(100, 150, 250, 30);
+		addProcessFrame.add(softwareSystemName);
 		
 		processNameLabel = new JLabel("نام فرآیند:");
 		processNameLabel.setBounds(380, 150, 60, 30);
@@ -127,15 +127,15 @@ public class AddProcessView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Date from = new Date(Integer.parseInt(from_year.getText()), Integer.parseInt(from_month.getText()), Integer.parseInt(from_day.getText()));
-				Date to = new Date(Integer.parseInt(to_year.getText()), Integer.parseInt(to_month.getText()), Integer.parseInt(to_day.getText()));
+				Date from = new Date(Integer.parseInt(from_year.getText()) - 1900, Integer.parseInt(from_month.getText()) - 1, Integer.parseInt(from_day.getText()));
+				Date to = new Date(Integer.parseInt(to_year.getText()) - 1900, Integer.parseInt(to_month.getText()) - 1, Integer.parseInt(to_day.getText()));
 
 				ProcessWrapper pw = ProcessWrapper.getInstance();
 				boolean success;
 				if (developmentRB.isSelected())
-					success = pw.addDevelopmentProcess(from, to, processName.getText());
+					success = pw.addDevelopmentProcess(from, to, softwareSystemName.getText());
 				else
-					success = pw.addMaintenanceProcess(from, to, processName.getText());
+					success = pw.addMaintenanceProcess(from, to, softwareSystemName.getText());
 				if (success)
 					message.setText("موفقیت‌آمیز");
 				else

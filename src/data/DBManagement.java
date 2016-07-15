@@ -95,16 +95,16 @@ public class DBManagement {
 		String query = "update " + table + " set ";
 		for (int i = 0; i < newValues.length; i++)
 			if (i == newValues.length - 1)
-				query += newValuesFileds[i] + " = " + newValues[i] + " ";
+				query += newValuesFileds[i] + " = \"" + newValues[i] + "\" ";
 			else
-				query += newValuesFileds[i] + " = " + newValues[i] + ", ";
+				query += newValuesFileds[i] + " = \"" + newValues[i] + "\", ";
 		if (oldValues.length > 0) {
 			query += "where ";
 			for (int i = 0; i < oldValues.length; i++)
 				if (i == oldValues.length - 1)
-					query += oldValuesFields[i] + " = " + oldValues[i] + ";";
+					query += oldValuesFields[i] + " = \"" + oldValues[i] + "\";";
 				else
-					query += oldValuesFields[i] + " = " + oldValues[i] + " and ";
+					query += oldValuesFields[i] + " = \"" + oldValues[i] + "\" and ";
 		} else
 			query += ";";
 		return query;

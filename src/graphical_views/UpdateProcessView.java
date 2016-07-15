@@ -115,12 +115,14 @@ public class UpdateProcessView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Date from = new Date(Integer.parseInt(from_year.getText()), Integer.parseInt(from_month.getText()), Integer.parseInt(from_day.getText()));
-				Date to = new Date(Integer.parseInt(to_year.getText()), Integer.parseInt(to_month.getText()), Integer.parseInt(to_day.getText()));
+				Date from = new Date(Integer.parseInt(from_year.getText()) - 1900, Integer.parseInt(from_month.getText()) - 1, Integer.parseInt(from_day.getText()));
+				Date to = new Date(Integer.parseInt(to_year.getText()) - 1900, Integer.parseInt(to_month.getText()) - 1, Integer.parseInt(to_day.getText()));
 
 				ProcessWrapper pw = ProcessWrapper.getInstance();
+				process.setProjectName(processName.getText());
+				process.setFrom(from);
+				process.setTo(to);
 				boolean success = pw.updateProcess(process);
-				success = false;
 				if (success)
 					message.setText("موفقیت‌آمیز");
 				else

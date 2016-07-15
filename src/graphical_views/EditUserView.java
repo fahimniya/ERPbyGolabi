@@ -108,8 +108,9 @@ public class EditUserView implements View {
 				boolean success;
 				if (UserWrapper.getInstance().isManager()) {
 					success = managerWrapper.updateUser(user.getUsername(), username.getText(), name.getText(), (new String(password.getPassword()).length() > 0)? new String(password.getPassword()) : user.getPassword(), "NORMAL");
-				}
+				} else {
 					success = userWrapper.editAccountInformation(user.getUsername(), username.getText(), name.getText(), (new String(password.getPassword()).length() > 0)? new String(password.getPassword()) : user.getPassword());
+				}
 				if (success)
 					message.setText("موفقیت‌آمیز");
 				else
