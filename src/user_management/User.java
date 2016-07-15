@@ -86,6 +86,7 @@ public class User {
 		String query = db.generateUpdateQuery("USER", new String[] { username, password, name, role },
 				new String[] { "USERNAME", "PASSWORD", "NAME", "ROLE" }, new String[] { oldUsername },
 				new String[] { "USERNAME" });
+		this.role = role;
 		return db.update(query);
 	}
 
