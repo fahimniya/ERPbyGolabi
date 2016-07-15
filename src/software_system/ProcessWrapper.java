@@ -16,9 +16,10 @@ import user_management.User;
 public class ProcessWrapper {
 	private static ProcessWrapper uniqueInstance;
 	private Process process;
-	
-	private ProcessWrapper() {}
-	
+
+	private ProcessWrapper() {
+	}
+
 	public static ProcessWrapper getInstance() {
 		if (uniqueInstance == null)
 			return (uniqueInstance = new ProcessWrapper());
@@ -68,7 +69,7 @@ public class ProcessWrapper {
 		} catch (Exception e) {
 			return null;
 		}
-		return (SoftwareOrganization[]) sos.toArray();
+		return sos.toArray(new SoftwareOrganization[sos.size()]);
 	}
 
 	public Process[] showProcesses() {
@@ -88,10 +89,25 @@ public class ProcessWrapper {
 							rs.getDate("TO_DATE"), rs.getInt("ID")));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			return null;
 		}
 		return processes.toArray(new Process[processes.size()]);
+	}
+
+	public SoftwareSystem[] showSoftwareSystem() {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, null, null);
+		ResultSet rs = db.getQuery(query);
+		ArrayList<SoftwareSystem> softwareSystems = new ArrayList<SoftwareSystem>();
+		try {
+			while (rs.next()) {
+				softwareSystems.add(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"),
+						rs.getString("DESCRIPTION")));
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return softwareSystems.toArray(new SoftwareSystem[softwareSystems.size()]);
 	}
 
 	public Module[] showModules() {
@@ -149,7 +165,7 @@ public class ProcessWrapper {
 		} catch (Exception e) {
 			return null;
 		}
-		return null;
+		return modules.toArray(new Module[modules.size()]);
 	}
 
 	public boolean removeProcess(Process[] processes) {
@@ -186,5 +202,19 @@ public class ProcessWrapper {
 
 	public void setProcess(Process process) {
 		this.process = process;
+	}
+
+	public boolean softwareSystemExists(String name) {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, null, null);
+		ResultSet rs = db.getQuery(query);
+		try {
+			rs.next();
+			if (rs.getString("NAME").equals(name))
+				return true;
+		} catch (Exception e) {
+			return true;
+		}
+		return false;
 	}
 }
