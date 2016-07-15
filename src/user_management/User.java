@@ -10,6 +10,7 @@ public class User {
 	private String username;
 	private String password;
 	private String name;
+	private String role;
 
 	public User(String username, String password) {
 		this.username = username;
@@ -20,7 +21,13 @@ public class User {
 		this.name = name;
 		this.username = username;
 		this.password = password;
+	}
 
+	public User(String username, String password, String name, String role) {
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.role = role;
 	}
 
 	public boolean authenticate() {
@@ -40,6 +47,14 @@ public class User {
 		return false;
 	}
 
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	public boolean addToPendingUpdate(String oldUsername) {
 		DBManagement db = new DBManagement();
 
@@ -49,7 +64,7 @@ public class User {
 		return db.update(query);
 	}
 
-	public boolean add(String username, String password, String name) {
+	public boolean add() {
 		String query = "insert into USER values(\"" + username + "\", \"" + password + "\", \"" + name
 				+ "\", \"NORMAL\");";
 		DBManagement db = new DBManagement();

@@ -24,13 +24,13 @@ public class Estimator {
 		try {
 			while(rs.next()) {
 				String tech = rs.getString("TECHNOLOGY");
-				int hSize = calculateHumanSize(new SoftwareSystem(rs.getString("NAME")));
-				int mSize = calculateModuleSize(new SoftwareSystem(rs.getString("NAME")));
+				int hSize = calculateHumanSize(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
+				int mSize = calculateModuleSize(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
 				if(technology.equals(tech) && ((((double)moduleSize/mSize > 1) && (((double)humanSize/hSize) > 1)) || (((double)moduleSize/mSize < 1) && (((double)humanSize/hSize) < 1)))) {
 					nOfSimilarSystems++;
 					humans +=hSize;
-					amount += calculateAmount(new SoftwareSystem(rs.getString("NAME")));
-					facilityNumber += calculateFacilityNumber(new SoftwareSystem(rs.getString("NAME")));
+					amount += calculateAmount(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
+					facilityNumber += calculateFacilityNumber(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
 				}
 			}
 		} catch (SQLException e) {
