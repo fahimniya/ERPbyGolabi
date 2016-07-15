@@ -21,6 +21,7 @@ public class User {
 		this.name = name;
 		this.username = username;
 		this.password = password;
+		role = "NORMAL";
 	}
 
 	public User(String username, String password, String name, String role) {
