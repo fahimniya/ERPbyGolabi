@@ -1,6 +1,8 @@
 package software_system;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import data.DBManagement;
 import user_management.User;
@@ -52,5 +54,4 @@ public class HumanResource {
 		
 		return db.update(query);
 	}
-
 }

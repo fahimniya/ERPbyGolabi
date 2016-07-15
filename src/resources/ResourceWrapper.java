@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import data.DBManagement;
+import software_system.HumanResource;
+import user_management.User;
 
 public class ResourceWrapper {
 	public Resource[] showResources() {
@@ -32,5 +34,24 @@ public class ResourceWrapper {
 			e.printStackTrace();
 		}
 		return (Resource[]) resources.toArray();
+	}
+	
+	public HumanResource[] showHumanResources() {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("HUMANRESOURCE", new String[] {"*"}, null, null);
+		ResultSet rs = db.getQuery(query);
+		ArrayList<HumanResource> humanResources = new ArrayList<HumanResource>();
+		try {
+			while(rs.next()) {
+				String q = db.generateSelectQuery("USER", new String[] {"*"}, new String[] {rs.getString("USERNAME")}, new String[] {"USERNAME"});
+				ResultSet temp = db.getQuery(q);
+				if(!temp.next())
+					break;
+				humanResources.add(new HumanResource(new User(temp.getString("USERNAME"), temp.getString("PASSWORD"), temp.getString("NAME")), rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		return humanResources.toArray(new HumanResource[humanResources.size()]);
 	}
 }
