@@ -101,8 +101,13 @@ public class ProcessWrapper {
 		ArrayList<SoftwareSystem> softwareSystems = new ArrayList<SoftwareSystem>();
 		try {
 			while (rs.next()) {
-				softwareSystems.add(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"),
-						rs.getString("DESCRIPTION")));
+				String name = rs.getString("NAME");
+				ResultSet rstech = db.getQuery(db.generateSelectQuery("SOFTECH", new String[] {"TNAME"}, new String[] {name}, new String[] {"SNAME"}));
+				ArrayList<Technology> techs = new ArrayList<Technology>();
+				while (rstech.next()) {
+					techs.add(new Technology(rstech.getString("TNAME")));
+				}
+				softwareSystems.add(new SoftwareSystem(rs.getString("NAME"), techs.toArray(new Technology[techs.size()]), rs.getString("DESCRIPTION")));
 			}
 		} catch (Exception e) {
 			return null;
@@ -206,7 +211,8 @@ public class ProcessWrapper {
 
 	public boolean softwareSystemExists(String name) {
 		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, new String[] {name}, new String[] {"NAME"});
+		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, new String[] { name },
+				new String[] { "NAME" });
 		ResultSet rs = db.getQuery(query);
 		try {
 			rs.next();

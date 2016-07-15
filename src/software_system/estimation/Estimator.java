@@ -2,16 +2,19 @@ package software_system.estimation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import data.DBManagement;
 import resources.Quantity;
 import resources.Unit;
 import software_system.SoftwareSystem;
+import software_system.Technology;
 
 public class Estimator {
-	public Requirement estimateNeededResource(String technology, int humanSize, int moduleSize) {
+	public Requirement estimateNeededResource(Technology[] technology, int humanSize, int moduleSize) {
 		DBManagement db = new DBManagement();
 		int nOfSimilarSystems = 0;
 		int humans = 0;
@@ -21,15 +24,16 @@ public class Estimator {
 		ResultSet rs = db.getQuery(query);
 		try {
 			while(rs.next()) {
-				String tech = rs.getString("TECHNOLOGY");
-				int hSize = calculateHumanSize(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
-				int mSize = calculateModuleSize(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
-				if(technology.equals(tech) && ((((double)moduleSize/mSize > 1) && (((double)humanSize/hSize) > 1)) || (((double)moduleSize/mSize < 1) && (((double)humanSize/hSize) < 1)))) {
-					nOfSimilarSystems++;
-					humans +=hSize;
-					amount += calculateAmount(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
-					facilityNumber += calculateFacilityNumber(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
-				}
+				String name = rs.getString("NAME");
+				Technology[] techs = getRelatedTechnologies(name);
+				int hSize = calculateHumanSize(new SoftwareSystem(rs.getString("NAME"), techs, rs.getString("DESCRIPTION")));
+				int mSize = calculateModuleSize(new SoftwareSystem(rs.getString("NAME"), techs, rs.getString("DESCRIPTION")));
+//				if(technology.equals(tech) && ((((double)moduleSize/mSize > 1) && (((double)humanSize/hSize) > 1)) || (((double)moduleSize/mSize < 1) && (((double)humanSize/hSize) < 1)))) {
+//					nOfSimilarSystems++;
+//					humans +=hSize;
+//					amount += calculateAmount(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
+//					facilityNumber += calculateFacilityNumber(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
+//				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,6 +75,21 @@ public class Estimator {
 		return size;
 	}
 
+	private Technology[] getRelatedTechnologies(String systemName) {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("Technology", new String[] {"TNAME"}, new String[] {systemName}, new String[] {"SNAME"});
+		ResultSet rs = db.getQuery(query);
+		ArrayList<Technology> techs = new ArrayList<Technology>();
+		try {
+			while(rs.next()) {
+				techs.add(new Technology(rs.getString("TNAME")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return techs.toArray(new Technology[techs.size()]);
+	}
+	
 	private int calculateHumanSize(SoftwareSystem SF) {
 		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("REQUIREDHUMANRESOURCE", new String[] {"*"}, new String[] {SF.getName()}, new String[] {"PROJECTNAME"});
@@ -124,5 +143,26 @@ public class Estimator {
 	
 	public Requirement[] estimateEssentialRequirements(SoftwareSystem SF) {
 		return null;
+	}
+	private class Pair {
+		private Integer point;
+		private SoftwareSystem system;
+		public Pair(SoftwareSystem sf) {
+			point = 0;
+			system = sf;
+		}
+		public Integer getPoint() {
+			return point;
+		}
+		public void setPoint(Integer point) {
+			this.point = point;
+		}
+		public SoftwareSystem getSystem() {
+			return system;
+		}
+		
+//		public boolean < (Pair p1, Pair p2) {
+//			return p1.pointpoint() < p2.getpoint();
+//		}
 	}
 }
