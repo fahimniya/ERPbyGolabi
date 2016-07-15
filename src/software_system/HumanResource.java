@@ -42,7 +42,8 @@ public class HumanResource {
 	}
 
 	public boolean addHumanResource() {
-		String query = "insert into HUMANRESOURCE values(\'" + user.getUsername() + "\', \'" + from + "\', \'" + to + "\');";  
+		String query = "insert into HUMANRESOURCE values(\'" + user.getUsername() + "\', \'" + from + "\', \'" + to + "\');";
+		System.out.println("From HumanResources: " + query);
 		DBManagement db = new DBManagement();
 		
 		return db.update(query);

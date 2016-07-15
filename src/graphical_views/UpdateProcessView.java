@@ -83,26 +83,26 @@ public class UpdateProcessView implements View {
 		processNameLabel.setBounds(380, 150, 60, 30);
 		updateProcessFrame.add(processNameLabel);
 		
-		from_year = new JTextField(process.getFrom().getYear());
+		from_year = new JTextField(Integer.toString(process.getFrom().getYear() + 1900));
 		from_year.setBounds(100, 200, 60, 30);
 		updateProcessFrame.add(from_year);
-		from_month = new JTextField(process.getFrom().getMonth());
+		from_month = new JTextField(Integer.toString(process.getFrom().getMonth() + 1));
 		from_month.setBounds(195, 200, 60, 30);
 		updateProcessFrame.add(from_month);
-		from_day = new JTextField(process.getFrom().getDay());
+		from_day = new JTextField(Integer.toString(process.getFrom().getDate()));
 		from_day.setBounds(290, 200, 60, 30);
 		updateProcessFrame.add(from_day);
 		fromLabel = new JLabel("تاریخ شروع:");
 		fromLabel.setBounds(380, 200, 60, 30);
 		updateProcessFrame.add(fromLabel);
 		
-		to_year = new JTextField(process.getTo().getYear());
+		to_year = new JTextField(Integer.toString(process.getTo().getYear() + 1900));
 		to_year.setBounds(100, 250, 60, 30);
 		updateProcessFrame.add(to_year);
-		to_month = new JTextField(process.getTo().getMonth());
+		to_month = new JTextField(Integer.toString(process.getTo().getMonth() + 1));
 		to_month.setBounds(195, 250, 60, 30);
 		updateProcessFrame.add(to_month);
-		to_day = new JTextField(process.getTo().getDay());
+		to_day = new JTextField(Integer.toString(process.getTo().getDate()));
 		to_day.setBounds(290, 250, 60, 30);
 		updateProcessFrame.add(to_day);
 		toLabel = new JLabel("تاریخ اتمام:");

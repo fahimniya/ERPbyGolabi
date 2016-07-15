@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -28,6 +29,8 @@ public class EditUserView implements View {
 	private JLabel nameLabel;
 	private JPasswordField password;
 	private JLabel passwordLabel;
+	private JCheckBox isManager;
+	private JLabel managerLabel;
 	private JButton edit;
 	private JLabel message;
 	
@@ -38,6 +41,8 @@ public class EditUserView implements View {
 		
 		infoFrame = new JFrame();
 		infoFrame.setBounds(150, 100, 600, 350);
+		if (UserWrapper.getInstance().isManager())
+			infoFrame.setBounds(150, 100, 600, 400);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -97,8 +102,20 @@ public class EditUserView implements View {
 		passwordLabel.setBounds(450, 200, 100, 30);
 		infoFrame.add(passwordLabel);
 		
+		isManager = new JCheckBox("بله");
+		isManager.setBounds(350, 250, 50, 30);
+		System.out.println(user.getRole());
+		isManager.setSelected(user.getRole().equals("MANAGER"));
+		if (UserWrapper.getInstance().isManager())
+			infoFrame.add(isManager);
+		managerLabel = new JLabel("مدیریت");
+		managerLabel.setBounds(450, 250, 100, 30);
+		infoFrame.add(managerLabel);
+		
 		edit = new JButton("ویرایش");
-		edit.setBounds(210, 250, 80, 45);
+		edit.setBounds(260, 250, 80, 45);
+		if (UserWrapper.getInstance().isManager())
+			edit.setBounds(260, 300, 80, 45);
 		edit.addActionListener(new ActionListener() {
 			
 			@Override
@@ -107,7 +124,7 @@ public class EditUserView implements View {
 				ManagerWrapper managerWrapper = ManagerWrapper.getInstance();
 				boolean success;
 				if (UserWrapper.getInstance().isManager()) {
-					success = managerWrapper.updateUser(user.getUsername(), username.getText(), name.getText(), (new String(password.getPassword()).length() > 0)? new String(password.getPassword()) : user.getPassword(), "NORMAL");
+					success = managerWrapper.updateUser(user.getUsername(), username.getText(), name.getText(), (new String(password.getPassword()).length() > 0)? new String(password.getPassword()) : user.getPassword(), isManager.isSelected()? "MANAGER" : "NORMAL");
 				} else {
 					success = userWrapper.editAccountInformation(user.getUsername(), username.getText(), name.getText(), (new String(password.getPassword()).length() > 0)? new String(password.getPassword()) : user.getPassword());
 				}
@@ -121,7 +138,6 @@ public class EditUserView implements View {
 		
 		message = new JLabel("");
 		message.setBounds(130, 250, 50, 45);
-		infoFrame.add(message);
 	}
 	
 	@Override

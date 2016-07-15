@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
+import user_management.ManagerWrapper;
 import user_management.User;
 import user_management.UserWrapper;
 
@@ -28,6 +29,7 @@ public class ChooseUserView implements View {
 	private JScrollPane upScroll;
 	private JRadioButton[] usersRBS;
 	private JButton editUser;
+	private JButton removeUser;
 	
 	private UserWrapper uw;
 	private User[] users;
@@ -47,8 +49,7 @@ public class ChooseUserView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				hide();
-				loginView.show(true);
+				logout();
 			}
 		});
 		chooseUserFrame.add(logout);
@@ -70,10 +71,10 @@ public class ChooseUserView implements View {
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		
-		final View cpv = this;
+		final View cuv = this;
 		
 		editUser = new JButton("ویرایش کاربر");
-		editUser.setBounds(250, 450, 100, 30);
+		editUser.setBounds(310, 450, 100, 30);
 		editUser.addActionListener(new ActionListener() {
 			
 			@Override
@@ -84,8 +85,27 @@ public class ChooseUserView implements View {
 						user = users[i];
 						break;
 					}
-				EditUserView updateProcessView = new EditUserView(cpv, loginView, user);
+				EditUserView updateProcessView = new EditUserView(returnView, loginView, user);
+				cuv.hide();
 				updateProcessView.show();
+			}
+		});
+		
+		removeUser = new JButton("حذف کاربر");
+		removeUser.setBounds(190, 450, 100, 30);
+		removeUser.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				User user = users[0];
+				for (int i = 0; i < users.length; i++)
+					if (usersRBS[i].isSelected()) {
+						user = users[i];
+						break;
+					}
+				ManagerWrapper.getInstance().removeUser(user.getUsername());
+				if (user.getUsername().equals(UserWrapper.getInstance().getUsername()))
+					logout();
 			}
 		});
 		
@@ -100,6 +120,7 @@ public class ChooseUserView implements View {
         contentPane.add(upScroll);
         contentPane.add(nameLabel);
         contentPane.add(editUser);
+        contentPane.add(removeUser);
         contentPane.add(logout);
         contentPane.add(return_);
         chooseUserFrame.setContentPane(contentPane);
@@ -130,6 +151,11 @@ public class ChooseUserView implements View {
 	@Override
 	public void hide() {
 		chooseUserFrame.setVisible(false);
+	}
+	
+	public void logout() {
+		hide();
+		loginView.show(true);
 	}
 
 }

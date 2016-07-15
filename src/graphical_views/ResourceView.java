@@ -62,7 +62,7 @@ public class ResourceView implements View {
 		
 		final View resourcev = this;
 		
-		add = new JButton("ا�?زودن");
+		add = new JButton("افزودن");
 		add.setFont(new Font(add.getFont().getName(), Font.PLAIN, 30));
 		add.setBounds(350, 100, 200, 140);
 		add.addActionListener(new ActionListener() {
@@ -75,7 +75,7 @@ public class ResourceView implements View {
 		});
 		resourceFrame.add(add);
 		
-		remove = new JButton("حذ�?");
+		remove = new JButton("حذف");
 		remove.setFont(new Font(remove.getFont().getName(), Font.PLAIN, 30));
 		remove.setBounds(50, 100, 200, 140);
 		remove.addActionListener(new ActionListener() {

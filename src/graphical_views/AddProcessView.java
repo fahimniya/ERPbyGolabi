@@ -91,7 +91,7 @@ public class AddProcessView implements View {
 		softwareSystemName.setBounds(100, 150, 250, 30);
 		addProcessFrame.add(softwareSystemName);
 		
-		processNameLabel = new JLabel("نام فرآیند:");
+		processNameLabel = new JLabel("نام سیستم نرم‌افزاری:");
 		processNameLabel.setBounds(380, 150, 60, 30);
 		addProcessFrame.add(processNameLabel);
 		
@@ -121,6 +121,8 @@ public class AddProcessView implements View {
 		toLabel.setBounds(380, 250, 60, 30);
 		addProcessFrame.add(toLabel);
 		
+		final View apv = this;
+		
 		addProcess = new JButton("ایجاد فرآیند");
 		addProcess.setBounds(180, 300, 90, 30);
 		addProcess.addActionListener(new ActionListener() {
@@ -129,8 +131,15 @@ public class AddProcessView implements View {
 			public void actionPerformed(ActionEvent arg0) {
 				Date from = new Date(Integer.parseInt(from_year.getText()) - 1900, Integer.parseInt(from_month.getText()) - 1, Integer.parseInt(from_day.getText()));
 				Date to = new Date(Integer.parseInt(to_year.getText()) - 1900, Integer.parseInt(to_month.getText()) - 1, Integer.parseInt(to_day.getText()));
-
+				
 				ProcessWrapper pw = ProcessWrapper.getInstance();
+				
+				System.out.println("System Exists? " + pw.softwareSystemExists(softwareSystemName.getText()));
+				if (!pw.softwareSystemExists(softwareSystemName.getText())) {
+					AddSoftwareSystemView addssv = new AddSoftwareSystemView(apv, loginView);
+					addssv.show();
+				}
+				
 				boolean success;
 				if (developmentRB.isSelected())
 					success = pw.addDevelopmentProcess(from, to, softwareSystemName.getText());

@@ -22,13 +22,14 @@ public class FundingResource extends Resource {
 		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("FUNDINGRESOURCE", new String[] { "AMOUNT" },
 				new String[] { quantity.getUnit().toString() }, new String[] { "UNIT" });
+		System.out.println("From FundingResource: " + query);
 		ResultSet rs = db.getQuery(query);
-		if (rs == null) {
-			query = db.generateAddQuery("FUNDINGRESOURCE",
-					new String[] { Integer.toString(quantity.getAmount()), quantity.getUnit().toString() });
-			return db.update(query);
-		} else {
-			try {
+		try {
+			if (!rs.next()) {
+				query = db.generateAddQuery("FUNDINGRESOURCE",
+						new String[] { Integer.toString(quantity.getAmount()), quantity.getUnit().toString() });
+				return db.update(query);
+			} else {
 				int amount = rs.getInt("AMOUNT");
 				amount += quantity.getAmount();
 				query = db.generateUpdateQuery("FUNDINGRESOURCE",
@@ -36,9 +37,9 @@ public class FundingResource extends Resource {
 						new String[] { "AMOUNT", "UNIT" }, new String[] { quantity.getUnit().toString() },
 						new String[] { "UNIT" });
 				return db.update(query);
-			} catch (SQLException e) {
-				return false;
 			}
+		} catch (Exception e) {
+			return false;
 		}
 	}
 

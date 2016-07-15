@@ -78,6 +78,8 @@ public class UserManagementView implements View {
 		userManagementFrame.add(info);
 		
 		edit = new JButton("ویرایش");
+		if (UserWrapper.getInstance().isManager())
+			edit.setText("ویرایش یا حذف");
 		edit.setFont(new Font(edit.getFont().getName(), Font.PLAIN, 30));
 		edit.setBounds(50, 100, 200, 140);
 		edit.addActionListener(new ActionListener() {
