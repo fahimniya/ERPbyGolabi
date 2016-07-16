@@ -44,14 +44,17 @@ public class DBInitiation {
 	private void clearAll() {
 		DBManagement db = new DBManagement();
 		String[] queries = new String[] { "SET FOREIGN_KEY_CHECKS = 0;", "SET @tables = NULL;",
-				"SELECT GROUP_CONCAT(table_schema, \'.\', table_name) INTO @tablesFROM information_schema.tables WHERE table_schema = \'EMP\';",
+				"SELECT GROUP_CONCAT(table_schema, \'.\', table_name) INTO @tables FROM information_schema.tables WHERE table_schema = \'EMP\';",
 				"SET @tables = CONCAT(\'DROP TABLE \', @tables);", "PREPARE stmt FROM @tables;", "EXECUTE stmt;",
 				"DEALLOCATE PREPARE stmt;", "SET FOREIGN_KEY_CHECKS = 1;" };
-		for (int i = 0; i < queries.length; i++) {
-			if(!queries[i].split(" ")[0].equals("SELECT"))
-				db.update(queries[i]);
-			else
-				db.getQuery(queries[i]);
-		}
+		System.out.println(db.update(queries[0]));
+		System.out.println(db.update(queries[1]));
+		System.out.println(queries[2]);
+		System.out.println(db.getQuery(queries[2]));
+		System.out.println(db.update(queries[3]));
+		System.out.println(db.update(queries[4]));
+		System.out.println(db.execute(queries[5]));
+		System.out.println(db.update(queries[6]));
+		System.out.println(db.update(queries[7]));
 	}
 }

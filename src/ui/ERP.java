@@ -11,7 +11,7 @@ public class ERP {
 //				System.out.println("Successfully Installed");
 //			else 
 //				System.out.println("Failed to Install");
-////		}else if (args[0].equals("Run")){
+//		}else if (args[0].equals("Run")){
 			LoginView login = new LoginView();
 			login.show(false);
 //		}

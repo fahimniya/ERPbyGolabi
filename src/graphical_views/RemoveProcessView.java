@@ -74,8 +74,6 @@ public class RemoveProcessView implements View {
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		removeProcessFrame.add(nameLabel);
 		
-		final View rmv = this;
-		
 		removeProcess = new JButton("حذف فرآیند‌های انتخاب‌شده");
 		removeProcess.setBounds(220, 450, 160, 30);
 		removeProcess.addActionListener(new ActionListener() {

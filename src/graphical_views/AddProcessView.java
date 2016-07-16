@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -28,6 +29,7 @@ public class AddProcessView implements View {
 	private JRadioButton maintenanceRB;
 	private JComboBox<String> softwareSystemName;
 	private SoftwareSystem[] softwareSystems;
+	private ArrayList<String> softwareSystemNames;
 	private JLabel softwareSystemNameLabel;
 	private JTextField from_year;
 	private JTextField from_month;
@@ -92,11 +94,7 @@ public class AddProcessView implements View {
 
 		softwareSystemName = new JComboBox<>();
 		softwareSystemName.setBounds(100, 150, 250, 30);
-		softwareSystems = ProcessWrapper.getInstance().showSoftwareSystem();
-		System.out.println("From AddProcess: number of sss: " + softwareSystems.length);
-		for (SoftwareSystem ss : softwareSystems)
-			softwareSystemName.addItem(ss.getName());
-		softwareSystemName.addItem("افزودن سیستم نرم‌افزاری جدید...");
+		softwareSystemNames = new ArrayList<>();
 		addProcessFrame.add(softwareSystemName);
 
 		softwareSystemNameLabel = new JLabel("سیستم نرم‌افزاری:");
@@ -175,9 +173,15 @@ public class AddProcessView implements View {
 		addProcessFrame.setVisible(true);
 
 		softwareSystems = ProcessWrapper.getInstance().showSoftwareSystem();
-		if (softwareSystemName.getItemCount() < softwareSystems.length) {
-
+		for (int i = 0; i < softwareSystemNames.size(); i++)
+			softwareSystemName.removeItem(softwareSystemNames.get(i));
+		softwareSystemNames = new ArrayList<>();
+		for (int i = 0; i < softwareSystems.length; i++) {
+			softwareSystemNames.add(softwareSystems[i].getName());
+			softwareSystemName.addItem(softwareSystems[i].getName());
 		}
+		softwareSystemNames.add("افزودن سیستم‌ نرم‌افزاری جدید...");
+		softwareSystemName.addItem("افزودن سیستم‌ نرم‌افزاری جدید...");
 	}
 
 	@Override
