@@ -152,27 +152,6 @@ public class DBManagement {
 		}
 		return false;
 	}
-	
-	public boolean execute(String query) {
-		Connection conn = null;
-		Statement stmt = null;
-		try {
-			// STEP 2: Register JDBC driver
-
-			Class.forName("com.mysql.jdbc.Driver");
-
-			// STEP 3: Open a connection
-			System.out.println("\nConnecting to database...");
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-			stmt = conn.createStatement();
-			stmt.execute(query);
-			return true;
-			// STEP 5: Extract data from result set
-		} catch (Exception e) {
-			System.out.println("Result is NULL");
-		}
-		return false;
-	}
 
 	public static void showResult(String statement, ResultSet rs, Map<String, Integer> tn, String[] col) {
 		try {
