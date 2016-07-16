@@ -27,7 +27,7 @@ public class ResourceView implements View {
 		returnView.hide();
 		
 		resourceFrame = new JFrame();
-		resourceFrame.setBounds(150, 100, 600, 500);
+		resourceFrame.setBounds(150, 100, 600, 290);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -100,19 +100,19 @@ public class ResourceView implements View {
 //			}
 //		});
 //		resourceFrame.add(update);
-		
-		assign = new JButton("تخصیص");
-		assign.setFont(new Font(assign.getFont().getName(), Font.PLAIN, 30));
-		assign.setBounds(200, 300, 200, 140);
-		assign.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				AssignResourceView assignResource = new AssignResourceView(resourcev, loginView);
-				assignResource.show();
-			}
-		});
-		resourceFrame.add(assign);
+//		
+//		assign = new JButton("تخصیص");
+//		assign.setFont(new Font(assign.getFont().getName(), Font.PLAIN, 30));
+//		assign.setBounds(200, 300, 200, 140);
+//		assign.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				AssignResourceView assignResource = new AssignResourceView(resourcev, loginView);
+//				assignResource.show();
+//			}
+//		});
+//		resourceFrame.add(assign);
 	}
 
 	@Override

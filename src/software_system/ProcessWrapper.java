@@ -97,16 +97,19 @@ public class ProcessWrapper {
 	public SoftwareSystem[] showSoftwareSystem() {
 		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, null, null);
+//		System.err.println("query from processWrapper: " + query);
 		ResultSet rs = db.getQuery(query);
 		ArrayList<SoftwareSystem> softwareSystems = new ArrayList<SoftwareSystem>();
 		try {
 			while (rs.next()) {
 				String name = rs.getString("NAME");
+				System.err.println("software name: " + name);
 				ResultSet rstech = db.getQuery(db.generateSelectQuery("SOFTECH", new String[] {"TNAME"}, new String[] {name}, new String[] {"SNAME"}));
 				ArrayList<Technology> techs = new ArrayList<Technology>();
-				while (rstech.next()) {
+				while (rstech != null && rstech.next()) {
 					techs.add(new Technology(rstech.getString("TNAME")));
 				}
+//				System.err.println("From ProcessWrapper: " + techs.toArray(new Technology[techs.size()]));
 				softwareSystems.add(new SoftwareSystem(rs.getString("NAME"), techs.toArray(new Technology[techs.size()]), rs.getString("DESCRIPTION")));
 			}
 		} catch (Exception e) {

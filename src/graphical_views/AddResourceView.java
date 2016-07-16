@@ -163,7 +163,7 @@ public class AddResourceView implements View {
 		username = new JLabel("نام کاربری:", SwingConstants.CENTER);
 		username.setBounds(700, 100, 100, 30);
 		addResourceFrame.add(username);
-		usersCB = new JComboBox<>();
+		usersCB = new JComboBox<String>();
 		usersCB.setBounds(670, 140, 160, 30);
 		final User[] users = UserWrapper.getInstance().showUsers();
 		for (User user: users)

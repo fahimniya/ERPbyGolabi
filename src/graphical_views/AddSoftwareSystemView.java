@@ -1,5 +1,6 @@
 package graphical_views;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +8,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 public class AddSoftwareSystemView implements View {
@@ -16,7 +19,8 @@ public class AddSoftwareSystemView implements View {
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
-	private JLabel message; 
+	private JPanel technologiesPanel;
+	private JScrollPane tpScroll;
 	
 	public AddSoftwareSystemView(View rv, LoginView lv) {
 		returnView = rv;
@@ -52,14 +56,25 @@ public class AddSoftwareSystemView implements View {
 		});
 		addSSFrame.add(return_);
 		
-		nameLabel = new JLabel("افزدون سیستم نرم‌افزاری", SwingConstants.CENTER);
+		nameLabel = new JLabel("افزودن سیستم نرم‌افزاری", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		addSSFrame.add(nameLabel);
 		
-		message = new JLabel("سیستم نرم‌افزاری مورد نظر موجود نیست، نخست باید آن را به سیستم‌های موجود بیفزایید", SwingConstants.CENTER);
-		message.setBounds(0, 100, 600, 30);
-		addSSFrame.add(message);
+		technologiesPanel = new JPanel();
+		technologiesPanel.setLayout(null);
+		technologiesPanel.setBounds(50, 100, 300, 1000);
+        tpScroll = new JScrollPane(technologiesPanel);
+        tpScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        tpScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        tpScroll.setBounds(50, 100, 300, 300);
+        addSSFrame.add(tpScroll);
+//        JPanel contentPane = new JPanel(null);
+//        contentPane.setPreferredSize(new Dimension(600, 550));
+//        contentPane.add(tpScroll);
+//        contentPane.add(nameLabel);
+//        contentPane.add(logout);
+//        contentPane.add(return_);
 	}
 
 	@Override

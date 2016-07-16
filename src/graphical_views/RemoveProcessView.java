@@ -87,11 +87,13 @@ public class RemoveProcessView implements View {
 					if (processesCBS[i].isSelected())
 						removeProcesses.add(processes[i]);
 				ProcessWrapper.getInstance().removeProcess(removeProcesses.toArray(new Process[removeProcesses.size()]));
+				show();
 			}
 		});
 		
 		processesPanel = new JPanel();
 		processesPanel.setLayout(null);
+		processesPanel.setBounds(50, 130, 500, 1000);
         ppScroll = new JScrollPane(processesPanel);
         ppScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         ppScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);

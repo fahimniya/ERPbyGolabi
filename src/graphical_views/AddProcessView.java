@@ -7,6 +7,7 @@ import java.sql.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
@@ -14,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import software_system.ProcessWrapper;
+import software_system.SoftwareSystem;
 
 public class AddProcessView implements View {
 	private View returnView;
@@ -24,8 +26,9 @@ public class AddProcessView implements View {
 	private JButton return_;
 	private JRadioButton developmentRB;
 	private JRadioButton maintenanceRB;
-	private JTextField softwareSystemName;
-	private JLabel processNameLabel;
+	private JComboBox<String> softwareSystemName;
+	private SoftwareSystem[] softwareSystems;
+	private JLabel softwareSystemNameLabel;
 	private JTextField from_year;
 	private JTextField from_month;
 	private JTextField from_day;
@@ -36,20 +39,20 @@ public class AddProcessView implements View {
 	private JLabel toLabel;
 	private JButton addProcess;
 	private JLabel message;
-	
+
 	public AddProcessView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
-		
+
 		addProcessFrame = new JFrame();
 		addProcessFrame.setBounds(150, 100, 600, 500);
-		
+
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
 		logout.setBounds(5, 5, 50, 25);
 		logout.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				hide();
@@ -57,12 +60,12 @@ public class AddProcessView implements View {
 			}
 		});
 		addProcessFrame.add(logout);
-		
+
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
 		return_.setBounds(65, 5, 60, 25);
 		return_.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				hide();
@@ -70,12 +73,12 @@ public class AddProcessView implements View {
 			}
 		});
 		addProcessFrame.add(return_);
-		
+
 		nameLabel = new JLabel("افزدون فرآیند", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		addProcessFrame.add(nameLabel);
-		
+
 		developmentRB = new JRadioButton("فرآیند ایجاد");
 		developmentRB.setBounds(150, 100, 100, 30);
 		developmentRB.setSelected(true);
@@ -86,15 +89,20 @@ public class AddProcessView implements View {
 		ButtonGroup group = new ButtonGroup();
 		group.add(developmentRB);
 		group.add(maintenanceRB);
-		
-		softwareSystemName = new JTextField();
+
+		softwareSystemName = new JComboBox<>();
 		softwareSystemName.setBounds(100, 150, 250, 30);
+		softwareSystems = ProcessWrapper.getInstance().showSoftwareSystem();
+		System.out.println("From AddProcess: number of sss: " + softwareSystems.length);
+		for (SoftwareSystem ss : softwareSystems)
+			softwareSystemName.addItem(ss.getName());
+		softwareSystemName.addItem("افزودن سیستم نرم‌افزاری جدید...");
 		addProcessFrame.add(softwareSystemName);
-		
-		processNameLabel = new JLabel("نام سیستم نرم‌افزاری:");
-		processNameLabel.setBounds(380, 150, 60, 30);
-		addProcessFrame.add(processNameLabel);
-		
+
+		softwareSystemNameLabel = new JLabel("سیستم نرم‌افزاری:");
+		softwareSystemNameLabel.setBounds(380, 150, 80, 30);
+		addProcessFrame.add(softwareSystemNameLabel);
+
 		from_year = new JTextField();
 		from_year.setBounds(100, 200, 60, 30);
 		addProcessFrame.add(from_year);
@@ -107,7 +115,7 @@ public class AddProcessView implements View {
 		fromLabel = new JLabel("تاریخ شروع:");
 		fromLabel.setBounds(380, 200, 60, 30);
 		addProcessFrame.add(fromLabel);
-		
+
 		to_year = new JTextField();
 		to_year.setBounds(100, 250, 60, 30);
 		addProcessFrame.add(to_year);
@@ -120,48 +128,56 @@ public class AddProcessView implements View {
 		toLabel = new JLabel("تاریخ اتمام:");
 		toLabel.setBounds(380, 250, 60, 30);
 		addProcessFrame.add(toLabel);
-		
+
 		final View apv = this;
-		
+
 		addProcess = new JButton("ایجاد فرآیند");
 		addProcess.setBounds(180, 300, 90, 30);
 		addProcess.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Date from = new Date(Integer.parseInt(from_year.getText()) - 1900, Integer.parseInt(from_month.getText()) - 1, Integer.parseInt(from_day.getText()));
-				Date to = new Date(Integer.parseInt(to_year.getText()) - 1900, Integer.parseInt(to_month.getText()) - 1, Integer.parseInt(to_day.getText()));
-				
-				ProcessWrapper pw = ProcessWrapper.getInstance();
-				
-				System.out.println("System Exists? " + pw.softwareSystemExists(softwareSystemName.getText()));
-				if (!pw.softwareSystemExists(softwareSystemName.getText())) {
+				if (softwareSystemName.getSelectedIndex() == softwareSystems.length) {
 					AddSoftwareSystemView addssv = new AddSoftwareSystemView(apv, loginView);
 					addssv.show();
+				} else {
+					Date from = new Date(Integer.parseInt(from_year.getText()) - 1900,
+							Integer.parseInt(from_month.getText()) - 1, Integer.parseInt(from_day.getText()));
+					Date to = new Date(Integer.parseInt(to_year.getText()) - 1900,
+							Integer.parseInt(to_month.getText()) - 1, Integer.parseInt(to_day.getText()));
+
+					ProcessWrapper pw = ProcessWrapper.getInstance();
+
+					boolean success;
+					if (developmentRB.isSelected())
+						success = pw.addDevelopmentProcess(from, to,
+								softwareSystems[softwareSystemName.getSelectedIndex()].getName());
+					else
+						success = pw.addMaintenanceProcess(from, to,
+								softwareSystems[softwareSystemName.getSelectedIndex()].getName());
+					if (success)
+						message.setText("موفقیت‌آمیز");
+					else
+						message.setText("ناموفق");
 				}
-				
-				boolean success;
-				if (developmentRB.isSelected())
-					success = pw.addDevelopmentProcess(from, to, softwareSystemName.getText());
-				else
-					success = pw.addMaintenanceProcess(from, to, softwareSystemName.getText());
-				if (success)
-					message.setText("موفقیت‌آمیز");
-				else
-					message.setText("ناموفق");
 			}
 		});
 		addProcessFrame.add(addProcess);
-		
+
 		message = new JLabel("", SwingConstants.CENTER);
 		message.setBounds(100, 350, 250, 30);
 		addProcessFrame.add(message);
 	}
-	
+
 	@Override
 	public void show() {
 		addProcessFrame.setLayout(null);
 		addProcessFrame.setVisible(true);
+
+		softwareSystems = ProcessWrapper.getInstance().showSoftwareSystem();
+		if (softwareSystemName.getItemCount() < softwareSystems.length) {
+
+		}
 	}
 
 	@Override
