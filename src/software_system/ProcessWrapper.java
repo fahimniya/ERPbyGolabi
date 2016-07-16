@@ -56,22 +56,22 @@ public class ProcessWrapper {
 		}
 		return flag;
 	}
-	
+
 	public boolean addSoftwareSystem(SoftwareSystem softwareSystem) {
 		return softwareSystem.add();
 	}
-	
+
 	public boolean addTechnology(Technology technology) {
 		return technology.addTechnology();
 	}
-	
+
 	public Technology[] showTechnologies() {
 		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("Technology", new String[] {"*"}, null, null);
+		String query = db.generateSelectQuery("Technology", new String[] { "*" }, null, null);
 		ResultSet rs = db.getQuery(query);
 		ArrayList<Technology> techs = new ArrayList<Technology>();
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				techs.add(new Technology(rs.getString("TNAME")));
 			}
 		} catch (SQLException e) {
@@ -79,11 +79,11 @@ public class ProcessWrapper {
 		}
 		return techs.toArray(new Technology[techs.size()]);
 	}
-	
+
 	public boolean deleteTechnology(Technology technology) {
 		return technology.deleteTechnology();
 	}
-	
+
 	public boolean updateTechnology(Technology technology, String oldName) {
 		return technology.updateTechnology(oldName);
 	}
@@ -128,25 +128,67 @@ public class ProcessWrapper {
 	public SoftwareSystem[] showSoftwareSystem() {
 		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, null, null);
-//		System.err.println("query from processWrapper: " + query);
+		// System.err.println("query from processWrapper: " + query);
 		ResultSet rs = db.getQuery(query);
 		ArrayList<SoftwareSystem> softwareSystems = new ArrayList<SoftwareSystem>();
 		try {
 			while (rs.next()) {
 				String name = rs.getString("NAME");
 				System.err.println("software name: " + name);
-				ResultSet rstech = db.getQuery(db.generateSelectQuery("SOFTECH", new String[] {"TNAME"}, new String[] {name}, new String[] {"SNAME"}));
+				ResultSet rstech = db.getQuery(db.generateSelectQuery("SOFTECH", new String[] { "TNAME" },
+						new String[] { name }, new String[] { "SNAME" }));
 				ArrayList<Technology> techs = new ArrayList<Technology>();
 				while (rstech != null && rstech.next()) {
 					techs.add(new Technology(rstech.getString("TNAME")));
 				}
-//				System.err.println("From ProcessWrapper: " + techs.toArray(new Technology[techs.size()]));
-				softwareSystems.add(new SoftwareSystem(rs.getString("NAME"), techs.toArray(new Technology[techs.size()]), rs.getString("DESCRIPTION")));
+				// System.err.println("From ProcessWrapper: " +
+				// techs.toArray(new Technology[techs.size()]));
+				softwareSystems.add(new SoftwareSystem(rs.getString("NAME"),
+						techs.toArray(new Technology[techs.size()]), rs.getString("DESCRIPTION")));
 			}
 		} catch (Exception e) {
 			return null;
 		}
 		return softwareSystems.toArray(new SoftwareSystem[softwareSystems.size()]);
+	}
+
+	public String[] showModuleName() {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("FACILITYRESOURCEALLOCATION", new String[] { "MODULENAME" }, null, null);
+		ResultSet rs = db.getQuery(query);
+		ArrayList<String> moduleNames = new ArrayList<String>();
+		try {
+			while(rs.next()) {
+				String temp = rs.getString("MODULENAME");
+				if(!moduleNames.contains(temp))
+					moduleNames.add(temp);
+			}
+		} catch(Exception e) {
+			return null;
+		}
+		query = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] { "MODULENAME" }, null, null);
+		rs = db.getQuery(query);
+		try {
+			while(rs.next()) {
+				String temp = rs.getString("MODULENAME");
+				if(!moduleNames.contains(temp))
+					moduleNames.add(temp);
+			}
+		} catch(Exception e) {
+			return null;
+		}
+		query = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] { "MODULENAME" }, null, null);
+		rs = db.getQuery(query);
+		try {
+			while(rs.next()) {
+				String temp = rs.getString("MODULENAME");
+				if(!moduleNames.contains(temp))
+					moduleNames.add(temp);
+			}
+		} catch(Exception e) {
+			return null;
+		}
+		return moduleNames.toArray(new String[moduleNames.size()]);
 	}
 
 	public Module[] showModules() {
