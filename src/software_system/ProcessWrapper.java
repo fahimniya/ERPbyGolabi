@@ -56,6 +56,37 @@ public class ProcessWrapper {
 		}
 		return flag;
 	}
+	
+	public boolean addSoftwareSystem(SoftwareSystem softwareSystem) {
+		return softwareSystem.add();
+	}
+	
+	public boolean addTechnology(Technology technology) {
+		return technology.addTechnology();
+	}
+	
+	public Technology[] showTechnologies() {
+		DBManagement db = new DBManagement();
+		String query = db.generateSelectQuery("Technology", new String[] {"*"}, null, null);
+		ResultSet rs = db.getQuery(query);
+		ArrayList<Technology> techs = new ArrayList<Technology>();
+		try {
+			while(rs.next()) {
+				techs.add(new Technology(rs.getString("TNAME")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return techs.toArray(new Technology[techs.size()]);
+	}
+	
+	public boolean deleteTechnology(Technology technology) {
+		return technology.deleteTechnology();
+	}
+	
+	public boolean updateTechnology(Technology technology, String oldName) {
+		return technology.updateTechnology(oldName);
+	}
 
 	public SoftwareOrganization[] showSoftwareOrganization() {
 		DBManagement db = new DBManagement();
