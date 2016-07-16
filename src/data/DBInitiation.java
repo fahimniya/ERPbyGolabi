@@ -4,6 +4,7 @@ public class DBInitiation {
 	public boolean initiate() {
 		DBManagement db = new DBManagement();
 		boolean flag = true;
+
 		flag = flag && db.update("create table FACILITYRESOURCE(ID INT NOT NULL,NAME VARCHAR(255),PRIMARY KEY (ID));");
 		flag = flag && db.update(
 				"create table FUNDINGRESOURCE(AMOUNT INT NOT NULL DEFAULT '0',UNIT VARCHAR(255) NOT NULL,PRIMARY KEY(UNIT));");
@@ -11,8 +12,7 @@ public class DBInitiation {
 				"create table USER(USERNAME VARCHAR(255) NOT NULL,PASSWORD VARCHAR(255) NOT NULL,NAME VARCHAR(255),ROLE VARCHAR(255),PRIMARY KEY(USERNAME));");
 		flag = flag && db.update(
 				"create table SOFTWARESYSTEM(NAME VARCHAR(255) NOT NULL,DESCRIPTION VARCHAR(255),PRIMARY KEY(NAME));");
-		flag = flag && db.update(
-				"create table TECHNOLOGY(TNAME VARCHAR(255) NOT NULL,PRIMARY KEY(TNAME));");
+		flag = flag && db.update("create table TECHNOLOGY(TNAME VARCHAR(255) NOT NULL,PRIMARY KEY(TNAME));");
 		flag = flag && db.update(
 				"create table SOFTECH(SNAME VARCHAR(255) NOT NULL,TNAME VARCHAR(255) NOT NULL,PRIMARY KEY(SNAME, TNAME),FOREIGN KEY(SNAME) REFERENCES SOFTWARESYSTEM(NAME) ON UPDATE CASCADE ON DELETE CASCADE,FOREIGN KEY(TNAME) REFERENCES TECHNOLOGY(TNAME) ON UPDATE CASCADE ON DELETE CASCADE);");
 		flag = flag && db.update(
@@ -37,6 +37,17 @@ public class DBInitiation {
 				"create table SOFTWARESYSTEM_ORGANIZATIONUNIT(OID INT NOT NULL,SSNAME VARCHAR(255) NOT NULL,PRIMARY KEY(OID, SSNAME),FOREIGN KEY(OID) REFERENCES ORGANIZATIONUNIT(ID) ON UPDATE CASCADE ON DELETE CASCADE,FOREIGN KEY(SSNAME) REFERENCES SOFTWARESYSTEM(NAME) ON UPDATE CASCADE ON DELETE CASCADE);");
 		flag = flag && db.update(
 				"create table PENDINGUPDATE(OUSERNAME VARCHAR(255) NOT NULL,USERNAME VARCHAR(255) NOT NULL,PASSWORD VARCHAR(255) NOT NULL,NAME VARCHAR(255),ROLE VARCHAR(255),PRIMARY KEY(USERNAME));");
+		flag = flag && db.update("insert into USER values(\'Admin\', \'Admin\', \'Admin\', \'MANAGER\');");
 		return flag;
+	}
+
+	private void clearAll() {
+		DBManagement db = new DBManagement();
+		String[] queries = new String[] { "SET FOREIGN_KEY_CHECKS = 0;", "SET @tables = NULL;",
+				"SELECT GROUP_CONCAT(table_schema, \'.\', table_name) INTO @tablesFROM information_schema.tables WHERE table_schema = \'EMP\';",
+				"SET @tables = CONCAT(\'DROP TABLE \', @tables);", "PREPARE stmt FROM @tables;", "EXECUTE stmt;",
+				"DEALLOCATE PREPARE stmt;", "SET FOREIGN_KEY_CHECKS = 1;" };
+		for (int i = 0; i < queries.length; i++)
+			db.update(queries[i]);
 	}
 }
