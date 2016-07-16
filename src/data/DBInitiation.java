@@ -4,7 +4,7 @@ public class DBInitiation {
 	public boolean initiate() {
 		DBManagement db = new DBManagement();
 		boolean flag = true;
-
+		clearAll();
 		flag = flag && db.update("create table FACILITYRESOURCE(ID INT NOT NULL,NAME VARCHAR(255),PRIMARY KEY (ID));");
 		flag = flag && db.update(
 				"create table FUNDINGRESOURCE(AMOUNT INT NOT NULL DEFAULT '0',UNIT VARCHAR(255) NOT NULL,PRIMARY KEY(UNIT));");
@@ -47,7 +47,11 @@ public class DBInitiation {
 				"SELECT GROUP_CONCAT(table_schema, \'.\', table_name) INTO @tablesFROM information_schema.tables WHERE table_schema = \'EMP\';",
 				"SET @tables = CONCAT(\'DROP TABLE \', @tables);", "PREPARE stmt FROM @tables;", "EXECUTE stmt;",
 				"DEALLOCATE PREPARE stmt;", "SET FOREIGN_KEY_CHECKS = 1;" };
-		for (int i = 0; i < queries.length; i++)
-			db.update(queries[i]);
+		for (int i = 0; i < queries.length; i++) {
+			if(!queries[i].split(" ")[0].equals("SELECT"))
+				db.update(queries[i]);
+			else
+				db.getQuery(queries[i]);
+		}
 	}
 }
