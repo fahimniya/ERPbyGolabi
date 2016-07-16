@@ -1,6 +1,8 @@
 package software_system;
 
 import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import data.DBManagement;
 import resources.FacilityResource;
@@ -37,20 +39,61 @@ public class Module {
 		DBManagement db = new DBManagement();
 		String query = "";
 		if (res != null) {
-			if (res instanceof FacilityResource)
+			if (res instanceof FacilityResource) {
+				if (!checkFacilityAvailablity(((FacilityResource) res).getId(), from, to))
+					return false;
 				query = db.generateAddQuery("FACILITYRESOURCEALLOCATION", new String[] { moduleName, projectName,
 						Integer.toString(((FacilityResource) res).getId()), type, from.toString(), to.toString() });
-			else
+			} 
+			else {
+				if(!checkFundingAvailablity(((FundingResource) res).getQuantity().getAmount(), ((FundingResource) res).getQuantity().getUnit().toString()))
+					return false;
 				query = db.generateAddQuery("FUNDINGRESOURCEALLOCATION",
-						new String[] { moduleName, projectName,
-								((FundingResource) res).getQuantity().getUnit().toString(),
-								String.valueOf(((FundingResource) res).getQuantity().getAmount()), type,
-								from.toString(), to.toString() });
-		} else if (hres != null) {
+						new String[] { moduleName, projectName, ((FundingResource) res).getQuantity().getUnit().toString(),
+								String.valueOf(((FundingResource) res).getQuantity().getAmount()), type, from.toString(),
+								to.toString() });
+			}
+		}
+		else if(hres!=null) {
+			if(!checkUserAvailablity(hres.getUser().getUsername(), from, to))
+				return false;
 			query = db.generateAddQuery("HUMANRESOURCEALLOCATION", new String[] { moduleName, projectName,
-					hres.getUser().getUsername(), type, from.toString(), to.toString() });
+				hres.getUser().getUsername(), type, from.toString(), to.toString() });
 		}
 		return db.update(query);
+	}
+
+	private boolean checkFacilityAvailablity(int id, Date requestedFromDate, Date requestedToDate) {
+		DBManagement db = new DBManagement();
+		String query = "select * from FACILITYRESOURCEALLOCATION where ID = \'" + Integer.toString(id) + "\' and not((FROM_DATE > \'" + requestedToDate.toString() + "\') or (TO_DATE < \'" + requestedFromDate.toString() + "\'));";
+		ResultSet rs = db.getQuery(query);
+		try {
+			return !rs.next();
+		} catch (SQLException e) {
+			return false;
+		}
+	}
+
+	private boolean checkFundingAvailablity(int amount, String unit) {
+		DBManagement db = new DBManagement();
+		String query = "select * from FUNDINGRESOURCEALLOCATION where UNIT =\'" + unit + "\' and AMOUNT <= \'" + Integer.toString(amount) + "\';";
+		ResultSet rs = db.getQuery(query);
+		try {
+			return !rs.next();
+		} catch (SQLException e) {
+			return false;
+		}
+	}
+	
+	private boolean checkUserAvailablity(String username, Date requestedFromDate, Date requestedToDate) {
+		DBManagement db = new DBManagement();
+		String query = "select * from HUMANRESOURCEALLOCATION where USERNAME = \'" + username + "\' and not((FROM_DATE > \'" + requestedToDate.toString() + "\') or (TO_DATE < \'" + requestedFromDate.toString() + "\'));";
+		ResultSet rs = db.getQuery(query);
+		try {
+			return !rs.next();
+		} catch (SQLException e) {
+			return false;
+		}
 	}
 
 	public boolean deleteResourceAllocation() {
@@ -63,10 +106,10 @@ public class Module {
 								from.toString(), to.toString() },
 						new String[] { "MODULENAME", "PROJECTNAME", "FACILITYRESOURCEID", "FROM_DATE", "TO_DATE" });
 			else
-				query = db
-						.generateDeleteQuery("FUNDINGRESOURCEALLOCATION",
-								new String[] { moduleName, projectName, ((FundingResource) res).getQuantity().getUnit()
-										.toString(), from.toString(), to.toString() },
+				query = db.generateDeleteQuery("FUNDINGRESOURCEALLOCATION",
+						new String[] { moduleName, projectName,
+								((FundingResource) res).getQuantity().getUnit().toString(), from.toString(),
+								to.toString() },
 						new String[] { "MODULENAME", "PROJECTNAME", "FUNDINGYRESOURCEID", "FROM_DATE", "TO_DATE" });
 		} else if (hres != null) {
 			query = db.generateDeleteQuery("HUMANRESOURCEALLOCATION",

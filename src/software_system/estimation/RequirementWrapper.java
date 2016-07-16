@@ -68,7 +68,7 @@ public class RequirementWrapper {
 			while(reqHumanResult.next()) {
 				int oid = reqHumanResult.getInt("OID");
 				Date SDate = reqHumanResult.getDate("SDATE");
-				String specialty = reqHumanResult.getString("SPECIALTY ");
+				String specialty = reqHumanResult.getString("SPECIALTY");
 				int number = reqHumanResult.getInt("HNUMBER");
 				int id = reqHumanResult.getInt("HREQID");
 				req.add(new Requirement(oid, SDate, id, Requirement.humanReq, number, specialty, null, null, null, (Module[])moduleArray.toArray()));
