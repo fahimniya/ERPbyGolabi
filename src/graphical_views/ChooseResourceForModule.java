@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -12,19 +13,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import resources.AuthorizedResourceWrapper;
+
 import resources.FacilityResource;
 import resources.FundingResource;
 import resources.Resource;
 import resources.ResourceWrapper;
 import software_system.HumanResource;
+import software_system.ProcessWrapper;
 
-public class RemoveResourceView implements View {
+public class ChooseResourceForModule implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame removeResourceFrame;
+	private JFrame chooseResourceFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
@@ -32,18 +35,28 @@ public class RemoveResourceView implements View {
 	private JScrollPane rpScroll;
 	private JRadioButton[] resourcesRBS;
 	private JButton removeResource;
+	private JRadioButton developmentRB;
+	private JRadioButton maintenanceRB;
+	private JTextField from_year;
+	private JTextField from_month;
+	private JTextField from_day;
+	private JLabel fromLabel;
+	private JTextField to_year;
+	private JTextField to_month;
+	private JTextField to_day;
+	private JLabel toLabel;
 	
 	private ResourceWrapper rw;
 	private Resource[] resources;
 	private HumanResource[] humanResources;
 	
-	public RemoveResourceView(View rv, LoginView lv) {
+	public ChooseResourceForModule(View rv, LoginView lv, final String moduleName, final String SSName) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		removeResourceFrame = new JFrame();
-		removeResourceFrame.setBounds(150, 100, 800, 500);
+		chooseResourceFrame = new JFrame();
+		chooseResourceFrame.setBounds(150, 100, 800, 600);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -56,7 +69,7 @@ public class RemoveResourceView implements View {
 				loginView.show(true);
 			}
 		});
-		removeResourceFrame.add(logout);
+		chooseResourceFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -69,25 +82,29 @@ public class RemoveResourceView implements View {
 				returnView.show();
 			}
 		});
-		removeResourceFrame.add(return_);
+		chooseResourceFrame.add(return_);
 		
-		nameLabel = new JLabel("حذف منابع", SwingConstants.CENTER);
+		nameLabel = new JLabel("انتخاب منبع برای اختصاص به ماژول " + moduleName + " از سیستم نرم‌افزاری " + SSName, SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 800, 45);
-		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		removeResourceFrame.add(nameLabel);
+		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 30));
+		chooseResourceFrame.add(nameLabel);
 		
-		removeResource = new JButton("حذف منبع انتخاب‌شده");
-		removeResource.setBounds(220, 450, 160, 30);
+		removeResource = new JButton("اختصاص منبع انتخاب‌شده");
+		removeResource.setBounds(300, 520, 200, 40);
 		removeResource.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				Date from = new Date(Integer.parseInt(from_year.getText()) - 1900,
+						Integer.parseInt(from_month.getText()) - 1, Integer.parseInt(from_day.getText()));
+				Date to = new Date(Integer.parseInt(to_year.getText()) - 1900,
+						Integer.parseInt(to_month.getText()) - 1, Integer.parseInt(to_day.getText()));
 				for (int i = 0; i < resources.length; i++)
 					if (resourcesRBS[i].isSelected())
-						new AuthorizedResourceWrapper().removeResource(resources[i]);
+						ProcessWrapper.getInstance().addModule(moduleName, SSName, resources[i], developmentRB.isSelected()? "DEVELOPMENT" : "MAINTENANCE", from, to);
 				for (int i = resources.length; i < resources.length + humanResources.length; i++)
 					if (resourcesRBS[i].isSelected())
-						new AuthorizedResourceWrapper().removeHumanResource(humanResources[i - resources.length]);
+						ProcessWrapper.getInstance().addModule(moduleName, SSName, humanResources[i - resources.length], developmentRB.isSelected()? "DEVELOPMENT" : "MAINTENANCE", from, to);
 				hide();
 				returnView.show();
 			}
@@ -98,24 +115,61 @@ public class RemoveResourceView implements View {
         rpScroll = new JScrollPane(resourcesPanel);
         rpScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         rpScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        rpScroll.setBounds(50, 130, 700, 300);
+        rpScroll.setBounds(50, 130, 700, 200);
         JPanel contentPane = new JPanel(null);
-        contentPane.setPreferredSize(new Dimension(800, 550));
+        contentPane.setPreferredSize(new Dimension(800, 600));
         contentPane.add(rpScroll);
         contentPane.add(nameLabel);
         contentPane.add(removeResource);
         contentPane.add(logout);
         contentPane.add(return_);
-        removeResourceFrame.setContentPane(contentPane);
-        removeResourceFrame.pack();
-        removeResourceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        removeResourceFrame.setVisible(true);
+        chooseResourceFrame.setContentPane(contentPane);
+        chooseResourceFrame.pack();
+        chooseResourceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        chooseResourceFrame.setVisible(true);
+        
+        developmentRB = new JRadioButton("فرآیند ایجاد");
+		developmentRB.setBounds(150, 350, 100, 30);
+		developmentRB.setSelected(true);
+		chooseResourceFrame.add(developmentRB);
+		maintenanceRB = new JRadioButton("فرآیند نگهداری");
+		maintenanceRB.setBounds(350, 350, 100, 30);
+		chooseResourceFrame.add(maintenanceRB);
+		ButtonGroup group = new ButtonGroup();
+		group.add(developmentRB);
+		group.add(maintenanceRB);
+		
+		from_year = new JTextField();
+		from_year.setBounds(100, 400, 60, 30);
+		chooseResourceFrame.add(from_year);
+		from_month = new JTextField();
+		from_month.setBounds(195, 400, 60, 30);
+		chooseResourceFrame.add(from_month);
+		from_day = new JTextField();
+		from_day.setBounds(290, 400, 60, 30);
+		chooseResourceFrame.add(from_day);
+		fromLabel = new JLabel("تاریخ شروع:");
+		fromLabel.setBounds(380, 400, 60, 30);
+		chooseResourceFrame.add(fromLabel);
+
+		to_year = new JTextField();
+		to_year.setBounds(100, 450, 60, 30);
+		chooseResourceFrame.add(to_year);
+		to_month = new JTextField();
+		to_month.setBounds(195, 450, 60, 30);
+		chooseResourceFrame.add(to_month);
+		to_day = new JTextField();
+		to_day.setBounds(290, 450, 60, 30);
+		chooseResourceFrame.add(to_day);
+		toLabel = new JLabel("تاریخ اتمام:");
+		toLabel.setBounds(380, 450, 60, 30);
+		chooseResourceFrame.add(toLabel);
 	}
 	
 	@Override
 	public void show() {
-		removeResourceFrame.setLayout(null);
-		removeResourceFrame.setVisible(true);
+		chooseResourceFrame.setLayout(null);
+		chooseResourceFrame.setVisible(true);
 		
 		rw = new ResourceWrapper();
 		resources = rw.showResources();
@@ -139,7 +193,7 @@ public class RemoveResourceView implements View {
 
 	@Override
 	public void hide() {
-		removeResourceFrame.setVisible(false);
+		chooseResourceFrame.setVisible(false);
 	}
 
 }

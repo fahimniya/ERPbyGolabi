@@ -10,6 +10,7 @@ encoding//src/graphical_views/AddTechnology.java=UTF-8
 encoding//src/graphical_views/AddUserView.java=UTF-8
 encoding//src/graphical_views/AssignResourceView.java=UTF-8
 encoding//src/graphical_views/ChangeProcessView.java=UTF-8
+encoding//src/graphical_views/ChooseResourceForModule.java=UTF-8
 encoding//src/graphical_views/ChooseUserView.java=UTF-8
 encoding//src/graphical_views/ConfirmChangesView.java=UTF-8
 encoding//src/graphical_views/EditUserView.java=UTF-8

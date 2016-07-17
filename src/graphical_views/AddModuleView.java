@@ -7,11 +7,17 @@ import java.sql.Date;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
+
+import software_system.ProcessWrapper;
+import software_system.SoftwareSystem;
 
 public class AddModuleView implements View {
 	private View returnView;
@@ -20,34 +26,25 @@ public class AddModuleView implements View {
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
-	private JRadioButton humanRB;
-	private JRadioButton facilityRB;
-	private JRadioButton fundingRB;
-	private JLabel resourceType;
-	private JTextField moduleName;
+	private JComboBox<String> moduleName;
 	private JLabel moduleNameLabel;
-	private JTextField projectName;
-	private JLabel projectNameLabel;
-	private JButton addModule;
-	private JRadioButton developmentRB;
-	private JRadioButton maintenanceRB;
-	private JLabel processType;
-	private JTextField from_year;
-	private JTextField from_month;
-	private JTextField from_day;
-	private JLabel fromLabel;
-	private JTextField to_year;
-	private JTextField to_month;
-	private JTextField to_day;
-	private JLabel toLabel;
+	private JComboBox<String> softwareSystemName;
+	private JLabel softwareSystemNameLabel;
+	private JTextField newModuleName;
+	private JLabel newModuleNameLabel;
+	private boolean addingNewModule;
+	private JButton continueAddModule;
+	
 	
 	public AddModuleView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
+		addingNewModule = false;
+		
 		addModuleFrame = new JFrame();
-		addModuleFrame.setBounds(150, 100, 600, 550);
+		addModuleFrame.setBounds(150, 100, 600, 380);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -75,111 +72,72 @@ public class AddModuleView implements View {
 		});
 		addModuleFrame.add(return_);
 		
-		nameLabel = new JLabel("افزدون ماژول", SwingConstants.CENTER);
+		nameLabel = new JLabel("افزودن ماژول", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		addModuleFrame.add(nameLabel);
 		
-		humanRB = new JRadioButton("منبع انسانی");
-		humanRB.setBounds(100, 250, 90, 30);
-		addModuleFrame.add(humanRB);
-		fundingRB = new JRadioButton("منبع مالی");
-		fundingRB.setBounds(190, 250, 90, 30);
-		addModuleFrame.add(fundingRB);
-		facilityRB = new JRadioButton("منبع تجهیزاتی");
-		facilityRB.setBounds(280, 250, 90, 30);
-		facilityRB.setSelected(true);
-		addModuleFrame.add(facilityRB);
-		ButtonGroup group = new ButtonGroup();
-		group.add(humanRB);
-		group.add(facilityRB);
-		group.add(fundingRB);
-		
-		resourceType = new JLabel("نوع منبع:");
-		resourceType.setBounds(380, 250, 60, 30);
-		addModuleFrame.add(resourceType);
-		
-		developmentRB = new JRadioButton("فرآیند ایجاد");
-		developmentRB.setBounds(220, 300, 100, 30);
-		developmentRB.setSelected(true);
-		addModuleFrame.add(developmentRB);
-		maintenanceRB = new JRadioButton("فرآیند نگهداری");
-		maintenanceRB.setBounds(100, 300, 100, 30);
-		addModuleFrame.add(maintenanceRB);
-		ButtonGroup group2 = new ButtonGroup();
-		group2.add(developmentRB);
-		group2.add(maintenanceRB);
-		
-		processType = new JLabel("نوع فرآیند:");
-		processType.setBounds(380, 300, 60, 30);
-		addModuleFrame.add(processType);
-		
-		moduleName = new JTextField();
+		moduleName = new JComboBox<>();
 		moduleName.setBounds(100, 150, 250, 30);
+		final String[] moduleNames = ProcessWrapper.getInstance().showModuleName();
+		for (String name: moduleNames)
+			moduleName.addItem(name);
+		moduleName.addItem("اضافه کردن ماژول جدید...");
+		moduleName.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (moduleName.getSelectedIndex() == moduleName.getItemCount() - 1) {
+					addingNewModule = true;
+					addModuleFrame.add(newModuleName);
+					addModuleFrame.add(newModuleNameLabel);
+					continueAddModule.setBounds(180, 300, 90, 30);
+					addModuleFrame.repaint();
+				}
+				else if (addingNewModule) {
+					addingNewModule = false;
+					addModuleFrame.remove(newModuleName);
+					addModuleFrame.remove(newModuleNameLabel);
+					continueAddModule.setBounds(180, 250, 90, 30);
+					addModuleFrame.repaint();
+				}
+			}
+		});
 		addModuleFrame.add(moduleName);
 		
 		moduleNameLabel = new JLabel("نام ماژول:");
 		moduleNameLabel.setBounds(380, 150, 60, 30);
 		addModuleFrame.add(moduleNameLabel);
 		
-		projectName = new JTextField();
-		projectName.setBounds(100, 200, 250, 30);
-		addModuleFrame.add(projectName);
+		softwareSystemName = new JComboBox<>();
+		softwareSystemName.setBounds(100, 200, 250, 30);
+		SoftwareSystem[] softwareSystems = ProcessWrapper.getInstance().showSoftwareSystem();
+		for (SoftwareSystem softwareSystem: softwareSystems)
+			softwareSystemName.addItem(softwareSystem.getName());
+		addModuleFrame.add(softwareSystemName);
 		
-		projectNameLabel = new JLabel("نام پروژه:");
-		projectNameLabel.setBounds(380, 200, 60, 30);
-		addModuleFrame.add(projectNameLabel);
+		softwareSystemNameLabel = new JLabel("نام سیستم نرم‌افزاری:");
+		softwareSystemNameLabel.setBounds(380, 200, 90, 30);
+		addModuleFrame.add(softwareSystemNameLabel);
 		
-		from_year = new JTextField();
-		from_year.setBounds(100, 350, 60, 30);
-		addModuleFrame.add(from_year);
-		from_month = new JTextField();
-		from_month.setBounds(195, 350, 60, 30);
-		addModuleFrame.add(from_month);
-		from_day = new JTextField();
-		from_day.setBounds(290, 350, 60, 30);
-		addModuleFrame.add(from_day);
-		fromLabel = new JLabel("تاریخ شروع:");
-		fromLabel.setBounds(380, 350, 60, 30);
-		addModuleFrame.add(fromLabel);
-		
-		to_year = new JTextField();
-		to_year.setBounds(100, 400, 60, 30);
-		addModuleFrame.add(to_year);
-		to_month = new JTextField();
-		to_month.setBounds(195, 400, 60, 30);
-		addModuleFrame.add(to_month);
-		to_day = new JTextField();
-		to_day.setBounds(290, 400, 60, 30);
-		addModuleFrame.add(to_day);
-		toLabel = new JLabel("تاریخ اتمام:");
-		toLabel.setBounds(380, 400, 60, 30);
-		addModuleFrame.add(toLabel);
+		newModuleName = new JTextField();
+		newModuleName.setBounds(100, 250, 250, 30);
+		newModuleNameLabel = new JLabel("نام ماژول جدید:");
+		newModuleNameLabel.setBounds(380, 250, 90, 30);
 		
 		final View amv = this;
 		
-		addModule = new JButton("ادامه");
-		addModule.setBounds(180, 450, 90, 30);
-		addModule.addActionListener(new ActionListener() {
+		continueAddModule = new JButton("ادامه");
+		continueAddModule.setBounds(180, 250, 90, 30);
+		continueAddModule.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Date from = new Date(Integer.parseInt(from_year.getText()), Integer.parseInt(from_month.getText()), Integer.parseInt(from_day.getText()));
-				Date to = new Date(Integer.parseInt(to_year.getText()), Integer.parseInt(to_month.getText()), Integer.parseInt(to_day.getText()));
-				
-				if (humanRB.isSelected()) {
-					AddHumanModuleView addHMV = new AddHumanModuleView(amv, loginView, from, to, moduleName.getText(), projectName.getText(), developmentRB.isSelected());
-					addHMV.show();
-				} else if (fundingRB.isSelected()) {
-					AddFundingModuleView addFMV = new AddFundingModuleView(amv, loginView, from, to, moduleName.getText(), projectName.getText(), developmentRB.isSelected());
-					addFMV.show();
-				} else {
-					AddFacilityModuleView addFaMV = new AddFacilityModuleView(amv, loginView, from, to, moduleName.getText(), projectName.getText(), developmentRB.isSelected());
-					addFaMV.show();
-				}
+				ChooseResourceForModule chooseResourceForModule = new ChooseResourceForModule(amv, loginView, addingNewModule? newModuleName.getText() : (String) moduleName.getSelectedItem(), (String) softwareSystemName.getSelectedItem());
+				chooseResourceForModule.show();
 			}
 		});
-		addModuleFrame.add(addModule);
+		addModuleFrame.add(continueAddModule);
 	}
 	
 	@Override
