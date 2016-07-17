@@ -80,8 +80,8 @@ public class ModuleView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//RemoveModuleView removeModuleView = new RemoveModuleView(mov, loginView);
-				//removeModuleView.show();
+				RemoveModuleView removeModuleView = new RemoveModuleView(mov, loginView);
+				removeModuleView.show();
 			}
 		});
 		moduleFrame.add(remove);

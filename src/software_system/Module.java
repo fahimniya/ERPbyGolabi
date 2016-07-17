@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import data.DBManagement;
 import resources.FacilityResource;
 import resources.FundingResource;
+import resources.Quantity;
 import resources.Resource;
+import resources.Unit;
 
 public class Module {
 	final static String MAINTENANCE = "maintenance";
@@ -48,6 +50,7 @@ public class Module {
 			else {
 				if(!checkFundingAvailablity(((FundingResource) res).getQuantity().getAmount(), ((FundingResource) res).getQuantity().getUnit().toString()))
 					return false;
+				updateFundingResource(((FundingResource) res).getQuantity().getAmount(), ((FundingResource) res).getQuantity().getUnit().toString());
 				query = db.generateAddQuery("FUNDINGRESOURCEALLOCATION",
 						new String[] { moduleName, projectName, ((FundingResource) res).getQuantity().getUnit().toString(),
 								String.valueOf(((FundingResource) res).getQuantity().getAmount()), type, from.toString(),
@@ -61,6 +64,11 @@ public class Module {
 				hres.getUser().getUsername(), type, from.toString(), to.toString() });
 		}
 		return db.update(query);
+	}
+
+	private void updateFundingResource(int amount, String unit) {
+		FundingResource resource = new FundingResource(new Quantity(amount, new Unit(unit)));
+		resource.removeFromDB();
 	}
 
 	private boolean checkFacilityAvailablity(int id, Date requestedFromDate, Date requestedToDate) {

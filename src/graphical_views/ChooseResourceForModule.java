@@ -19,8 +19,10 @@ import javax.swing.SwingConstants;
 
 import resources.FacilityResource;
 import resources.FundingResource;
+import resources.Quantity;
 import resources.Resource;
 import resources.ResourceWrapper;
+import resources.Unit;
 import software_system.HumanResource;
 import software_system.ProcessWrapper;
 
@@ -34,6 +36,8 @@ public class ChooseResourceForModule implements View {
 	private JPanel resourcesPanel;
 	private JScrollPane rpScroll;
 	private JRadioButton[] resourcesRBS;
+	private JTextField amount;
+	private JTextField unit;
 	private JButton removeResource;
 	private JRadioButton developmentRB;
 	private JRadioButton maintenanceRB;
@@ -47,7 +51,7 @@ public class ChooseResourceForModule implements View {
 	private JLabel toLabel;
 	
 	private ResourceWrapper rw;
-	private Resource[] resources;
+	private Resource[] facilityResources;
 	private HumanResource[] humanResources;
 	
 	public ChooseResourceForModule(View rv, LoginView lv, final String moduleName, final String SSName) {
@@ -99,12 +103,14 @@ public class ChooseResourceForModule implements View {
 						Integer.parseInt(from_month.getText()) - 1, Integer.parseInt(from_day.getText()));
 				Date to = new Date(Integer.parseInt(to_year.getText()) - 1900,
 						Integer.parseInt(to_month.getText()) - 1, Integer.parseInt(to_day.getText()));
-				for (int i = 0; i < resources.length; i++)
+				for (int i = 0; i < facilityResources.length; i++)
 					if (resourcesRBS[i].isSelected())
-						ProcessWrapper.getInstance().addModule(moduleName, SSName, resources[i], developmentRB.isSelected()? "DEVELOPMENT" : "MAINTENANCE", from, to);
-				for (int i = resources.length; i < resources.length + humanResources.length; i++)
+						ProcessWrapper.getInstance().addModule(moduleName, SSName, facilityResources[i], developmentRB.isSelected()? "DEVELOPMENT" : "MAINTENANCE", from, to);
+				for (int i = facilityResources.length; i < facilityResources.length + humanResources.length; i++)
 					if (resourcesRBS[i].isSelected())
-						ProcessWrapper.getInstance().addModule(moduleName, SSName, humanResources[i - resources.length], developmentRB.isSelected()? "DEVELOPMENT" : "MAINTENANCE", from, to);
+						ProcessWrapper.getInstance().addModule(moduleName, SSName, humanResources[i - facilityResources.length], developmentRB.isSelected()? "DEVELOPMENT" : "MAINTENANCE", from, to);
+				if (resourcesRBS[facilityResources.length + humanResources.length].isSelected())
+					ProcessWrapper.getInstance().addModule(moduleName, SSName, new FundingResource(new Quantity(Integer.parseInt(amount.getText()), new Unit(unit.getText()))), developmentRB.isSelected()? "DEVELOPMENT" : "MAINTENANCE", from, to);
 				hide();
 				returnView.show();
 			}
@@ -172,23 +178,33 @@ public class ChooseResourceForModule implements View {
 		chooseResourceFrame.setVisible(true);
 		
 		rw = new ResourceWrapper();
-		resources = rw.showResources();
+		facilityResources = rw.showFacilityResources();
 		humanResources = rw.showHumanResources();
-		resourcesRBS = new JRadioButton[resources.length + humanResources.length];
+		resourcesRBS = new JRadioButton[facilityResources.length + humanResources.length + 1];
 		ButtonGroup group = new ButtonGroup();
-		for (int i = 0; i < resources.length; i++) {
-			resourcesRBS[i] = new JRadioButton(resources[i].getClass().equals(FacilityResource.class)? ("منبع تجهیزاتی: " + ((FacilityResource) resources[i]).getName()) : ("منبع مالی: " + ((FundingResource) resources[i]).getQuantity().getAmount() + " " + ((FundingResource) resources[i]).getQuantity().getUnit()));
+		for (int i = 0; i < facilityResources.length; i++) {
+			resourcesRBS[i] = new JRadioButton(facilityResources[i].getClass().equals(FacilityResource.class)? ("منبع تجهیزاتی: " + ((FacilityResource) facilityResources[i]).getName()) : ("منبع مالی: " + ((FundingResource) facilityResources[i]).getQuantity().getAmount() + " " + ((FundingResource) facilityResources[i]).getQuantity().getUnit()));
 			resourcesRBS[i].setBounds(20, i * 40, 160, 30);
 			resourcesPanel.add(resourcesRBS[i]);
 			group.add(resourcesRBS[i]);
 		}
-		for (int i = resources.length; i < resources.length + humanResources.length; i++) {
-			HumanResource hr = humanResources[i - resources.length];
+		for (int i = facilityResources.length; i < facilityResources.length + humanResources.length; i++) {
+			HumanResource hr = humanResources[i - facilityResources.length];
 			resourcesRBS[i] = new JRadioButton("منبع انسانی: " + hr.getUser().getName() + " (از: " + hr.getFrom().toString() + " تا: " + hr.getTo().toString() + " ");
-			resourcesRBS[i].setBounds(220, (i - resources.length) * 40, 460, 30);
+			resourcesRBS[i].setBounds(220, (i - facilityResources.length) * 40, 460, 30);
 			resourcesPanel.add(resourcesRBS[i]);
 			group.add(resourcesRBS[i]);
 		}
+		resourcesRBS[facilityResources.length + humanResources.length] = new JRadioButton("منبع مالی:");
+		resourcesRBS[facilityResources.length + humanResources.length].setBounds(20, facilityResources.length * 40, 70, 30);
+		resourcesPanel.add(resourcesRBS[facilityResources.length + humanResources.length]);
+		group.add(resourcesRBS[facilityResources.length + humanResources.length]);
+		amount = new JTextField("مقدار");
+		amount.setBounds(90, facilityResources.length * 40, 50, 30);
+		resourcesPanel.add(amount);
+		unit = new JTextField("واحد");
+		unit.setBounds(150, facilityResources.length * 40, 50, 30);
+		resourcesPanel.add(unit);
 	}
 
 	@Override

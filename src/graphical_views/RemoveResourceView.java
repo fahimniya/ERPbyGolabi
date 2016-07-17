@@ -34,7 +34,8 @@ public class RemoveResourceView implements View {
 	private JButton removeResource;
 	
 	private ResourceWrapper rw;
-	private Resource[] resources;
+	private Resource[] facilityResources;
+	private Resource[] fundingResources;
 	private HumanResource[] humanResources;
 	
 	public RemoveResourceView(View rv, LoginView lv) {
@@ -82,12 +83,16 @@ public class RemoveResourceView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				for (int i = 0; i < resources.length; i++)
+				for (int i = 0; i < facilityResources.length; i++)
 					if (resourcesRBS[i].isSelected())
-						new AuthorizedResourceWrapper().removeResource(resources[i]);
-				for (int i = resources.length; i < resources.length + humanResources.length; i++)
+						new AuthorizedResourceWrapper().removeResource(facilityResources[i]);
+				for (int i = facilityResources.length; i < facilityResources.length + fundingResources.length; i++) {
 					if (resourcesRBS[i].isSelected())
-						new AuthorizedResourceWrapper().removeHumanResource(humanResources[i - resources.length]);
+						new AuthorizedResourceWrapper().removeResource(fundingResources[i - facilityResources.length]);
+				}
+				for (int i = facilityResources.length + fundingResources.length; i < facilityResources.length + fundingResources.length + humanResources.length; i++)
+					if (resourcesRBS[i].isSelected())
+						new AuthorizedResourceWrapper().removeHumanResource(humanResources[i - facilityResources.length - fundingResources.length]);
 				hide();
 				returnView.show();
 			}
@@ -118,20 +123,30 @@ public class RemoveResourceView implements View {
 		removeResourceFrame.setVisible(true);
 		
 		rw = new ResourceWrapper();
-		resources = rw.showResources();
+		facilityResources = rw.showFacilityResources();
+		System.out.println("number of facility resources: " + facilityResources.length);
+		fundingResources = rw.showFundingResources();
+		System.out.println("number of funding resources: " + fundingResources.length);
 		humanResources = rw.showHumanResources();
-		resourcesRBS = new JRadioButton[resources.length + humanResources.length];
+		System.out.println("number of human resources: " + humanResources.length);
+		resourcesRBS = new JRadioButton[facilityResources.length + fundingResources.length + humanResources.length];
 		ButtonGroup group = new ButtonGroup();
-		for (int i = 0; i < resources.length; i++) {
-			resourcesRBS[i] = new JRadioButton(resources[i].getClass().equals(FacilityResource.class)? ("منبع تجهیزاتی: " + ((FacilityResource) resources[i]).getName()) : ("منبع مالی: " + ((FundingResource) resources[i]).getQuantity().getAmount() + " " + ((FundingResource) resources[i]).getQuantity().getUnit()));
+		for (int i = 0; i < facilityResources.length; i++) {
+			resourcesRBS[i] = new JRadioButton(("منبع تجهیزاتی: " + ((FacilityResource) facilityResources[i]).getName()));
 			resourcesRBS[i].setBounds(20, i * 40, 160, 30);
 			resourcesPanel.add(resourcesRBS[i]);
 			group.add(resourcesRBS[i]);
 		}
-		for (int i = resources.length; i < resources.length + humanResources.length; i++) {
-			HumanResource hr = humanResources[i - resources.length];
-			resourcesRBS[i] = new JRadioButton("منبع انسانی: " + hr.getUser().getName() + " (از: " + hr.getFrom().toString() + " تا: " + hr.getTo().toString() + " ");
-			resourcesRBS[i].setBounds(220, (i - resources.length) * 40, 460, 30);
+		for (int i = facilityResources.length; i < facilityResources.length + fundingResources.length; i++) {
+			resourcesRBS[i] = new JRadioButton(("منبع مالی: " + ((FundingResource) fundingResources[i - facilityResources.length]).getQuantity().getAmount() + " " + ((FundingResource) fundingResources[i - facilityResources.length]).getQuantity().getUnit()));
+			resourcesRBS[i].setBounds(20, i * 40, 160, 30);
+			resourcesPanel.add(resourcesRBS[i]);
+			group.add(resourcesRBS[i]);
+		}
+		for (int i = facilityResources.length + fundingResources.length; i < facilityResources.length + fundingResources.length + humanResources.length; i++) {
+			HumanResource hr = humanResources[i - facilityResources.length - fundingResources.length];
+			resourcesRBS[i] = new JRadioButton("منبع انسانی: " + hr.getUser().getName() + " (از: " + hr.getFrom().toString() + " تا: " + hr.getTo().toString() + ")");
+			resourcesRBS[i].setBounds(220, (i - facilityResources.length - fundingResources.length) * 40, 460, 30);
 			resourcesPanel.add(resourcesRBS[i]);
 			group.add(resourcesRBS[i]);
 		}
