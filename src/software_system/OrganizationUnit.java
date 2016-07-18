@@ -33,11 +33,21 @@ public class OrganizationUnit {
 		}
 		return result.toArray(new OrganizationUnit[result.size()]);
 	}
-
+	
 	public OrganizationUnit(int id, String name, User manager) {
 		this.id = id;
 		this.name = name;
 		this.manager = manager;
+	}
+
+	public OrganizationUnit(String name, User manager) {
+		this.id = generateReqId();
+		this.name = name;
+		this.manager = manager;
+	}
+	
+	public boolean addOrganizationUnit(OrganizationUnit organizationUnit) {
+		return addOrganizationUnit(organizationUnit.id, organizationUnit.name, organizationUnit.manager);
 	}
 
 	public boolean addOrganizationUnit(int id, String name, User manager) {

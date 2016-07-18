@@ -9,23 +9,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public class ModuleView implements View {
+public class OrganizationUnitView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame moduleFrame;
+	private JFrame ouFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	private JButton add;
 	private JButton remove;
 	
-	public ModuleView(View rv, LoginView lv) {
+	public OrganizationUnitView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		moduleFrame = new JFrame();
-		moduleFrame.setBounds(150, 100, 600, 350);
+		ouFrame = new JFrame();
+		ouFrame.setBounds(150, 100, 600, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -38,7 +38,7 @@ public class ModuleView implements View {
 				loginView.show(true);
 			}
 		});
-		moduleFrame.add(logout);
+		ouFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -51,14 +51,14 @@ public class ModuleView implements View {
 				returnView.show();
 			}
 		});
-		moduleFrame.add(return_);
+		ouFrame.add(return_);
 		
-		nameLabel = new JLabel("مدیریت ماژول‌ها", SwingConstants.CENTER);
+		nameLabel = new JLabel("مدیریت فرآیندها", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		moduleFrame.add(nameLabel);
+		ouFrame.add(nameLabel);
 		
-		final View mov = this;
+		final View pv = this;
 		
 		add = new JButton("افزودن");
 		add.setFont(new Font(add.getFont().getName(), Font.PLAIN, 30));
@@ -67,11 +67,11 @@ public class ModuleView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				AddModuleView addModuleView = new AddModuleView(mov, loginView);
-				addModuleView.show();
+				AddOrganizaionUnitView addOUView = new AddOrganizaionUnitView(pv, loginView);
+				addOUView.show();
 			}
 		});
-		moduleFrame.add(add);
+		ouFrame.add(add);
 		
 		remove = new JButton("حذف");
 		remove.setFont(new Font(remove.getFont().getName(), Font.PLAIN, 30));
@@ -80,21 +80,21 @@ public class ModuleView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				RemoveModuleView removeModuleView = new RemoveModuleView(mov, loginView);
-				removeModuleView.show();
+				RemoveProcessView removeProcessView = new RemoveProcessView(pv, loginView);
+				removeProcessView.show();
 			}
 		});
-		moduleFrame.add(remove);
+		ouFrame.add(remove);
 	}
 
 	@Override
 	public void show() {
-		moduleFrame.setLayout(null);
-		moduleFrame.setVisible(true);
+		ouFrame.setLayout(null);
+		ouFrame.setVisible(true);
 	}
 
 	@Override
 	public void hide() {
-		moduleFrame.setVisible(false);
+		ouFrame.setVisible(false);
 	}
 }

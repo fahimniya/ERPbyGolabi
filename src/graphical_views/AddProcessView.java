@@ -76,7 +76,7 @@ public class AddProcessView implements View {
 		});
 		addProcessFrame.add(return_);
 
-		nameLabel = new JLabel("افزدون فرآیند", SwingConstants.CENTER);
+		nameLabel = new JLabel("افزودن فرآیند", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 600, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		addProcessFrame.add(nameLabel);

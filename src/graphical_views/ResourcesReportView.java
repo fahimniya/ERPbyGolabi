@@ -21,30 +21,29 @@ import resources.Resource;
 import resources.ResourceWrapper;
 import software_system.HumanResource;
 
-public class RemoveResourceView implements View {
+public class ResourcesReportView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame removeResourceFrame;
+	private JFrame resourcesReportFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
 	private JPanel resourcesPanel;
 	private JScrollPane rpScroll;
-	private JRadioButton[] resourcesRBS;
-	private JButton removeResource;
+	private JLabel[] resourcesLS;
 	
 	private ResourceWrapper rw;
 	private Resource[] facilityResources;
 	private Resource[] fundingResources;
 	private HumanResource[] humanResources;
 	
-	public RemoveResourceView(View rv, LoginView lv) {
+	public ResourcesReportView(View rv, LoginView lv) {
 		returnView = rv;
 		loginView = lv;
 		returnView.hide();
 		
-		removeResourceFrame = new JFrame();
-		removeResourceFrame.setBounds(150, 100, 800, 500);
+		resourcesReportFrame = new JFrame();
+		resourcesReportFrame.setBounds(150, 100, 800, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -57,7 +56,7 @@ public class RemoveResourceView implements View {
 				loginView.show(true);
 			}
 		});
-		removeResourceFrame.add(logout);
+		resourcesReportFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -70,33 +69,12 @@ public class RemoveResourceView implements View {
 				returnView.show();
 			}
 		});
-		removeResourceFrame.add(return_);
+		resourcesReportFrame.add(return_);
 		
-		nameLabel = new JLabel("حذف منابع", SwingConstants.CENTER);
+		nameLabel = new JLabel("لیست منابع", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 800, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		removeResourceFrame.add(nameLabel);
-		
-		removeResource = new JButton("حذف منبع انتخاب‌شده");
-		removeResource.setBounds(220, 450, 160, 30);
-		removeResource.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				for (int i = 0; i < facilityResources.length; i++)
-					if (resourcesRBS[i].isSelected())
-						new AuthorizedResourceWrapper().removeResource(facilityResources[i]);
-				for (int i = facilityResources.length; i < facilityResources.length + fundingResources.length; i++) {
-					if (resourcesRBS[i].isSelected())
-						new AuthorizedResourceWrapper().removeResource(fundingResources[i - facilityResources.length]);
-				}
-				for (int i = facilityResources.length + fundingResources.length; i < facilityResources.length + fundingResources.length + humanResources.length; i++)
-					if (resourcesRBS[i].isSelected())
-						new AuthorizedResourceWrapper().removeHumanResource(humanResources[i - facilityResources.length - fundingResources.length]);
-				hide();
-				returnView.show();
-			}
-		});
+		resourcesReportFrame.add(nameLabel);
 		
 		resourcesPanel = new JPanel();
 		resourcesPanel.setLayout(null);
@@ -108,19 +86,18 @@ public class RemoveResourceView implements View {
         contentPane.setPreferredSize(new Dimension(800, 550));
         contentPane.add(rpScroll);
         contentPane.add(nameLabel);
-        contentPane.add(removeResource);
         contentPane.add(logout);
         contentPane.add(return_);
-        removeResourceFrame.setContentPane(contentPane);
-        removeResourceFrame.pack();
-        removeResourceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        removeResourceFrame.setVisible(true);
+        resourcesReportFrame.setContentPane(contentPane);
+        resourcesReportFrame.pack();
+        resourcesReportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        resourcesReportFrame.setVisible(true);
 	}
 	
 	@Override
 	public void show() {
-		removeResourceFrame.setLayout(null);
-		removeResourceFrame.setVisible(true);
+		resourcesReportFrame.setLayout(null);
+		resourcesReportFrame.setVisible(true);
 		
 		rw = new ResourceWrapper();
 		facilityResources = rw.showFacilityResources();
@@ -129,32 +106,28 @@ public class RemoveResourceView implements View {
 		System.out.println("number of funding resources: " + fundingResources.length);
 		humanResources = rw.showHumanResources();
 		System.out.println("number of human resources: " + humanResources.length);
-		resourcesRBS = new JRadioButton[facilityResources.length + fundingResources.length + humanResources.length];
-		ButtonGroup group = new ButtonGroup();
+		resourcesLS = new JLabel[facilityResources.length + fundingResources.length + humanResources.length];
 		for (int i = 0; i < facilityResources.length; i++) {
-			resourcesRBS[i] = new JRadioButton(("منبع تجهیزاتی: " + ((FacilityResource) facilityResources[i]).getName()));
-			resourcesRBS[i].setBounds(20, i * 40, 160, 30);
-			resourcesPanel.add(resourcesRBS[i]);
-			group.add(resourcesRBS[i]);
+			resourcesLS[i] = new JLabel(("منبع تجهیزاتی: " + ((FacilityResource) facilityResources[i]).getName()));
+			resourcesLS[i].setBounds(20, i * 40, 160, 30);
+			resourcesPanel.add(resourcesLS[i]);
 		}
 		for (int i = facilityResources.length; i < facilityResources.length + fundingResources.length; i++) {
-			resourcesRBS[i] = new JRadioButton(("منبع مالی: " + ((FundingResource) fundingResources[i - facilityResources.length]).getQuantity().getAmount() + " " + ((FundingResource) fundingResources[i - facilityResources.length]).getQuantity().getUnit()));
-			resourcesRBS[i].setBounds(20, i * 40, 160, 30);
-			resourcesPanel.add(resourcesRBS[i]);
-			group.add(resourcesRBS[i]);
+			resourcesLS[i] = new JLabel(("منبع مالی: " + ((FundingResource) fundingResources[i - facilityResources.length]).getQuantity().getAmount() + " " + ((FundingResource) fundingResources[i - facilityResources.length]).getQuantity().getUnit()));
+			resourcesLS[i].setBounds(20, i * 40, 160, 30);
+			resourcesPanel.add(resourcesLS[i]);
 		}
 		for (int i = facilityResources.length + fundingResources.length; i < facilityResources.length + fundingResources.length + humanResources.length; i++) {
 			HumanResource hr = humanResources[i - facilityResources.length - fundingResources.length];
-			resourcesRBS[i] = new JRadioButton("منبع انسانی: " + hr.getUser().getName() + " (از: " + hr.getFrom().toString() + " تا: " + hr.getTo().toString() + ")");
-			resourcesRBS[i].setBounds(220, (i - facilityResources.length - fundingResources.length) * 40, 460, 30);
-			resourcesPanel.add(resourcesRBS[i]);
-			group.add(resourcesRBS[i]);
+			resourcesLS[i] = new JLabel("منبع انسانی: " + hr.getUser().getName() + " (از: " + hr.getFrom().toString() + " تا: " + hr.getTo().toString() + ")");
+			resourcesLS[i].setBounds(220, (i - facilityResources.length - fundingResources.length) * 40, 460, 30);
+			resourcesPanel.add(resourcesLS[i]);
 		}
 	}
 
 	@Override
 	public void hide() {
-		removeResourceFrame.setVisible(false);
+		resourcesReportFrame.setVisible(false);
 	}
 
 }

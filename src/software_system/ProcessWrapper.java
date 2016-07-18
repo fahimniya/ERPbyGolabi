@@ -158,34 +158,34 @@ public class ProcessWrapper {
 		ResultSet rs = db.getQuery(query);
 		ArrayList<String> moduleNames = new ArrayList<String>();
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				String temp = rs.getString("MODULENAME");
-				if(!moduleNames.contains(temp))
+				if (!moduleNames.contains(temp))
 					moduleNames.add(temp);
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 		query = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] { "MODULENAME" }, null, null);
 		rs = db.getQuery(query);
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				String temp = rs.getString("MODULENAME");
-				if(!moduleNames.contains(temp))
+				if (!moduleNames.contains(temp))
 					moduleNames.add(temp);
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 		query = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] { "MODULENAME" }, null, null);
 		rs = db.getQuery(query);
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				String temp = rs.getString("MODULENAME");
-				if(!moduleNames.contains(temp))
+				if (!moduleNames.contains(temp))
 					moduleNames.add(temp);
 			}
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 		return moduleNames.toArray(new String[moduleNames.size()]);
@@ -204,8 +204,7 @@ public class ProcessWrapper {
 				ResultSet temp = db.getQuery(q);
 				if (!temp.next())
 					break;
-				FacilityResource fr = null;
-				fr = new FacilityResource(temp.getString("NAME"), temp.getInt("ID"));
+				FacilityResource fr = new FacilityResource(temp.getString("NAME"), temp.getInt("ID"));
 				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), fr,
 						rs.getString("TYPE"), rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
 			}
@@ -222,12 +221,11 @@ public class ProcessWrapper {
 				ResultSet temp = db.getQuery(q);
 				if (!temp.next())
 					break;
-				HumanResource hr = null;
 				q = db.generateSelectQuery("USER", new String[] { "*" }, null, null);
 				ResultSet t = db.getQuery(q);
 				t.next();
 				User user = new User(t.getString("USERNAME"), t.getString("PASSWORD"), t.getString("NAME"));
-				hr = new HumanResource(user, temp.getDate("FROM_DATE"), temp.getDate("TO_DATE"));
+				HumanResource hr = new HumanResource(user, temp.getDate("FROM_DATE"), temp.getDate("TO_DATE"));
 				modules.add(new Module(rs.getString("MODULENAME"), rs.getString("PROJECTNAME"), hr,
 						rs.getString("TYPE"), rs.getDate("FROM_DATE"), rs.getDate("TO_DATE")));
 			}
@@ -257,10 +255,19 @@ public class ProcessWrapper {
 		return flag;
 	}
 
-	public boolean removeModule(Module[] modules) {
+	public boolean removeModule(String[] moduleNames) {
+		DBManagement db = new DBManagement();
 		boolean flag = true;
-		for (int i = 0; i < modules.length; i++) {
-			flag = flag && modules[i].deleteResourceAllocation();
+		for (int i = 0; i < moduleNames.length; i++) {
+			String query = db.generateDeleteQuery("FACILITYRESOURCEALLOCATION", new String[] { moduleNames[i] },
+					new String[] { "MODULENAME" });
+			flag = flag && db.update(query);
+			query = db.generateDeleteQuery("FUNDINGRESOURCEALLOCATION", new String[] { moduleNames[i] },
+					new String[] { "MODULENAME" });
+			flag = flag && db.update(query);
+			query = db.generateDeleteQuery("HUMANRESOURCEALLOCATION", new String[] { moduleNames[i] },
+					new String[] { "MODULENAME" });
+			flag = flag && db.update(query);
 		}
 		return flag;
 	}
