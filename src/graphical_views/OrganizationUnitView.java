@@ -73,18 +73,18 @@ public class OrganizationUnitView implements View {
 		});
 		ouFrame.add(add);
 		
-		remove = new JButton("حذف");
+		remove = new JButton("افزودن نیازمندی");
 		remove.setFont(new Font(remove.getFont().getName(), Font.PLAIN, 30));
 		remove.setBounds(50, 100, 200, 140);
 		remove.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				RemoveOrganizationUnitView removeOUView = new RemoveOrganizationUnitView(pv, loginView);
-				removeOUView.show();
+				AddRequirementView addRequirementView = new AddRequirementView(pv, loginView);
+				addRequirementView.show();
 			}
 		});
-		//ouFrame.add(remove);
+		ouFrame.add(remove);
 	}
 
 	@Override

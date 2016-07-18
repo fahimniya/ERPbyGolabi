@@ -62,7 +62,9 @@ public class OrganizationUnit {
 
 	public boolean registerResource(String projectName, int humans, String specialty, Quantity amount,
 			int facilityNumber, String name, int priority) {
-		if (!UserWrapper.getInstance().getUsername().equals(manager.getUsername()))
+		System.out.println(UserWrapper.getInstance().getUsername());
+		System.out.println(manager.getUsername());
+		if (!UserWrapper.getInstance().getUsername().equalsIgnoreCase(manager.getUsername()))
 			return false;
 		UserWrapper.getInstance().getUsername();
 		boolean human = false, facility = false, fund = false;
@@ -80,6 +82,7 @@ public class OrganizationUnit {
 		String query = db.generateAddQuery("REQUIREDHUMANRESOURCE",
 				new String[] { Integer.toString(hReqId), Integer.toString(id), projectName,
 						Integer.toString(humanNumber), specialty, null, Integer.toString(priority) });
+		System.out.println("From OU: " + query);
 		return db.update(query);
 	}
 
@@ -95,6 +98,7 @@ public class OrganizationUnit {
 		String query = db.generateAddQuery("REQUIREDFACILITYRESOURCE",
 				new String[] { Integer.toString(fReqId), Integer.toString(id), projectName,
 						Integer.toString(facilityNumber), name, null, Integer.toString(priority) });
+		System.out.println("From OU: " + query);
 		return db.update(query);
 	}
 
@@ -105,6 +109,11 @@ public class OrganizationUnit {
 				new String[] { Integer.toString(fundingReqId), Integer.toString(id), projectName,
 						Integer.toString(amount.getAmount()), amount.getUnit().toString(), null,
 						Integer.toString(priority) });
+		System.out.println("From OU: " + query);
 		return db.update(query);
+	}
+	
+	public String getName() {
+		return name;
 	}
 }
