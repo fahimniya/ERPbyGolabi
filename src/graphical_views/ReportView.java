@@ -95,7 +95,7 @@ public class ReportView implements View {
 		
 		softwareSystemName = new JComboBox<>();
 		softwareSystemName.setBounds(100, 340, 250, 30);
-		SoftwareSystem[] softwareSystems = ProcessWrapper.getInstance().showSoftwareSystem();
+		final SoftwareSystem[] softwareSystems = ProcessWrapper.getInstance().showSoftwareSystem();
 		for (SoftwareSystem softwareSystem: softwareSystems)
 			softwareSystemName.addItem(softwareSystem.getName());
 		reportFrame.add(softwareSystemName);
@@ -111,8 +111,8 @@ public class ReportView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ResourcesReportView showReport = new ResourcesReportView(reportv, loginView);
-				showReport.show();
+				RequirementsReportView requirementsReport = new RequirementsReportView(reportv, loginView, softwareSystems[softwareSystemName.getSelectedIndex()]);
+				requirementsReport.show();
 			}
 		});
 		reportFrame.add(report3);

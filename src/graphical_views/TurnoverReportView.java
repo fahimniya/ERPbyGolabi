@@ -22,6 +22,7 @@ import resources.ResourceWrapper;
 import software_system.HumanResource;
 import software_system.Module;
 import software_system.ProcessWrapper;
+import software_system.estimation.RequirementWrapper;
 
 public class TurnoverReportView implements View {
 	private View returnView;
@@ -34,7 +35,7 @@ public class TurnoverReportView implements View {
 	private JScrollPane mpScroll;
 	private JLabel[] modulesLS;
 	
-	private ProcessWrapper pw;
+	private RequirementWrapper rw;
 	private String[] modules;
 	
 	public TurnoverReportView(View rv, LoginView lv) {
@@ -71,7 +72,7 @@ public class TurnoverReportView implements View {
 		});
 		turnoverReportFrame.add(return_);
 		
-		nameLabel = new JLabel("لیست منابع", SwingConstants.CENTER);
+		nameLabel = new JLabel("گزارش جریان چرخشی منابع", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 800, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		turnoverReportFrame.add(nameLabel);
@@ -99,12 +100,12 @@ public class TurnoverReportView implements View {
 		turnoverReportFrame.setLayout(null);
 		turnoverReportFrame.setVisible(true);
 		
-		pw = ProcessWrapper.getInstance();
-		modules = pw.showModuleName();
+		rw = new RequirementWrapper();
+		modules = rw.resourceTurnover();
 		modulesLS = new JLabel[modules.length];
 		for (int i = 0; i < modules.length; i++) {
 			modulesLS[i] = new JLabel(modules[i]);
-			modulesLS[i].setBounds(20, i * 40, 160, 30);
+			modulesLS[i].setBounds(20, i * 40, 800, 30);
 			modulesPanel.add(modulesLS[i]);
 		}
 	}

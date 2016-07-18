@@ -24,6 +24,7 @@ public class RequirementWrapper {
 	public String[] resourceTurnover() {
 		DBManagement db = new DBManagement();
 		String query = db.generateSelectQuery("FACILITYRESOURCEALLOCATION", new String[] { "*" }, null, null);
+		System.out.println("From RequirementWrapper: " + query);
 		ResultSet rs = db.getQuery(query);
 		String organization;
 		ArrayList<String> reports = new ArrayList<String>();
@@ -31,59 +32,60 @@ public class RequirementWrapper {
 			while (rs.next()) {
 				organization = "";
 				String projectName = rs.getString("PROJECTNAME");
-				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
-						new String[] { projectName }, new String[] { "PROJECTNAME" });
-				ResultSet temp = db.getQuery(query);
-				while (temp.next()) {
-					organization = organization + " " + temp.getString("OID");
-				}
-				reports.add(rs.getString("MODULENAME") + "\t" + rs.getShort("PROJECTNAME") + "\t"
-						+ Integer.toString(rs.getInt("ID")) + "\t" + rs.getString("TYPE") + "\t"
-						+ rs.getDate("FROM_DATE").toString() + "\t" + rs.getDate("TO_DATE").toString() + "\t"
-						+ organization);
+				System.out.println("From RequirementWrapper: " + projectName);
+//				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
+//						new String[] { projectName }, new String[] { "SSNAME" });
+				System.out.println("From RequirementWrapper: " + query);
+//				ResultSet temp = db.getQuery(query);
+//				while (temp.next()) {
+//					organization = organization + " " + temp.getString("OID");
+//				}
+//				System.out.println("From RequirementWrapper: " + organization);
+				reports.add(rs.getString("MODULENAME") + "   " + rs.getString("PROJECTNAME") + "   "
+						+ Integer.toString(rs.getInt("ID")) + "   " + rs.getString("TYPE") + "   "
+						+ rs.getDate("FROM_DATE").toString() + "   " + rs.getDate("TO_DATE").toString());
 			}
 		} catch (Exception e) {
 			return null;
 		}
-		query = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] { "*" }, null, null);
-		rs = db.getQuery(query);
-		try {
-			while (rs.next()) {
-				organization = "";
-				String projectName = rs.getString("PROJECTNAME");
-				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
-						new String[] { projectName }, new String[] { "PROJECTNAME" });
-				ResultSet temp = db.getQuery(query);
-				while (temp.next()) {
-					organization = organization + " " + temp.getString("OID");
-				}
-				reports.add(rs.getString("MODULENAME") + "\t" + rs.getShort("PROJECTNAME") + "\t" + rs.getString("UNIT")
-						+ "\t" + Integer.toString(rs.getInt("AMOUNT")) + "\t" + rs.getString("TYPE")
-						+ rs.getDate("FROM_DATE").toString() + "\t" + rs.getDate("TO_DATE").toString() + "\t"
-						+ organization);
-			}
-		} catch (Exception e) {
-			return null;
-		}
-		query = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] { "*" }, null, null);
-		rs = db.getQuery(query);
-		try {
-			while (rs.next()) {
-				organization = "";
-				String projectName = rs.getString("PROJECTNAME");
-				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
-						new String[] { projectName }, new String[] { "PROJECTNAME" });
-				ResultSet temp = db.getQuery(query);
-				while (temp.next()) {
-					organization = organization + " " + temp.getString("OID");
-				}
-				reports.add(rs.getString("MODULENAME") + "\t" + rs.getShort("PROJECTNAME") + "\t"
-						+ rs.getString("USERNAME") + "\t" + rs.getString("TYPE") + rs.getDate("FROM_DATE").toString()
-						+ "\t" + rs.getDate("TO_DATE").toString() + "\t" + organization);
-			}
-		} catch (Exception e) {
-			return null;
-		}
+//		query = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] { "*" }, null, null);
+//		rs = db.getQuery(query);
+//		try {
+//			while (rs.next()) {
+//				organization = "";
+//				String projectName = rs.getString("PROJECTNAME");
+//				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
+//						new String[] { projectName }, new String[] { "SSNAME" });
+////				ResultSet temp = db.getQuery(query);
+////				while (temp.next()) {
+////					organization = organization + " " + temp.getString("OID");
+////				}
+//				reports.add(rs.getString("MODULENAME") + "\t" + rs.getShort("PROJECTNAME") + "\t" + rs.getString("UNIT")
+//						+ "\t" + Integer.toString(rs.getInt("AMOUNT")) + "\t" + rs.getString("TYPE")
+//						+ rs.getDate("FROM_DATE").toString() + "\t" + rs.getDate("TO_DATE").toString());
+//			}
+//		} catch (Exception e) {
+//			return null;
+//		}
+//		query = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] { "*" }, null, null);
+//		rs = db.getQuery(query);
+//		try {
+//			while (rs.next()) {
+//				organization = "";
+//				String projectName = rs.getString("PROJECTNAME");
+//				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
+//						new String[] { projectName }, new String[] { "SSNAME" });
+////				ResultSet temp = db.getQuery(query);
+////				while (temp.next()) {
+////					organization = organization + " " + temp.getString("OID");
+////				}
+//				reports.add(rs.getString("MODULENAME") + "\t" + rs.getShort("PROJECTNAME") + "\t"
+//						+ rs.getString("USERNAME") + "\t" + rs.getString("TYPE") + rs.getDate("FROM_DATE").toString()
+//						+ "\t" + rs.getDate("TO_DATE").toString() + "\t");
+//			}
+//		} catch (Exception e) {
+//			return null;
+//		}
 		return reports.toArray(new String[reports.size()]);
 	}
 
