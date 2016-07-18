@@ -13,43 +13,55 @@ public class DBManagement {
 	// Database credentials
 	static final String USER = "Golabi";
 	static final String PASS = "123456";
-	
-//	public void createtable() {
-//		String query = createTableQuery("DEVELOP", new String[] { "ID", "PROJECTNAME", "FROM", "TO" }, new String[] { "INT", "VARCHAR(255)", "DATE", "DATE" }, new String[] { "", "", "", "" }, new String {"ID"}, foreignKey, refrence)
-//				,
-//				new String[] { String.valueOf(id), projectName, from.toString(), to.toString() }
-//		update(query);
-//	}
-	
-	public String createTableQuery(String tableName, String fields[], String type[], String options[], String primaryKey[], String foreignKey[], String refrence[]) {
+
+	// public void createtable() {
+	// String query = createTableQuery("DEVELOP", new String[] { "ID",
+	// "PROJECTNAME", "FROM", "TO" }, new String[] { "INT", "VARCHAR(255)",
+	// "DATE", "DATE" }, new String[] { "", "", "", "" }, new String {"ID"},
+	// foreignKey, refrence)
+	// ,
+	// new String[] { String.valueOf(id), projectName, from.toString(),
+	// to.toString() }
+	// update(query);
+	// }
+
+	public String createTableQuery(String tableName, String fields[], String type[], String options[],
+			String primaryKey[], String foreignKey[], String refrence[]) {
 		String query = "create table " + tableName + "( ";
-		for(int i=0; i<fields.length; i++) 
+		for (int i = 0; i < fields.length; i++)
 			query += fields[i] + " " + type[i] + " " + options[i] + ", ";
 		query += "PRIMARY KEY ( ";
-		for(int i=0; i<primaryKey.length; i++)
-			if(i==primaryKey.length-1)
+		for (int i = 0; i < primaryKey.length; i++)
+			if (i == primaryKey.length - 1)
 				query += primaryKey[i] + " )";
 			else
 				query += primaryKey[i] + ", ";
-		if(foreignKey !=null) {
-			for(int i=0; i<foreignKey.length; i++) {
-				query += "FOREIGN KEY ( " + foreignKey +" ) REFERENCES" + refrence[i] + " ";
-				if(i != foreignKey.length-1)
+		if (foreignKey != null) {
+			for (int i = 0; i < foreignKey.length; i++) {
+				query += "FOREIGN KEY ( " + foreignKey + " ) REFERENCES" + refrence[i] + " ";
+				if (i != foreignKey.length - 1)
 					query += ", ";
 			}
 		}
 		query += ");";
 		return query;
-			
+
 	}
 
 	public String generateAddQuery(String table, String[] values) {
-		String query = "insert into " + table + " values(\'";
+		String query = "insert into " + table + " values(";
 		for (int i = 0; i < values.length; i++) {
-			if (i == values.length - 1)
-				query += values[i] + "\');";
-			else
-				query += values[i] + "\', \'";
+			if (!values[i].equalsIgnoreCase("null"))
+				if (i == values.length - 1)
+					query += "\'" + values[i] + "\');";
+				else
+					query += "\'" + values[i] + "\', ";
+			else {
+				if (i == values.length - 1)
+					query += "\'" + values[i] + "\');";
+				else
+					query += "\'" + values[i] + "\', ";
+			}
 		}
 		return query;
 	}
@@ -57,10 +69,17 @@ public class DBManagement {
 	public String generateDeleteQuery(String table, String[] values, String[] fields) {
 		String query = "delete from " + table + " where ";
 		for (int i = 0; i < values.length; i++) {
-			if (i == values.length - 1)
-				query += fields[i] + " = \'" + values[i] + "\';";
-			else
-				query += fields[i] + " = \'" + values[i] + "\' and ";
+			if (!values[i].equalsIgnoreCase("null"))
+				if (i == values.length - 1)
+					query += fields[i] + " = \'" + values[i] + "\';";
+				else
+					query += fields[i] + " = \'" + values[i] + "\' and ";
+			else {
+				if (i == values.length - 1)
+					query += fields[i] + " = " + values[i] + ";";
+				else
+					query += fields[i] + " = " + values[i] + " and ";
+			}
 		}
 		return query;
 	}
@@ -74,16 +93,23 @@ public class DBManagement {
 				query += col[i] + ", ";
 		}
 		query += "from " + table;
-		if(values !=null) {
+		if (values != null) {
 			query += " where ";
 			for (int i = 0; i < values.length; i++) {
-				if (i == values.length - 1)
-					query += fields[i] + " = \'" + values[i] + "\';";
-				else
-					query += fields[i] + " = \'" + values[i] + "\' and ";
+				if (!values[i].equalsIgnoreCase("null"))
+					if (i == values.length - 1)
+						query += fields[i] + " = \'" + values[i] + "\';";
+					else
+						query += fields[i] + " = \'" + values[i] + "\' and ";
+				else {
+					if (i == values.length - 1)
+						query += fields[i] + " = " + values[i] + ";";
+					else
+						query += fields[i] + " = " + values[i] + " and ";
+				}
+
 			}
-		}
-		else 
+		} else
 			query += ";";
 		return query;
 	}
@@ -98,11 +124,18 @@ public class DBManagement {
 				query += newValuesFileds[i] + " = \"" + newValues[i] + "\", ";
 		if (oldValues.length > 0) {
 			query += "where ";
-			for (int i = 0; i < oldValues.length; i++)
-				if (i == oldValues.length - 1)
-					query += oldValuesFields[i] + " = \"" + oldValues[i] + "\";";
-				else
-					query += oldValuesFields[i] + " = \"" + oldValues[i] + "\" and ";
+			for (int i = 0; i < oldValues.length; i++) 
+				if(!oldValues[i].equalsIgnoreCase("null"))
+					if (i == oldValues.length - 1)
+						query += oldValuesFields[i] + " = \"" + oldValues[i] + "\";";
+					else
+						query += oldValuesFields[i] + " = \"" + oldValues[i] + "\" and ";
+				else {
+					if (i == oldValues.length - 1)
+						query += oldValuesFields[i] + " = " + oldValues[i] + ";";
+					else
+						query += oldValuesFields[i] + " = " + oldValues[i] + " and ";
+				}
 		} else
 			query += ";";
 		return query;
@@ -150,7 +183,7 @@ public class DBManagement {
 		}
 		return false;
 	}
-	
+
 	public boolean execute(String query) {
 		Connection conn = null;
 		Statement stmt = null;
