@@ -23,6 +23,7 @@ import software_system.HumanResource;
 import software_system.Module;
 import software_system.ProcessWrapper;
 import software_system.SoftwareSystem;
+import software_system.estimation.Requirement;
 import software_system.estimation.RequirementWrapper;
 
 public class RequirementsReportView implements View {
@@ -35,15 +36,16 @@ public class RequirementsReportView implements View {
 	private JButton return_;
 	private JPanel modulesPanel;
 	private JScrollPane mpScroll;
-	private JLabel[] modulesLS;
+	private JLabel[] requirementsLS;
 	
 	private RequirementWrapper rw;
-	private String[] modules;
+	private Requirement[] requirements;
 	
-	public RequirementsReportView(View rv, LoginView lv, SoftwareSystem softwareSystem) {
+	public RequirementsReportView(View rv, LoginView lv, SoftwareSystem softwareSystem, Requirement[] requirements) {
 		returnView = rv;
 		loginView = lv;
 		this.softwareSystem = softwareSystem;
+		this.requirements = requirements;
 		returnView.hide();
 		
 		requirementsReportFrame = new JFrame();
@@ -75,7 +77,10 @@ public class RequirementsReportView implements View {
 		});
 		requirementsReportFrame.add(return_);
 		
-		nameLabel = new JLabel("گزارش منابع مورد نیاز برای سیستم نرم‌افزاری " + softwareSystem.getName(), SwingConstants.CENTER);
+		if (softwareSystem != null)
+			nameLabel = new JLabel("گزارش منابع مورد نیاز برای سیستم نرم‌افزاری " + softwareSystem.getName(), SwingConstants.CENTER);
+		else 
+			nameLabel = new JLabel("تخمین", SwingConstants.CENTER);
 		nameLabel.setBounds(0, 35, 900, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
 		requirementsReportFrame.add(nameLabel);
@@ -104,12 +109,14 @@ public class RequirementsReportView implements View {
 		requirementsReportFrame.setVisible(true);
 		
 		rw = new RequirementWrapper();
-		modules = rw.resourceTurnover();
-		modulesLS = new JLabel[modules.length];
-		for (int i = 0; i < modules.length; i++) {
-			modulesLS[i] = new JLabel(modules[i]);
-			modulesLS[i].setBounds(20, i * 40, 160, 30);
-			modulesPanel.add(modulesLS[i]);
+		if (softwareSystem != null)
+			requirements = rw.showRequirment(softwareSystem);
+		System.out.println("Req Report: " + requirements.length);
+		requirementsLS = new JLabel[requirements.length];
+		for (int i = 0; i < requirements.length; i++) {
+			requirementsLS[i] = new JLabel(requirements[i].toString());
+			requirementsLS[i].setBounds(20, i * 40, 160, 30);
+			modulesPanel.add(requirementsLS[i]);
 		}
 	}
 

@@ -111,7 +111,7 @@ public class ReportView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				RequirementsReportView requirementsReport = new RequirementsReportView(reportv, loginView, softwareSystems[softwareSystemName.getSelectedIndex()]);
+				RequirementsReportView requirementsReport = new RequirementsReportView(reportv, loginView, softwareSystems[softwareSystemName.getSelectedIndex()], null);
 				requirementsReport.show();
 			}
 		});

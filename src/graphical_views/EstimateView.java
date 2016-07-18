@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import software_system.estimation.Estimator;
+
 public class EstimateView implements View {
 	private View returnView;
 	private LoginView loginView;
@@ -73,14 +75,14 @@ public class EstimateView implements View {
 		});
 		estimateFrame.add(estimateResource);
 		
-		estimateRequirements = new JButton("تخمین نیازمندی‌ها");
+		estimateRequirements = new JButton("تخمین نیازمندی‌های ضروری");
 		estimateRequirements.setFont(new Font(estimateRequirements.getFont().getName(), Font.PLAIN, 30));
 		estimateRequirements.setBounds(100, 220, 400, 100);
 		estimateRequirements.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				EstimateRequirementsView estimateRequirements = new EstimateRequirementsView(reportv, loginView);
+				RequirementsReportView estimateRequirements = new RequirementsReportView(reportv, loginView, null, new Estimator().estimateEssentialRequirements());
 				estimateRequirements.show();
 			}
 		});

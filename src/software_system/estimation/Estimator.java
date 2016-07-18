@@ -167,13 +167,13 @@ public class Estimator {
 			e.printStackTrace();
 		}
 
-		return (Requirement[]) req.toArray();
+		return req.toArray(new Requirement[req.size()]);
 
 	}
 
 	private Technology[] getRelatedTechnologies(String systemName) {
 		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("Technology", new String[] { "TNAME" }, new String[] { systemName },
+		String query = db.generateSelectQuery("SOFTECH", new String[] { "TNAME" }, new String[] { systemName },
 				new String[] { "SNAME" });
 		ResultSet rs = db.getQuery(query);
 		ArrayList<Technology> techs = new ArrayList<Technology>();

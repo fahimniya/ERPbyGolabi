@@ -24,6 +24,21 @@ public class Requirement {
 	public int numberOfSystem;
 	public String type;
 	
+	@Override
+	public String toString() {
+		switch (type) {
+		case humanReq:
+			return humans + " " + "نفر";
+		case facilityReq:
+			return facilityName + " " + facilityName;
+		case fundingReq:
+			return amount.getAmount() + " " + amount.getUnit().toString();
+		default:
+			break;
+		}
+		return null;
+	}
+	
 	public Requirement(int oid,Date SDATE, Integer id, String reqType, Integer humans, String specialty, Quantity amount, Integer facilityNumber, String facilityName, Module[] modules, int priority) {
 		this.numberOfSystem = 1;
 		this.id = id;

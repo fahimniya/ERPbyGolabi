@@ -58,9 +58,9 @@ public class DBManagement {
 					query += "\'" + values[i] + "\', ";
 			else {
 				if (i == values.length - 1)
-					query += "\'" + values[i] + "\');";
+					query += " " + values[i] + ");";
 				else
-					query += "\'" + values[i] + "\', ";
+					query += " " + values[i] + ", ";
 			}
 		}
 		return query;

@@ -48,44 +48,44 @@ public class RequirementWrapper {
 		} catch (Exception e) {
 			return null;
 		}
-//		query = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] { "*" }, null, null);
-//		rs = db.getQuery(query);
-//		try {
-//			while (rs.next()) {
-//				organization = "";
-//				String projectName = rs.getString("PROJECTNAME");
-//				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
-//						new String[] { projectName }, new String[] { "SSNAME" });
-////				ResultSet temp = db.getQuery(query);
-////				while (temp.next()) {
-////					organization = organization + " " + temp.getString("OID");
-////				}
-//				reports.add(rs.getString("MODULENAME") + "\t" + rs.getShort("PROJECTNAME") + "\t" + rs.getString("UNIT")
-//						+ "\t" + Integer.toString(rs.getInt("AMOUNT")) + "\t" + rs.getString("TYPE")
-//						+ rs.getDate("FROM_DATE").toString() + "\t" + rs.getDate("TO_DATE").toString());
-//			}
-//		} catch (Exception e) {
-//			return null;
-//		}
-//		query = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] { "*" }, null, null);
-//		rs = db.getQuery(query);
-//		try {
-//			while (rs.next()) {
-//				organization = "";
-//				String projectName = rs.getString("PROJECTNAME");
-//				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
-//						new String[] { projectName }, new String[] { "SSNAME" });
-////				ResultSet temp = db.getQuery(query);
-////				while (temp.next()) {
-////					organization = organization + " " + temp.getString("OID");
-////				}
-//				reports.add(rs.getString("MODULENAME") + "\t" + rs.getShort("PROJECTNAME") + "\t"
-//						+ rs.getString("USERNAME") + "\t" + rs.getString("TYPE") + rs.getDate("FROM_DATE").toString()
-//						+ "\t" + rs.getDate("TO_DATE").toString() + "\t");
-//			}
-//		} catch (Exception e) {
-//			return null;
-//		}
+		query = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] { "*" }, null, null);
+		rs = db.getQuery(query);
+		try {
+			while (rs.next()) {
+				organization = "";
+				String projectName = rs.getString("PROJECTNAME");
+				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
+						new String[] { projectName }, new String[] { "SSNAME" });
+//				ResultSet temp = db.getQuery(query);
+//				while (temp.next()) {
+//					organization = organization + " " + temp.getString("OID");
+//				}
+				reports.add(rs.getString("MODULENAME") + "\t" + rs.getString("PROJECTNAME") + "\t" + rs.getString("UNIT")
+						+ "\t" + Integer.toString(rs.getInt("AMOUNT")) + "\t" + rs.getString("TYPE")
+						+ rs.getDate("FROM_DATE").toString() + "\t" + rs.getDate("TO_DATE").toString());
+			}
+		} catch (Exception e) {
+			return null;
+		}
+		query = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] { "*" }, null, null);
+		rs = db.getQuery(query);
+		try {
+			while (rs.next()) {
+				organization = "";
+				String projectName = rs.getString("PROJECTNAME");
+				query = db.generateSelectQuery("SOFTWARESYSTEM_ORGANIZATIONUNIT", new String[] { "OID" },
+						new String[] { projectName }, new String[] { "SSNAME" });
+//				ResultSet temp = db.getQuery(query);
+//				while (temp.next()) {
+//					organization = organization + " " + temp.getString("OID");
+//				}
+				reports.add(rs.getString("MODULENAME") + "\t" + rs.getString("PROJECTNAME") + "\t"
+						+ rs.getString("USERNAME") + "\t" + rs.getString("TYPE") + rs.getDate("FROM_DATE").toString()
+						+ "\t" + rs.getDate("TO_DATE").toString() + "\t");
+			}
+		} catch (Exception e) {
+			return null;
+		}
 		return reports.toArray(new String[reports.size()]);
 	}
 
@@ -94,10 +94,13 @@ public class RequirementWrapper {
 
 		String reqHumanQuery = db.generateSelectQuery("REQUIREDHUMANRESOURCE", new String[] { "*" },
 				new String[] { softwareSystem.getName() }, new String[] { "PROJECTNAME" });
+		System.out.println("From Req: " + reqHumanQuery);
 		String reqFacilityQuery = db.generateSelectQuery("REQUIREDFACILITYRESOURCE", new String[] { "*" },
 				new String[] { softwareSystem.getName() }, new String[] { "PROJECTNAME" });
+		System.out.println("From Req: " + reqFacilityQuery);
 		String reqFundingQuery = db.generateSelectQuery("REQUIREDFUNDINGRESOURCE", new String[] { "*" },
 				new String[] { softwareSystem.getName() }, new String[] { "PROJECTNAME" });
+		System.out.println("From Req: " + reqFundingQuery);
 
 		ResultSet reqHumanResult = db.getQuery(reqHumanQuery);
 		ResultSet reqFacilityResult = db.getQuery(reqFacilityQuery);
@@ -159,12 +162,12 @@ public class RequirementWrapper {
 				int id = reqFundingResult.getInt("FREQID");
 				int priority = reqFundingResult.getInt("PRIORITY");
 				req.add(new Requirement(oid, SDate, id, Requirement.fundingReq, null, null,
-						new Quantity(amount, new Unit(unit)), null, null, (Module[]) moduleArray.toArray(), priority));
+						new Quantity(amount, new Unit(unit)), null, null, moduleArray.toArray(new Module[moduleArray.size()]), priority));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return (Requirement[]) req.toArray();
+		return req.toArray(new Requirement[req.size()]);
 	}
 }
