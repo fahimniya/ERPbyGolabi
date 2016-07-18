@@ -86,7 +86,7 @@ public class OrganizationUnit {
 		return db.update(query);
 	}
 
-	private int generateReqId() {
+	public int generateReqId() {
 		Random rand = new Random();
 		int id = 500000000 + rand.nextInt(99999999);
 		return id;

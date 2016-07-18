@@ -3,6 +3,9 @@ package software_system;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+
+import javax.rmi.CORBA.UtilDelegate;
 
 import data.DBManagement;
 import resources.FacilityResource;
@@ -50,6 +53,7 @@ public class Module {
 					return false;
 				query = db.generateAddQuery("FACILITYRESOURCEALLOCATION", new String[] { moduleName, projectName,
 						Integer.toString(((FacilityResource) res).getId()), type, from.toString(), to.toString() });
+				updateRequiredFacilityResource(projectName, ((FacilityResource) res).getName());
 			} 
 			else {
 				if(!checkFundingAvailablity(((FundingResource) res).getQuantity().getAmount(), ((FundingResource) res).getQuantity().getUnit().toString()))
@@ -66,6 +70,7 @@ public class Module {
 				return false;
 			query = db.generateAddQuery("HUMANRESOURCEALLOCATION", new String[] { moduleName, projectName,
 				hres.getUser().getUsername(), type, from.toString(), to.toString() });
+				updateRequiredHumanResource(projectName);
 		}
 		return db.update(query);
 	}
@@ -75,6 +80,59 @@ public class Module {
 		resource.removeFromDB();
 	}
 
+	private void updateRequiredFacilityResource(String projectName, String facilityName) {
+		DBManagement db = new DBManagement();
+		String selectQuery = db.generateSelectQuery("REQUIREDFACILITYRESOURCE", new String[] {"*"}, new String[] {projectName, facilityName} , new String[] {"PROJECTNAME", "NAME"});
+		selectQuery = selectQuery.substring(selectQuery.length()-1) + " and SDATE = null;";
+		ResultSet rs = db.getQuery(selectQuery);
+		try {
+			if(rs.getFetchSize()>0) {
+				rs.next();
+				int id = rs.getInt("FREQID");
+				int number = rs.getInt("FNUMBER");
+				if(number == 1) {
+					String updateQuery = db.generateUpdateQuery("REQUIREDFACILITYRESOURCE", new String[] {new Date(Calendar.getInstance().getTime().getTime()).toString()}, new String[]{"SDATE"}, new String[] {Integer.toString(id)}, new String[] {"FREQID"});
+					db.update(updateQuery);
+				}
+				else {
+					String updateQuery = db.generateUpdateQuery("REQUIREDFACILITYRESOURCE", new String[] {new Date(Calendar.getInstance().getTime().getTime()).toString(), Integer.toString(id-1)}, new String[]{"SDATE", "FNUMBER"}, new String[] {Integer.toString(id)}, new String[] {"FREQID"});
+					db.update(updateQuery);
+					String addQuery = db.generateAddQuery("REQUIREDFACILITYRESOURCE", new String[] {Integer.toString(new OrganizationUnit(null, null).generateReqId()), rs.getString("OID"), rs.getString("PROJECTNAME"), "1", facilityName, new Date(Calendar.getInstance().getTime().getTime()).toString(), Integer.toString(id-1), rs.getString("PRIORITY")});
+					db.update(addQuery);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateRequiredHumanResource(String projectName) {
+		DBManagement db = new DBManagement();
+		String selectQuery = db.generateSelectQuery("REQUIREDHUMANRESOURCE", new String[] {"*"}, new String[] {projectName} , new String[] {"PROJECTNAME"});
+		selectQuery = selectQuery.substring(selectQuery.length()-1) + " and SDATE = null;";
+		ResultSet rs = db.getQuery(selectQuery);
+		try {
+			if(rs.getFetchSize()>0) {
+				rs.next();
+				int id = rs.getInt("HREQID");
+				int number = rs.getInt("HNUMBER");
+				if(number == 1) {
+					String updateQuery = db.generateUpdateQuery("REQUIREDHUMANRESOURCE", new String[] {new Date(Calendar.getInstance().getTime().getTime()).toString()}, new String[]{"SDATE"}, new String[] {Integer.toString(id)}, new String[] {"HREQID"});
+					db.update(updateQuery);
+				}
+				else {
+					String updateQuery = db.generateUpdateQuery("REQUIREDHUMANRESOURCE", new String[] {new Date(Calendar.getInstance().getTime().getTime()).toString(), Integer.toString(id-1)}, new String[]{"SDATE", "HNUMBER"}, new String[] {Integer.toString(id)}, new String[] {"FREQID"});
+					db.update(updateQuery);
+					String addQuery = db.generateAddQuery("REQUIREDHUMANRESOURCE", new String[] {Integer.toString(new OrganizationUnit(null, null).generateReqId()), rs.getString("OID"), rs.getString("PROJECTNAME"), "1", rs.getString("SPECIALTY"), new Date(Calendar.getInstance().getTime().getTime()).toString(), Integer.toString(id-1), rs.getString("PRIORITY")});
+					db.update(addQuery);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	private boolean checkFacilityAvailablity(int id, Date requestedFromDate, Date requestedToDate) {
 		DBManagement db = new DBManagement();
 		String query = "select * from FACILITYRESOURCEALLOCATION where ID = \'" + Integer.toString(id) + "\' and not((FROM_DATE > \'" + requestedToDate.toString() + "\') or (TO_DATE < \'" + requestedFromDate.toString() + "\'));";
