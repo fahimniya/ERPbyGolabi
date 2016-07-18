@@ -26,7 +26,7 @@ public class OrganizationUnit {
 				int currentID = rs.getInt("ID");
 				String currentName = rs.getString("NAME");
 				String managerUsername = rs.getString("USERNAME");
-				result.add(new OrganizationUnit(currentID, currentName, new User(managerUsername, null)));
+				result.add(new OrganizationUnit(currentID, currentName, new User(managerUsername, "null")));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class OrganizationUnit {
 		int hReqId = generateReqId();
 		String query = db.generateAddQuery("REQUIREDHUMANRESOURCE",
 				new String[] { Integer.toString(hReqId), Integer.toString(id), projectName,
-						Integer.toString(humanNumber), specialty, null, Integer.toString(priority) });
+						Integer.toString(humanNumber), specialty, "null", Integer.toString(priority) });
 		System.out.println("From OU: " + query);
 		return db.update(query);
 	}
@@ -97,7 +97,7 @@ public class OrganizationUnit {
 		int fReqId = generateReqId();
 		String query = db.generateAddQuery("REQUIREDFACILITYRESOURCE",
 				new String[] { Integer.toString(fReqId), Integer.toString(id), projectName,
-						Integer.toString(facilityNumber), name, null, Integer.toString(priority) });
+						Integer.toString(facilityNumber), name, "null", Integer.toString(priority) });
 		System.out.println("From OU: " + query);
 		return db.update(query);
 	}
@@ -107,7 +107,7 @@ public class OrganizationUnit {
 		int fundingReqId = generateReqId();
 		String query = db.generateAddQuery("REQUIREDFUNDINGRESOURCE",
 				new String[] { Integer.toString(fundingReqId), Integer.toString(id), projectName,
-						Integer.toString(amount.getAmount()), amount.getUnit().toString(), null,
+						Integer.toString(amount.getAmount()), amount.getUnit().toString(), "null",
 						Integer.toString(priority) });
 		System.out.println("From OU: " + query);
 		return db.update(query);
