@@ -1,87 +1,184 @@
 package software_system.estimation;
 
+import java.io.Serializable;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import data.DBManagement;
 import resources.Quantity;
 import resources.Unit;
+import software_system.Module;
 import software_system.SoftwareSystem;
 import software_system.Technology;
 
 public class Estimator {
-	public Requirement estimateNeededResource(Technology[] technology, int humanSize, int moduleSize) {
+	public Requirement[] estimateNeededResource(boolean useTechs, Technology[] technology, boolean useHumanSize,
+			int humanSize, boolean useModuleSize, int moduleSize) {
 		DBManagement db = new DBManagement();
-		int nOfSimilarSystems = 0;
-		int humans = 0;
-		int amount = 0;
-		int facilityNumber = 0;
-		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] {"*"}, null, null);
+		Map<Double, SoftwareSystem> ranking = new TreeMap<Double, SoftwareSystem>();
+		Map<Double, Requirement> rankedReq = new TreeMap<Double, Requirement>();
+		String query = db.generateSelectQuery("SOFTWARESYSTEM", new String[] { "*" }, null, null);
 		ResultSet rs = db.getQuery(query);
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				String name = rs.getString("NAME");
+				String description = rs.getString("DESCRIPTION");
 				Technology[] techs = getRelatedTechnologies(name);
-				int hSize = calculateHumanSize(new SoftwareSystem(rs.getString("NAME"), techs, rs.getString("DESCRIPTION")));
-				int mSize = calculateModuleSize(new SoftwareSystem(rs.getString("NAME"), techs, rs.getString("DESCRIPTION")));
-//				if(technology.equals(tech) && ((((double)moduleSize/mSize > 1) && (((double)humanSize/hSize) > 1)) || (((double)moduleSize/mSize < 1) && (((double)humanSize/hSize) < 1)))) {
-//					nOfSimilarSystems++;
-//					humans +=hSize;
-//					amount += calculateAmount(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
-//					facilityNumber += calculateFacilityNumber(new SoftwareSystem(rs.getString("NAME"), rs.getString("TECHNOLOGY"), rs.getString("DESCRIPTION")));
-//				}
+				SoftwareSystem system = new SoftwareSystem(name, techs, description);
+				int hSize = calculateHumanSize(system);
+				int mSize = calculateModuleSize(system);
+
+				Double point = 0.0;
+				if (useTechs)
+					point += addTechnologyPoints(technology, techs);
+				if (useHumanSize)
+					point += addHumanSizePoints(humanSize, hSize);
+				if (useModuleSize)
+					point += addModuleSizePoint(moduleSize, mSize);
+				ranking.put(point, system);
+
+				Requirement[] req = new RequirementWrapper().showRequirment(system);
+				Map<Double, Requirement> temp = new TreeMap<Double, Requirement>(rankedReq);
+				rankedReq.clear();
+				for (int i = 0; i < req.length; i++) {
+					for (Entry<Double, Requirement> item : temp.entrySet()) {
+						Requirement x = item.getValue();
+						if (x.type.equals(req[i].type)) {
+							switch (x.type) {
+							case Requirement.humanReq:
+								if (x.specialty.equals(req[i].specialty)) {
+									x.numberOfSystem++;
+									x.humans += x.humans;
+									rankedReq.put(point + item.getKey(), x);
+								}
+								break;
+							case Requirement.facilityReq:
+								if (x.facilityName.equals(req[i].facilityName)) {
+									x.numberOfSystem++;
+									x.facilityNumber += req[i].facilityNumber;
+									rankedReq.put(point + item.getKey(), x);
+								}
+								break;
+							case Requirement.fundingReq:
+								if (x.amount.getUnit().equals(req[i].amount.getUnit())) {
+									x.amount = new Quantity(x.amount.getAmount() + req[i].amount.getAmount(),
+											x.amount.getUnit());
+									x.numberOfSystem++;
+									rankedReq.put(point + item.getKey(), x);
+								}
+								break;
+							}
+						}
+					}
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		if(nOfSimilarSystems != 0) {
-			return new Requirement(0,null, 0, "", (Integer)humans/nOfSimilarSystems, "", new Quantity((Integer)amount/nOfSimilarSystems, new Unit("")), facilityNumber/nOfSimilarSystems, "", null);
-		}
-		return null;
-	}
-	
-	private int calculateFacilityNumber(SoftwareSystem SF) {
-		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("REQUIREDFACILITYRESOURCE", new String[] {"*"}, new String[] {SF.getName()}, new String[] {"PROJECTNAME"});
-		ResultSet rs = db.getQuery(query);
-		int size = 0;
-		try {
-			while(rs.next()) {
-				size += rs.getInt("FNUMBER");
+		ArrayList<Requirement> result = new ArrayList<Requirement>();
+		for (Entry<Double, Requirement> item : rankedReq.entrySet()) {
+			Requirement x = item.getValue();
+			switch (x.type) {
+			case Requirement.humanReq:
+				x.humans /= x.numberOfSystem;
+				break;
+			case Requirement.facilityReq:
+				x.facilityNumber /= x.numberOfSystem;
+				break;
+			case Requirement.fundingReq:
+				x.amount = new Quantity(x.amount.getAmount() / x.numberOfSystem, x.amount.getUnit());
+				break;
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			result.add(x);
 		}
-		return size;
+		Collections.reverse(result);
+		return result.toArray(new Requirement[result.size()]);
 	}
 
-
-	private int calculateAmount(SoftwareSystem SF) {
+	private Requirement[] getAllUnsatisfiedReq() {
 		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("REQUIREDFUNDINGRESOURCE", new String[] {"*"}, new String[] {SF.getName()}, new String[] {"PROJECTNAME"});
-		ResultSet rs = db.getQuery(query);
-		int size = 0;
+
+		String reqHumanQuery = db.generateSelectQuery("REQUIREDHUMANRESOURCE", new String[] { "*" },
+				new String[] { "null" }, new String[] { "SDATE" });
+		String reqFacilityQuery = db.generateSelectQuery("REQUIREDFACILITYRESOURCE", new String[] { "*" },
+				new String[] { "null" }, new String[] { "SDATE" });
+		String reqFundingQuery = db.generateSelectQuery("REQUIREDFUNDINGRESOURCE", new String[] { "*" },
+				new String[] { "null" }, new String[] { "SDATE" });
+
+		ResultSet reqHumanResult = db.getQuery(reqHumanQuery);
+		ResultSet reqFacilityResult = db.getQuery(reqFacilityQuery);
+		ResultSet reqFundingResult = db.getQuery(reqFundingQuery);
+
+		ArrayList<Requirement> req = new ArrayList<Requirement>();
 		try {
-			while(rs.next()) {
-				size += rs.getInt("AMOUNT");
+			while (reqHumanResult.next()) {
+				int oid = reqHumanResult.getInt("OID");
+				Date SDate = reqHumanResult.getDate("SDATE");
+				String specialty = reqHumanResult.getString("SPECIALTY");
+				int number = reqHumanResult.getInt("HNUMBER");
+				int id = reqHumanResult.getInt("HREQID");
+				int priority = reqHumanResult.getInt("PRIORITY");
+				req.add(new Requirement(oid, SDate, id, Requirement.humanReq, number, specialty, null, null, null, null,
+						priority));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return size;
+
+		try {
+			while (reqFacilityResult.next()) {
+				int oid = reqFacilityResult.getInt("OID");
+				Date SDate = reqFacilityResult.getDate("SDATE");
+				int facilityNumber = reqFacilityResult.getInt("FNUMBER");
+				String facilityName = reqFacilityResult.getString("NAME");
+				int id = reqFacilityResult.getInt("FREQID");
+				int priority = reqFacilityResult.getInt("PRIORITY");
+				req.add(new Requirement(oid, SDate, id, Requirement.facilityReq, null, null, null, facilityNumber,
+						facilityName, null, priority));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			while (reqFundingResult.next()) {
+				int oid = reqFundingResult.getInt("OID");
+				Date SDate = reqFundingResult.getDate("SDATE");
+				int amount = reqFundingResult.getInt("AMOUNT");
+				String unit = reqFundingResult.getString("UNIT");
+				int id = reqFundingResult.getInt("FREQID");
+				int priority = reqFundingResult.getInt("PRIORITY");
+				req.add(new Requirement(oid, SDate, id, Requirement.fundingReq, null, null,
+						new Quantity(amount, new Unit(unit)), null, null, null, priority));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return (Requirement[]) req.toArray();
+
 	}
 
 	private Technology[] getRelatedTechnologies(String systemName) {
 		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("Technology", new String[] {"TNAME"}, new String[] {systemName}, new String[] {"SNAME"});
+		String query = db.generateSelectQuery("Technology", new String[] { "TNAME" }, new String[] { systemName },
+				new String[] { "SNAME" });
 		ResultSet rs = db.getQuery(query);
 		ArrayList<Technology> techs = new ArrayList<Technology>();
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				techs.add(new Technology(rs.getString("TNAME")));
 			}
 		} catch (SQLException e) {
@@ -89,14 +186,15 @@ public class Estimator {
 		}
 		return techs.toArray(new Technology[techs.size()]);
 	}
-	
+
 	private int calculateHumanSize(SoftwareSystem SF) {
 		DBManagement db = new DBManagement();
-		String query = db.generateSelectQuery("REQUIREDHUMANRESOURCE", new String[] {"*"}, new String[] {SF.getName()}, new String[] {"PROJECTNAME"});
+		String query = db.generateSelectQuery("REQUIREDHUMANRESOURCE", new String[] { "*" },
+				new String[] { SF.getName() }, new String[] { "PROJECTNAME" });
 		ResultSet rs = db.getQuery(query);
 		int size = 0;
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				size += rs.getInt("HNUMBER");
 			}
 		} catch (SQLException e) {
@@ -104,65 +202,115 @@ public class Estimator {
 		}
 		return size;
 	}
-	
+
 	private int calculateModuleSize(SoftwareSystem SF) {
 		Set<String> modules = new HashSet<String>();
 		DBManagement db = new DBManagement();
-		String query1 = db.generateSelectQuery("FACILITYRESOURCEALLOCATION", new String[] {"MODULENAME"}, new String[] {SF.getName()}, new String[] {"PROJECTNAME"});
-		String query2 = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] {"MODULENAME"}, new String[] {SF.getName()}, new String[] {"PROJECTNAME"});
-		String query3 = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] {"MODULENAME"}, new String[] {SF.getName()}, new String[] {"PROJECTNAME"});
-		
+		String query1 = db.generateSelectQuery("FACILITYRESOURCEALLOCATION", new String[] { "MODULENAME" },
+				new String[] { SF.getName() }, new String[] { "PROJECTNAME" });
+		String query2 = db.generateSelectQuery("HUMANRESOURCEALLOCATION", new String[] { "MODULENAME" },
+				new String[] { SF.getName() }, new String[] { "PROJECTNAME" });
+		String query3 = db.generateSelectQuery("FUNDINGRESOURCEALLOCATION", new String[] { "MODULENAME" },
+				new String[] { SF.getName() }, new String[] { "PROJECTNAME" });
+
 		ResultSet rs = db.getQuery(query1);
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				modules.add(rs.getString("MODULENAME"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		rs = db.getQuery(query2);
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				modules.add(rs.getString("MODULENAME"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		rs = db.getQuery(query3);
 		try {
-			while(rs.next()) {
+			while (rs.next()) {
 				modules.add(rs.getString("MODULENAME"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return modules.size();		
+		return modules.size();
 	}
-	
-	public Requirement[] estimateEssentialRequirements(SoftwareSystem SF) {
-		return null;
+
+	public Requirement[] estimateEssentialRequirements() {
+		Requirement req[] = getAllUnsatisfiedReq();
+		for (int i = 0; i < req.length; i++) {
+			if (req[i].numberOfSystem == 0)
+				continue;
+			for (int j = i + 1; j < req.length; j++) {
+				if (req[j].numberOfSystem == 1 && req[i].type.equals(req[j].type)) {
+					switch (req[j].type) {
+					case Requirement.humanReq:
+						if (req[j].specialty.equals(req[i].specialty)) {
+							req[j].numberOfSystem = 0;
+							req[i].numberOfSystem++;
+							req[i].humans += req[i].humans;
+							req[i].priority += req[j].priority;
+						}
+						break;
+					case Requirement.facilityReq:
+						if (req[j].facilityName.equals(req[i].facilityName)) {
+							req[j].numberOfSystem = 0;
+							req[i].numberOfSystem++;
+							req[i].facilityNumber += req[j].facilityNumber;
+							req[i].priority += req[j].priority;
+						}
+						break;
+					case Requirement.fundingReq:
+						if (req[j].amount.getUnit().equals(req[i].amount.getUnit())) {
+							req[j].numberOfSystem = 0;
+							req[i].numberOfSystem++;
+							req[i].amount = new Quantity(req[j].amount.getAmount() + req[i].amount.getAmount(),
+									req[j].amount.getUnit());
+							req[i].priority +=req[j].priority;
+						}
+						break;
+					}
+				}
+			}
+		}
+		Map<Double, Requirement> map = new TreeMap<Double, Requirement>();
+		for(int i=0; i<req.length; i++)
+			if(req[i].numberOfSystem != 0)
+				map.put((double)req[i].priority/req[i].numberOfSystem, req[i]);
+		ArrayList<Requirement> result = new ArrayList<Requirement>();
+		for(Entry<Double, Requirement> item : map.entrySet()) {
+			result.add(item.getValue());
+		}
+		Collections.reverse(result);
+		return result.toArray(new Requirement[result.size()]);
 	}
-	private class Pair {
-		private Integer point;
-		private SoftwareSystem system;
-		public Pair(SoftwareSystem sf) {
-			point = 0;
-			system = sf;
+
+	public double addTechnologyPoints(Technology searchTechs[], Technology[] systemTechs) {
+		int numberOfSimilarTechs = 0;
+		for (int i = 0; i < searchTechs.length; i++) {
+			for (int j = 0; j < systemTechs.length; j++)
+				if (searchTechs[i].gettName().equals(systemTechs[j].gettName())) {
+					numberOfSimilarTechs++;
+					break;
+				}
 		}
-		public Integer getPoint() {
-			return point;
-		}
-		public void setPoint(Integer point) {
-			this.point = point;
-		}
-		public SoftwareSystem getSystem() {
-			return system;
-		}
-		
-//		public boolean < (Pair p1, Pair p2) {
-//			return p1.pointpoint() < p2.getpoint();
-//		}
+
+		return 20.1 * ((double) numberOfSimilarTechs / searchTechs.length);
+	}
+
+	public double addHumanSizePoints(int searchSize, int systemSize) {
+		double diff = Math.abs(searchSize - systemSize);
+		return 10.01 * Math.exp(-diff / systemSize);
+	}
+
+	public double addModuleSizePoint(int searchSize, int systemSize) {
+		double diff = Math.abs(searchSize - systemSize);
+		return 10.0 * Math.exp(-diff / systemSize);
 	}
 }
