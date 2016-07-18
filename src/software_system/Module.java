@@ -76,6 +76,31 @@ public class Module {
 	}
 
 	private void updateFundingResource(int amount, String unit) {
+		DBManagement db = new DBManagement();
+		String selectQuery = db.generateSelectQuery("REQUIREDFUNDINGRESOURCE", new String[] {"*"}, new String[] {projectName, unit} , new String[] {"PROJECTNAME", "UNIT"});
+		selectQuery = selectQuery.substring(selectQuery.length()-1) + " and SDATE = null;";
+		
+		ResultSet rs = db.getQuery(selectQuery);
+		try {
+			if(rs.getFetchSize()>0) {
+				rs.next();
+				int id = rs.getInt("FREQID");
+				int requiredAmount = rs.getInt("AMOUNT");
+				if(requiredAmount <= amount) {
+					String updateQuery = db.generateUpdateQuery("REQUIREDFUNDINGRESOURCE", new String[] {new Date(Calendar.getInstance().getTime().getTime()).toString()}, new String[]{"SDATE"}, new String[] {Integer.toString(id)}, new String[] {"FREQID"});
+					db.update(updateQuery);
+				}
+				else {
+					String updateQuery = db.generateUpdateQuery("REQUIREDFUNDINGRESOURCE", new String[] {new Date(Calendar.getInstance().getTime().getTime()).toString(), Integer.toString(amount)}, new String[]{"SDATE", "AMOUNT"}, new String[] {Integer.toString(id)}, new String[] {"FREQID"});
+					db.update(updateQuery);
+					String addQuery = db.generateAddQuery("REQUIREDFUNDINGRESOURCE", new String[] {Integer.toString(new OrganizationUnit(null, null).generateReqId()), rs.getString("OID"), rs.getString("PROJECTNAME"), Integer.toString(requiredAmount - amount), unit, new Date(Calendar.getInstance().getTime().getTime()).toString(), rs.getString("PRIORITY")});
+					db.update(addQuery);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		FundingResource resource = new FundingResource(new Quantity(amount, new Unit(unit)));
 		resource.removeFromDB();
 	}
