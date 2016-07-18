@@ -256,20 +256,18 @@ public class ProcessWrapper {
 	}
 
 	public boolean removeModule(String[] moduleNames) {
-		Module[] modules = showModules();
-		boolean[] flags = new boolean[modules.length];
-		for (int i = 0; i < flags.length; i++)
-			flags[i] = false;
-		for (int i = 0; i < moduleNames.length; i++) {
-			for (int j = 0; j < modules.length; j++) {
-				if (moduleNames[i].equals(modules[j].getModuleName()))
-					flags[j] = true;
-			}
-		}
+		DBManagement db = new DBManagement();
 		boolean flag = true;
-		for (int i = 0; i < modules.length; i++) {
-			if (flags[i])
-				flag = flag && modules[i].deleteResourceAllocation();
+		for (int i = 0; i < moduleNames.length; i++) {
+			String query = db.generateDeleteQuery("FACILITYRESOURCEALLOCATION", new String[] { moduleNames[i] },
+					new String[] { "MODULENAME" });
+			flag = flag && db.update(query);
+			query = db.generateDeleteQuery("FUNDINGRESOURCEALLOCATION", new String[] { moduleNames[i] },
+					new String[] { "MODULENAME" });
+			flag = flag && db.update(query);
+			query = db.generateDeleteQuery("HUMANRESOURCEALLOCATION", new String[] { moduleNames[i] },
+					new String[] { "MODULENAME" });
+			flag = flag && db.update(query);
 		}
 		return flag;
 	}
