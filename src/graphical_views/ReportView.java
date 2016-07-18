@@ -5,9 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+
+import software_system.ProcessWrapper;
+import software_system.SoftwareSystem;
 
 public class ReportView implements View {
 	private View returnView;
@@ -18,6 +22,8 @@ public class ReportView implements View {
 	private JButton return_;
 	private JButton report1;
 	private JButton report2;
+	private JComboBox<String> softwareSystemName;
+	private JLabel softwareSystemNameLabel;
 	private JButton report3;
 	
 	public ReportView(View rv, LoginView lv) {
@@ -26,7 +32,7 @@ public class ReportView implements View {
 		returnView.hide();
 		
 		reportFrame = new JFrame();
-		reportFrame.setBounds(150, 100, 600, 500);
+		reportFrame.setBounds(150, 100, 600, 540);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -87,9 +93,20 @@ public class ReportView implements View {
 		});
 		reportFrame.add(report2);
 		
+		softwareSystemName = new JComboBox<>();
+		softwareSystemName.setBounds(100, 340, 250, 30);
+		SoftwareSystem[] softwareSystems = ProcessWrapper.getInstance().showSoftwareSystem();
+		for (SoftwareSystem softwareSystem: softwareSystems)
+			softwareSystemName.addItem(softwareSystem.getName());
+		reportFrame.add(softwareSystemName);
+		
+		softwareSystemNameLabel = new JLabel("نام سیستم نرم‌افزاری:");
+		softwareSystemNameLabel.setBounds(400, 340, 100, 30);
+		reportFrame.add(softwareSystemNameLabel);
+		
 		report3 = new JButton("دریافت گزارش منابع موردنیاز");
 		report3.setFont(new Font(report3.getFont().getName(), Font.PLAIN, 30));
-		report3.setBounds(100, 340, 400, 100);
+		report3.setBounds(100, 380, 400, 100);
 		report3.addActionListener(new ActionListener() {
 			
 			@Override

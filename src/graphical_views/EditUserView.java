@@ -110,7 +110,8 @@ public class EditUserView implements View {
 			infoFrame.add(isManager);
 		managerLabel = new JLabel("مدیریت");
 		managerLabel.setBounds(450, 250, 100, 30);
-		infoFrame.add(managerLabel);
+		if (UserWrapper.getInstance().isManager())
+			infoFrame.add(managerLabel);
 		
 		edit = new JButton("ویرایش");
 		edit.setBounds(260, 250, 80, 45);

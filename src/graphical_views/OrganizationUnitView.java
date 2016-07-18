@@ -80,11 +80,11 @@ public class OrganizationUnitView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				RemoveProcessView removeProcessView = new RemoveProcessView(pv, loginView);
-				removeProcessView.show();
+				RemoveOrganizationUnitView removeOUView = new RemoveOrganizationUnitView(pv, loginView);
+				removeOUView.show();
 			}
 		});
-		ouFrame.add(remove);
+		//ouFrame.add(remove);
 	}
 
 	@Override
