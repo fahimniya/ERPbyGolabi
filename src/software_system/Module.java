@@ -15,6 +15,10 @@ public class Module {
 	final static String MAINTENANCE = "maintenance";
 	final static String DEVELOPMENT = "development";
 	private String moduleName, projectName, type;
+	public String getModuleName() {
+		return moduleName;
+	}
+
 	private Resource res;
 	private HumanResource hres;
 	private Date from, to;
