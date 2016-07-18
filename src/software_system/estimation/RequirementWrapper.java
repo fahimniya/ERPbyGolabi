@@ -71,7 +71,8 @@ public class RequirementWrapper {
 				String specialty = reqHumanResult.getString("SPECIALTY");
 				int number = reqHumanResult.getInt("HNUMBER");
 				int id = reqHumanResult.getInt("HREQID");
-				req.add(new Requirement(oid, SDate, id, Requirement.humanReq, number, specialty, null, null, null, (Module[])moduleArray.toArray()));
+				int priority = reqHumanResult.getInt("PRIORITY");
+				req.add(new Requirement(oid, SDate, id, Requirement.humanReq, number, specialty, null, null, null, (Module[])moduleArray.toArray(), priority));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -83,8 +84,9 @@ public class RequirementWrapper {
 				Date SDate = reqFacilityResult.getDate("SDATE");
 				int facilityNumber = reqFacilityResult.getInt("FNUMBER");
 				String facilityName = reqFacilityResult.getString("NAME");
-				int id = reqHumanResult.getInt("FREQID");
-				req.add(new Requirement(oid, SDate, id, Requirement.facilityReq, null, null, null, facilityNumber, facilityName, (Module[])moduleArray.toArray()));
+				int id = reqFacilityResult.getInt("FREQID");
+				int priority = reqFacilityResult.getInt("PRIORITY");
+				req.add(new Requirement(oid, SDate, id, Requirement.facilityReq, null, null, null, facilityNumber, facilityName, (Module[])moduleArray.toArray(), priority));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -92,12 +94,13 @@ public class RequirementWrapper {
 		
 		try {
 			while(reqFundingResult.next()) {
-				int oid = reqHumanResult.getInt("OID");
-				Date SDate = reqHumanResult.getDate("SDATE");
-				int amount = reqFacilityResult.getInt("AMOUNT");
-				String unit = reqFacilityResult.getString("UNIT");
-				int id = reqHumanResult.getInt("FREQID");
-				req.add(new Requirement(oid, SDate, id, Requirement.fundingReq, null, null, new Quantity(amount, new Unit(unit)), null, null, (Module[])moduleArray.toArray()));
+				int oid = reqFundingResult.getInt("OID");
+				Date SDate = reqFundingResult.getDate("SDATE");
+				int amount = reqFundingResult.getInt("AMOUNT");
+				String unit = reqFundingResult.getString("UNIT");
+				int id = reqFundingResult.getInt("FREQID");
+				int priority = reqFundingResult.getInt("PRIORITY");
+				req.add(new Requirement(oid, SDate, id, Requirement.fundingReq, null, null, new Quantity(amount, new Unit(unit)), null, null, (Module[])moduleArray.toArray(), priority));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

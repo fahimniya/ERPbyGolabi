@@ -47,7 +47,6 @@ public class MainView implements View {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				UserManagementView userManagement = new UserManagementView(mv, loginView);
-				userManagement.show();
 			}
 		});
 		mainFrame.add(userManagement);
