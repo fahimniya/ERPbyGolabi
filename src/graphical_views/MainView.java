@@ -15,13 +15,14 @@ public class MainView implements View {
 	private JButton resource;
 	private JButton report;
 	private JButton estimate;
+	private JButton organizationUnits;
 	
 	public MainView(LoginView lv) {
 		this.loginView = lv;
 		loginView.hide();
 		
 		mainFrame = new JFrame();
-		mainFrame.setBounds(150, 100, 600, 455);
+		mainFrame.setBounds(150, 50, 600, 655);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -102,6 +103,19 @@ public class MainView implements View {
 			}
 		});
 		mainFrame.add(estimate);
+		
+		organizationUnits = new JButton("واحدهای سازمان");
+		organizationUnits.setFont(new Font(estimate.getFont().getName(), Font.PLAIN, 25));
+		organizationUnits.setBounds(350, 455, 200, 140);
+		organizationUnits.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				OrganizationUnitView ouView = new OrganizationUnitView(mv, loginView);
+				ouView.show();
+			}
+		});
+		mainFrame.add(organizationUnits);
 	}
 	
 	public void show(){

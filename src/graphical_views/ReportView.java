@@ -61,40 +61,40 @@ public class ReportView implements View {
 		
 		final View reportv = this;
 		
-		report1 = new JButton("گزارش نوع اول");
+		report1 = new JButton("دریافت گزارش منابع موجود");
 		report1.setFont(new Font(report1.getFont().getName(), Font.PLAIN, 30));
 		report1.setBounds(100, 100, 400, 100);
 		report1.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ShowReportView showReport = new ShowReportView(reportv, loginView);
-				showReport.show();
+				ResourcesReportView resourcesReport = new ResourcesReportView(reportv, loginView);
+				resourcesReport.show();
 			}
 		});
 		reportFrame.add(report1);
 		
-		report2 = new JButton("گزارش نوع دوم");
+		report2 = new JButton("دریافت گزارش جریان چرخشی منابع");
 		report2.setFont(new Font(report2.getFont().getName(), Font.PLAIN, 30));
 		report2.setBounds(100, 220, 400, 100);
 		report2.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ShowReportView showReport = new ShowReportView(reportv, loginView);
-				showReport.show();
+				TurnoverReportView turnoverReport = new TurnoverReportView(reportv, loginView);
+				turnoverReport.show();
 			}
 		});
 		reportFrame.add(report2);
 		
-		report3 = new JButton("گزراش نوع سوم");
+		report3 = new JButton("دریافت گزارش منابع موردنیاز");
 		report3.setFont(new Font(report3.getFont().getName(), Font.PLAIN, 30));
 		report3.setBounds(100, 340, 400, 100);
 		report3.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ShowReportView showReport = new ShowReportView(reportv, loginView);
+				ResourcesReportView showReport = new ResourcesReportView(reportv, loginView);
 				showReport.show();
 			}
 		});

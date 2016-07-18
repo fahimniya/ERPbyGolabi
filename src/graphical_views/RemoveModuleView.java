@@ -82,11 +82,11 @@ public class RemoveModuleView implements View {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				ArrayList<Module> removeModules = new ArrayList<>();
+				ArrayList<String> removeModules = new ArrayList<>();
 				for (int i = 0; i < moduleNames.length; i++)
 					if (modulesCBS[i].isSelected())
-						removeModules.add(modules[i]);
-					ProcessWrapper.getInstance().removeModule(removeModules.toArray(new Module[removeModules.size()]));
+						removeModules.add(moduleNames[i]);
+					ProcessWrapper.getInstance().removeModule(removeModules.toArray(new String[removeModules.size()]));
 				show();
 			}
 		});
@@ -118,7 +118,9 @@ public class RemoveModuleView implements View {
 		
 		pw = ProcessWrapper.getInstance();
 		moduleNames = pw.showModuleName();
-		modules = pw.showModules();
+		System.out.println("number of modules: " + moduleNames.length);
+		//modules = pw.showModules();
+		//System.out.println("number of modules: " + modules.length);
 		modulesCBS = new JCheckBox[moduleNames.length];
 		for (int i = 0; i < moduleNames.length; i++) {
 			modulesCBS[i] = new JCheckBox(moduleNames[i]);
