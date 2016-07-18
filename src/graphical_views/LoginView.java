@@ -27,7 +27,7 @@ public class LoginView implements View {
 		loginFrame = new JFrame();
 		loginFrame.setBounds(200, 150, 400, 300);
 		
-		systemName = new JLabel("سامانه‌ی برنامه‌ریزی برای منابع انسانی", SwingConstants.CENTER);
+		systemName = new JLabel("سامانه‌ی برنامه‌ریزی برای منابع سازمانی", SwingConstants.CENTER);
 		systemName.setBounds(0, 10, 400, 50);
 		systemName.setFont(new Font(systemName.getFont().getName(), Font.PLAIN, 18));
 		loginFrame.add(systemName);

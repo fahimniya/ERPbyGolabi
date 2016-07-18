@@ -22,12 +22,14 @@ import resources.ResourceWrapper;
 import software_system.HumanResource;
 import software_system.Module;
 import software_system.ProcessWrapper;
+import software_system.SoftwareSystem;
 import software_system.estimation.RequirementWrapper;
 
-public class TurnoverReportView implements View {
+public class RequirementsReportView implements View {
 	private View returnView;
 	private LoginView loginView;
-	private JFrame turnoverReportFrame;
+	private SoftwareSystem softwareSystem;
+	private JFrame requirementsReportFrame;
 	private JLabel nameLabel;
 	private JButton logout;
 	private JButton return_;
@@ -38,13 +40,14 @@ public class TurnoverReportView implements View {
 	private RequirementWrapper rw;
 	private String[] modules;
 	
-	public TurnoverReportView(View rv, LoginView lv) {
+	public RequirementsReportView(View rv, LoginView lv, SoftwareSystem softwareSystem) {
 		returnView = rv;
 		loginView = lv;
+		this.softwareSystem = softwareSystem;
 		returnView.hide();
 		
-		turnoverReportFrame = new JFrame();
-		turnoverReportFrame.setBounds(150, 100, 800, 500);
+		requirementsReportFrame = new JFrame();
+		requirementsReportFrame.setBounds(150, 100, 900, 500);
 		
 		logout = new JButton("خروج");
 		logout.setFont(new Font(logout.getFont().getName(), Font.PLAIN, 8));
@@ -57,7 +60,7 @@ public class TurnoverReportView implements View {
 				loginView.show(true);
 			}
 		});
-		turnoverReportFrame.add(logout);
+		requirementsReportFrame.add(logout);
 		
 		return_ = new JButton("بازگشت");
 		return_.setFont(new Font(return_.getFont().getName(), Font.PLAIN, 8));
@@ -70,49 +73,49 @@ public class TurnoverReportView implements View {
 				returnView.show();
 			}
 		});
-		turnoverReportFrame.add(return_);
+		requirementsReportFrame.add(return_);
 		
-		nameLabel = new JLabel("گزارش جریان چرخشی منابع", SwingConstants.CENTER);
-		nameLabel.setBounds(0, 35, 800, 45);
+		nameLabel = new JLabel("گزارش منابع مورد نیاز برای سیستم نرم‌افزاری " + softwareSystem.getName(), SwingConstants.CENTER);
+		nameLabel.setBounds(0, 35, 900, 45);
 		nameLabel.setFont(new Font(nameLabel.getFont().getName(), Font.PLAIN, 40));
-		turnoverReportFrame.add(nameLabel);
+		requirementsReportFrame.add(nameLabel);
 		
 		modulesPanel = new JPanel();
 		modulesPanel.setLayout(null);
         mpScroll = new JScrollPane(modulesPanel);
         mpScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         mpScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        mpScroll.setBounds(50, 130, 700, 300);
+        mpScroll.setBounds(50, 130, 800, 300);
         JPanel contentPane = new JPanel(null);
-        contentPane.setPreferredSize(new Dimension(800, 550));
+        contentPane.setPreferredSize(new Dimension(900, 480));
         contentPane.add(mpScroll);
         contentPane.add(nameLabel);
         contentPane.add(logout);
         contentPane.add(return_);
-        turnoverReportFrame.setContentPane(contentPane);
-        turnoverReportFrame.pack();
-        turnoverReportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        turnoverReportFrame.setVisible(true);
+        requirementsReportFrame.setContentPane(contentPane);
+        requirementsReportFrame.pack();
+        requirementsReportFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        requirementsReportFrame.setVisible(true);
 	}
 	
 	@Override
 	public void show() {
-		turnoverReportFrame.setLayout(null);
-		turnoverReportFrame.setVisible(true);
+		requirementsReportFrame.setLayout(null);
+		requirementsReportFrame.setVisible(true);
 		
 		rw = new RequirementWrapper();
 		modules = rw.resourceTurnover();
 		modulesLS = new JLabel[modules.length];
 		for (int i = 0; i < modules.length; i++) {
 			modulesLS[i] = new JLabel(modules[i]);
-			modulesLS[i].setBounds(20, i * 40, 800, 30);
+			modulesLS[i].setBounds(20, i * 40, 160, 30);
 			modulesPanel.add(modulesLS[i]);
 		}
 	}
 
 	@Override
 	public void hide() {
-		turnoverReportFrame.setVisible(false);
+		requirementsReportFrame.setVisible(false);
 	}
 
 }
